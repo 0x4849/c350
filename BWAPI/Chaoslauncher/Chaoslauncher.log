@@ -1,0 +1,33 @@
+2015-11-11 12:24:38 PM 4596 Logging started
+2015-11-11 12:24:38 PM 4596 Begin Startup
+2015-11-11 12:24:38 PM 4596 Chaosauncher 0.5.4.4 on NT 6.2.9200  at C:\libraries\BWAPI\Chaoslauncher\Chaoslauncher.exe
+2015-11-11 12:24:38 PM 4596 Load Settings
+2015-11-11 12:24:38 PM 4596 GamePath: C:\sc\
+2015-11-11 12:24:38 PM 4596 Load Plugins
+2015-11-11 12:24:38 PM 4596 AdvLoaderPluginPath: \Plugins\
+2015-11-11 12:24:38 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\iccscbn.icc
+2015-11-11 12:24:44 PM 4596 Plugin loaded ICCup
+2015-11-11 12:24:44 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\APMAlert.bwl
+2015-11-11 12:24:45 PM 4596 Plugin loaded APMAlert (1.16.1)
+2015-11-11 12:24:45 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\BWAPI_PluginInjector.bwl
+2015-11-11 12:24:45 PM 4596 Plugin loaded BWAPI 4.1.2 Injector [RELEASE]
+2015-11-11 12:24:45 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\BWAPI_PluginInjectord.bwl
+2015-11-11 12:24:45 PM 4596 Plugin loaded BWAPI 4.1.2 Injector [DEBUG]
+2015-11-11 12:24:45 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\Chaosplugin.bwl
+2015-11-11 12:24:45 PM 4596 Plugin loaded Chaosplugin for 1.16.1
+2015-11-11 12:24:45 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\LatencyChanger.bwl
+2015-11-11 12:24:46 PM 4596 Plugin loaded LatencyChanger for 1.16.1
+2015-11-11 12:24:46 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\repfix.bwl
+2015-11-11 12:24:46 PM 4596 Plugin loaded RepFix
+2015-11-11 12:24:46 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\RWAPlayer.bwl
+2015-11-11 12:24:46 PM 4596 Plugin loaded RWAPlayer (1.16.1)
+2015-11-11 12:24:46 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\RWARecorder.bwl
+2015-11-11 12:24:47 PM 4596 Plugin loaded RWARecorder (1.16.1)
+2015-11-11 12:24:47 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\Stormplugin.bwl
+2015-11-11 12:24:47 PM 4596 Plugin loaded Stormplugin for 1.16.1
+2015-11-11 12:24:47 PM 4596 Loading BWL4-Plugin C:\libraries\BWAPI\Chaoslauncher\Plugins\wmode.bwl
+2015-11-11 12:24:48 PM 4596 Plugin loaded W-MODE 1.02
+2015-11-11 12:24:48 PM 4596 Load Tools
+2015-11-11 12:24:48 PM 4596 Init GUI
+2015-11-11 12:24:48 PM 4596 Get Starcraftversions
+2015-11-11 12:24:48 PM 4596 Init complete
