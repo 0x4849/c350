@@ -5,6 +5,13 @@
 
 namespace Config
 {
+    namespace ConfigFile
+    {
+        extern bool ConfigFileFound;
+        extern bool ConfigFileParsed;
+        extern std::string ConfigFileLocation;
+    }
+
     namespace Modules
     {
         extern bool UsingGameCommander;			
@@ -13,8 +20,7 @@ namespace Config
         extern bool UsingUnitCommandManager;
         extern bool UsingBuildOrderSearch;  
         extern bool UsingAutoObserver;
-        extern bool UsingStrategyIO;            
-        extern bool UsingBuildOrderDemo;			
+        extern bool UsingStrategyIO;			
     }
     
     namespace BotInfo
@@ -26,14 +32,13 @@ namespace Config
 
     namespace Strategy
     {
-        extern std::string ProtossStrategyName;
-        extern std::string TerranStrategyName;
-        extern std::string ZergStrategyName;
         extern std::string StrategyName;
         extern std::string ReadDir;
         extern std::string WriteDir;
         extern bool GasStealWithScout;
         extern bool ScoutHarassEnemy;
+        extern bool UseEnemySpecificStrategy;
+        extern bool FoundEnemySpecificStrategy;
     }
 
     namespace BWAPIOptions
@@ -51,7 +56,7 @@ namespace Config
 
     namespace Debug
     {
-        extern bool PrintModuleTimeout;				
+        extern bool DrawGameInfo;
         extern bool DrawBuildOrderSearchInfo;
         extern bool DrawUnitHealthBars;
         extern bool DrawResourceInfo;
@@ -68,9 +73,11 @@ namespace Config
         extern bool DrawMapGrid;
         extern bool DrawUnitTargetInfo;
         extern bool DrawSquadInfo;
-        extern bool AllDebugOff;
+        extern bool DrawBOSSStateInfo;
+        extern bool PrintModuleTimeout;		
 
         extern std::string ErrorLogFilename;
+        extern bool LogAssertToErrorFile;
 
         extern BWAPI::Color ColorLineTarget;
         extern BWAPI::Color ColorLineMineral;
@@ -81,10 +88,11 @@ namespace Config
     namespace Micro
     {
         extern bool UseSparcraftSimulation;
-
-        extern bool WorkerDefense;
-        extern int  WorkerDefensePerUnit;
-
+        extern bool KiteWithRangedUnits;
+        extern std::set<BWAPI::UnitType> KiteLongerRangedUnits;
+        extern bool WorkersDefendRush;
+        extern int RetreatMeleeUnitShields;
+        extern int RetreatMeleeUnitHP;
         extern int CombatRadius;                
         extern int CombatRegroupRadius;         
         extern int UnitNearEnemyRadius;         
@@ -92,6 +100,8 @@ namespace Config
 
     namespace Macro
     {
+        extern int BOSSFrameLimit;
+        extern int WorkersPerRefinery;
         extern int BuildingSpacing;
         extern int PylonSpacing;
     }

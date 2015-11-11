@@ -116,11 +116,9 @@
   <ItemGroup>
     <ClCompile Include="..\Source\AutoObserver.cpp" />
     <ClCompile Include="..\Source\BOSSManager.cpp" />
-    <ClCompile Include="..\source\BuildingData.cpp" />
     <ClCompile Include="..\source\BuildingManager.cpp" />
     <ClCompile Include="..\source\BuildingPlacer.cpp" />
     <ClCompile Include="..\source\BuildOrder.cpp" />
-    <ClCompile Include="..\source\BuildOrderGoalManager.cpp" />
     <ClCompile Include="..\source\BuildOrderQueue.cpp" />
     <ClCompile Include="..\Source\CombatSimulation.cpp" />
     <ClCompile Include="..\Source\CombatCommander.cpp" />
@@ -133,6 +131,7 @@
     <ClCompile Include="..\Source\Logger.cpp" />
     <ClCompile Include="..\Source\MapGrid.cpp" />
     <ClCompile Include="..\Source\MapTools.cpp" />
+    <ClCompile Include="..\Source\MedicManager.cpp" />
     <ClCompile Include="..\source\MeleeManager.cpp" />
     <ClCompile Include="..\source\MetaType.cpp" />
     <ClCompile Include="..\source\MicroManager.cpp" />
@@ -145,6 +144,7 @@
     <ClCompile Include="..\Source\Squad.cpp" />
     <ClCompile Include="..\Source\SquadData.cpp" />
     <ClCompile Include="..\Source\StrategyManager.cpp" />
+    <ClCompile Include="..\Source\TankManager.cpp" />
     <ClCompile Include="..\source\TimerManager.cpp" />
     <ClCompile Include="..\source\TransportManager.cpp" />
     <ClCompile Include="..\Source\UABAssert.cpp" />
@@ -157,11 +157,9 @@
   <ItemGroup>
     <ClInclude Include="..\Source\AutoObserver.h" />
     <ClInclude Include="..\Source\BOSSManager.h" />
-    <ClInclude Include="..\source\BuildingData.h" />
     <ClInclude Include="..\source\BuildingManager.h" />
     <ClInclude Include="..\source\BuildingPlacer.h" />
     <ClInclude Include="..\source\BuildOrder.h" />
-    <ClInclude Include="..\source\BuildOrderGoalManager.h" />
     <ClInclude Include="..\source\BuildOrderQueue.h" />
     <ClInclude Include="..\Source\CombatSimulation.h" />
     <ClInclude Include="..\Source\CombatCommander.h" />
@@ -174,6 +172,7 @@
     <ClInclude Include="..\Source\Logger.h" />
     <ClInclude Include="..\Source\MapGrid.h" />
     <ClInclude Include="..\Source\MapTools.h" />
+    <ClInclude Include="..\Source\MedicManager.h" />
     <ClInclude Include="..\source\MeleeManager.h" />
     <ClInclude Include="..\source\MetaType.h" />
     <ClInclude Include="..\source\MicroManager.h" />
@@ -187,6 +186,7 @@
     <ClInclude Include="..\Source\SquadData.h" />
     <ClInclude Include="..\Source\SquadOrder.h" />
     <ClInclude Include="..\Source\StrategyManager.h" />
+    <ClInclude Include="..\Source\TankManager.h" />
     <ClInclude Include="..\source\TimerManager.h" />
     <ClInclude Include="..\source\TransportManager.h" />
     <ClInclude Include="..\Source\UABAssert.h" />

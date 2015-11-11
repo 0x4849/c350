@@ -1,4 +1,5 @@
 #include "Squad.h"
+#include "UnitUtil.h"
 
 using namespace UAlbertaBot;
 
@@ -6,8 +7,9 @@ Squad::Squad()
     : _lastRetreatSwitch(0)
     , _lastRetreatSwitchVal(false)
     , _priority(0)
+    , _name("Default")
 {
-    
+    int a = 10;
 }
 
 Squad::Squad(const std::string & name, SquadOrder order, size_t priority) 
@@ -17,6 +19,11 @@ Squad::Squad(const std::string & name, SquadOrder order, size_t priority)
     , _lastRetreatSwitchVal(false)
     , _priority(priority)
 {
+}
+
+Squad::~Squad()
+{
+    clear();
 }
 
 void Squad::update()
@@ -30,9 +37,9 @@ void Squad::update()
 	// draw some debug info
 	if (Config::Debug::DrawSquadInfo && _order.getType() == SquadOrderTypes::Attack) 
 	{
-		BWAPI::Broodwar->drawTextScreen(200, 340, "%s", _regroupStatus.c_str());
+		BWAPI::Broodwar->drawTextScreen(200, 350, "%s", _regroupStatus.c_str());
 
-		BWAPI::UnitInterface* closest = unitClosestToEnemy();
+		BWAPI::Unit closest = unitClosestToEnemy();
 	}
 
 	// if we do need to regroup, do it
@@ -49,12 +56,16 @@ void Squad::update()
         
 		_meleeManager.regroup(regroupPosition);
 		_rangedManager.regroup(regroupPosition);
+        _tankManager.regroup(regroupPosition);
+        _medicManager.regroup(regroupPosition);
 	}
 	else // otherwise, execute micro
 	{
 		_meleeManager.execute(_order);
 		_rangedManager.execute(_order);
-		_transportManager.execute(_order);
+        _tankManager.execute(_order);
+        _medicManager.execute(_order);
+		_transportManager.update();
 
 		_detectorManager.setUnitClosestToEnemy(unitClosestToEnemy());
 		_detectorManager.execute(_order);
@@ -87,7 +98,7 @@ void Squad::setAllUnits()
 {
 	// clean up the _units vector just in case one of them died
 	BWAPI::Unitset goodUnits;
-	for (BWAPI::UnitInterface* unit : _units)
+	for (auto & unit : _units)
 	{
 		if( unit->isCompleted() && 
 			unit->getHitPoints() > 0 && 
@@ -104,7 +115,7 @@ void Squad::setAllUnits()
 void Squad::setNearEnemyUnits()
 {
 	_nearEnemy.clear();
-	for (BWAPI::UnitInterface* unit : _units)
+	for (auto & unit : _units)
 	{
 		int x = unit->getPosition().x;
 		int y = unit->getPosition().y;
@@ -128,35 +139,45 @@ void Squad::setNearEnemyUnits()
 
 void Squad::addUnitsToMicroManagers()
 {
-	std::vector<BWAPI::UnitInterface *> meleeUnits;
-	std::vector<BWAPI::UnitInterface *> rangedUnits;
-	std::vector<BWAPI::UnitInterface *> detectorUnits;
-	std::vector<BWAPI::UnitInterface *> transportUnits;
+	BWAPI::Unitset meleeUnits;
+	BWAPI::Unitset rangedUnits;
+	BWAPI::Unitset detectorUnits;
+	BWAPI::Unitset transportUnits;
+    BWAPI::Unitset tankUnits;
+    BWAPI::Unitset medicUnits;
 
 	// add _units to micro managers
-	for (BWAPI::UnitInterface* unit : _units)
+	for (auto & unit : _units)
 	{
 		if(unit->isCompleted() && unit->getHitPoints() > 0 && unit->exists())
 		{
 			// select dector _units
-			if (unit->getType().isDetector() && !unit->getType().isBuilding())
+            if (unit->getType() == BWAPI::UnitTypes::Terran_Medic)
+            {
+                medicUnits.insert(unit);
+            }
+            else if (unit->getType() == BWAPI::UnitTypes::Terran_Siege_Tank_Siege_Mode || unit->getType() == BWAPI::UnitTypes::Terran_Siege_Tank_Tank_Mode)
+            {
+                tankUnits.insert(unit);
+            }   
+			else if (unit->getType().isDetector() && !unit->getType().isBuilding())
 			{
-				detectorUnits.push_back(unit);
+				detectorUnits.insert(unit);
 			}
 			// select transport _units
 			else if (unit->getType() == BWAPI::UnitTypes::Protoss_Shuttle || unit->getType() == BWAPI::UnitTypes::Terran_Dropship)
 			{
-				transportUnits.push_back(unit);
+				transportUnits.insert(unit);
 			}
 			// select ranged _units
-			else if ((unit->getType().groundWeapon().maxRange() > 32) || (unit->getType() == BWAPI::UnitTypes::Protoss_Reaver))
+			else if ((unit->getType().groundWeapon().maxRange() > 32) || (unit->getType() == BWAPI::UnitTypes::Protoss_Reaver) || (unit->getType() == BWAPI::UnitTypes::Zerg_Scourge))
 			{
-				rangedUnits.push_back(unit);
+				rangedUnits.insert(unit);
 			}
 			// select melee _units
 			else if (unit->getType().groundWeapon().maxRange() <= 32)
 			{
-				meleeUnits.push_back(unit);
+				meleeUnits.insert(unit);
 			}
 		}
 	}
@@ -164,7 +185,9 @@ void Squad::addUnitsToMicroManagers()
 	_meleeManager.setUnits(meleeUnits);
 	_rangedManager.setUnits(rangedUnits);
 	_detectorManager.setUnits(detectorUnits);
-	_transportManager.setUnits(detectorUnits);
+	_transportManager.setUnits(transportUnits);
+    _tankManager.setUnits(tankUnits);
+    _medicManager.setUnits(medicUnits);
 }
 
 // calculates whether or not to regroup
@@ -178,18 +201,49 @@ bool Squad::needsToRegroup()
 	// if we are not attacking, never regroup
 	if (_units.empty() || (_order.getType() != SquadOrderTypes::Attack))
 	{
-		_regroupStatus = std::string("\x04 No combat _units available");
+		_regroupStatus = std::string("\x04 No combat units available");
 		return false;
 	}
 
-
-    BWAPI::UnitInterface* unitClosest = unitClosestToEnemy();
+    BWAPI::Unit unitClosest = unitClosestToEnemy();
 
 	if (!unitClosest)
 	{
 		_regroupStatus = std::string("\x04 No closest unit");
 		return false;
 	}
+
+    // if none of our units are in attack range of any enemy units, don't retreat
+    std::vector<UnitInfo> enemyCombatUnits;
+    const auto & enemyUnitInfo = InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy());
+
+    bool anyInRange = false;
+    for (const auto & eui : enemyUnitInfo)
+    {
+        bool inRange = false;
+        for (const auto & u : _units)
+        {
+            int range = UnitUtil::GetAttackRange(eui.second.type, u->getType());
+
+            if (range + 128 >= eui.second.lastPosition.getDistance(u->getPosition()))
+            {
+                inRange = true;
+                break;
+            }
+        }
+
+        if (inRange)
+        {
+            anyInRange = true;
+            break;
+        }
+    }
+
+    if (!anyInRange)
+    {
+        _regroupStatus = std::string("\x04 No enemy units in attack range");
+        return false;
+    }
 
     SparCraft::ScoreType score = 0;
 
@@ -200,8 +254,7 @@ bool Squad::needsToRegroup()
 	score = sim.simulateCombat();
 
 	// if we are DT rushing and we haven't lost a DT yet, no retreat!
-	if (Config::Strategy::StrategyName == "Protoss_DTRush" &&
-		(BWAPI::Broodwar->self()->deadUnitCount(BWAPI::UnitTypes::Protoss_Dark_Templar) == 0))
+	if (Config::Strategy::StrategyName == "Protoss_DTRush" && (BWAPI::Broodwar->self()->deadUnitCount(BWAPI::UnitTypes::Protoss_Dark_Templar) == 0))
 	{
 		_regroupStatus = std::string("\x04 DARK TEMPLAR HOOOOO!");
 		return false;
@@ -244,21 +297,29 @@ void Squad::setSquadOrder(const SquadOrder & so)
 	_order = so;
 }
 
-bool Squad::containsUnit(BWAPI::UnitInterface * u) const
+bool Squad::containsUnit(BWAPI::Unit u) const
 {
     return _units.contains(u);
 }
 
 void Squad::clear()
 {
+    for (auto & unit : getUnits())
+    {
+        if (unit->getType().isWorker())
+        {
+            WorkerManager::Instance().finishedWithWorker(unit);
+        }
+    }
+
     _units.clear();
 }
 
-bool Squad::unitNearEnemy(BWAPI::UnitInterface* unit)
+bool Squad::unitNearEnemy(BWAPI::Unit unit)
 {
 	assert(unit);
 
-	std::vector<BWAPI::UnitInterface *> enemyNear;
+	BWAPI::Unitset enemyNear;
 
 	MapGrid::Instance().GetUnits(enemyNear, unit->getPosition(), 400, false, true);
 
@@ -277,7 +338,7 @@ BWAPI::Position Squad::calcCenter()
     }
 
 	BWAPI::Position accum(0,0);
-	for (BWAPI::UnitInterface* unit : _units)
+	for (auto & unit : _units)
 	{
 		accum += unit->getPosition();
 	}
@@ -290,7 +351,7 @@ BWAPI::Position Squad::calcRegroupPosition()
 
 	int minDist = 100000;
 
-	for (BWAPI::UnitInterface* unit : _units)
+	for (auto & unit : _units)
 	{
 		if (!_nearEnemy[unit])
 		{
@@ -313,12 +374,12 @@ BWAPI::Position Squad::calcRegroupPosition()
 	}
 }
 
-BWAPI::UnitInterface* Squad::unitClosestToEnemy()
+BWAPI::Unit Squad::unitClosestToEnemy()
 {
-	BWAPI::UnitInterface* closest = NULL;
+	BWAPI::Unit closest = nullptr;
 	int closestDist = 100000;
 
-	for (BWAPI::UnitInterface* unit : _units)
+	for (auto & unit : _units)
 	{
 		if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
 		{
@@ -337,7 +398,7 @@ BWAPI::UnitInterface* Squad::unitClosestToEnemy()
 
 	if (!closest)
 	{
-		for (BWAPI::UnitInterface* unit : _units)
+		for (auto & unit : _units)
 		{
 			if (unit->getType() == BWAPI::UnitTypes::Protoss_Observer)
 			{
@@ -362,7 +423,7 @@ int Squad::squadUnitsNear(BWAPI::Position p)
 {
 	int numUnits = 0;
 
-	for (BWAPI::UnitInterface* unit : _units)
+	for (auto & unit : _units)
 	{
 		if (unit->getDistance(p) < 600)
 		{
@@ -383,12 +444,12 @@ const SquadOrder & Squad::getSquadOrder()	const
 	return _order; 
 }
 
-void Squad::addUnit(BWAPI::UnitInterface *u)
+void Squad::addUnit(BWAPI::Unit u)
 {
 	_units.insert(u);
 }
 
-void Squad::removeUnit(BWAPI::UnitInterface *u)
+void Squad::removeUnit(BWAPI::Unit u)
 {
     _units.erase(u);
 }

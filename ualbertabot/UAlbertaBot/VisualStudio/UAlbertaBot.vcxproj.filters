@@ -69,9 +69,6 @@
     <ClCompile Include="..\Source\UABAssert.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\BuildingData.cpp">
-      <Filter>game\macro</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\BuildingManager.cpp">
       <Filter>game\macro</Filter>
     </ClCompile>
@@ -105,9 +102,6 @@
     <ClCompile Include="..\source\TransportManager.cpp">
       <Filter>game\combat\micro</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\BuildOrderGoalManager.cpp">
-      <Filter>game\macro\buildorders</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\BuildOrderQueue.cpp">
       <Filter>game\macro\buildorders</Filter>
     </ClCompile>
@@ -119,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="..\source\MetaType.cpp">
       <Filter>game\macro</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Logger.cpp">
-      <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="..\source\TimerManager.cpp">
       <Filter>game\util</Filter>
@@ -151,6 +142,15 @@
       <Filter>game\combat\micro</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\UnitUtil.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\TankManager.cpp">
+      <Filter>game\combat\micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\MedicManager.cpp">
+      <Filter>game\combat\micro</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Logger.cpp">
       <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,9 +191,6 @@
     <ClInclude Include="..\Source\CombatSimulation.h">
       <Filter>game\combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\BuildingData.h">
-      <Filter>game\macro</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\BuildingManager.h">
       <Filter>game\macro</Filter>
     </ClInclude>
@@ -227,9 +224,6 @@
     <ClInclude Include="..\source\ScoutManager.h">
       <Filter>game\combat\micro</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\BuildOrderGoalManager.h">
-      <Filter>game\macro\buildorders</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\BuildOrderQueue.h">
       <Filter>game\macro\buildorders</Filter>
     </ClInclude>
@@ -241,9 +235,6 @@
     </ClInclude>
     <ClInclude Include="..\source\MetaType.h">
       <Filter>game\macro</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Logger.h">
-      <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\source\TimerManager.h">
       <Filter>game\util</Filter>
@@ -273,6 +264,15 @@
       <Filter>game\combat\micro</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\UnitUtil.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\TankManager.h">
+      <Filter>game\combat\micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\MedicManager.h">
+      <Filter>game\combat\micro</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Logger.h">
       <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>

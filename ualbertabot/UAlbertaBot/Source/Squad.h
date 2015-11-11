@@ -9,6 +9,8 @@
 #include "DistanceMap.hpp"
 #include "StrategyManager.h"
 #include "CombatSimulation.h"
+#include "TankManager.h"
+#include "MedicManager.h"
 
 namespace UAlbertaBot
 {
@@ -18,7 +20,6 @@ class Squad
     std::string         _name;
 	BWAPI::Unitset      _units;
 	std::string         _regroupStatus;
-	bool                _squadObserverNear(BWAPI::Position p);
     int                 _lastRetreatSwitch;
     bool                _lastRetreatSwitchVal;
     size_t              _priority;
@@ -28,19 +29,21 @@ class Squad
 	RangedManager       _rangedManager;
 	DetectorManager     _detectorManager;
 	TransportManager    _transportManager;
+    TankManager         _tankManager;
+    MedicManager        _medicManager;
 
-	std::map<BWAPI::UnitInterface*, bool>	_nearEnemy;
+	std::map<BWAPI::Unit, bool>	_nearEnemy;
 
     
-	BWAPI::UnitInterface*		getRegroupUnit();
-	BWAPI::UnitInterface*		unitClosestToEnemy();
-
+	BWAPI::Unit		getRegroupUnit();
+	BWAPI::Unit		unitClosestToEnemy();
+    
 	void                        updateUnits();
 	void                        addUnitsToMicroManagers();
 	void                        setNearEnemyUnits();
 	void                        setAllUnits();
 	
-	bool                        unitNearEnemy(BWAPI::UnitInterface* unit);
+	bool                        unitNearEnemy(BWAPI::Unit unit);
 	bool                        needsToRegroup();
 	int                         squadUnitsNear(BWAPI::Position p);
 
@@ -48,12 +51,13 @@ public:
 
 	Squad(const std::string & name, SquadOrder order, size_t priority);
 	Squad();
+    ~Squad();
 
 	void                update();
 	void                setSquadOrder(const SquadOrder & so);
-	void                addUnit(BWAPI::UnitInterface * u);
-	void                removeUnit(BWAPI::UnitInterface * u);
-    bool                containsUnit(BWAPI::UnitInterface * u) const;
+	void                addUnit(BWAPI::Unit u);
+	void                removeUnit(BWAPI::Unit u);
+    bool                containsUnit(BWAPI::Unit u) const;
     bool                isEmpty() const;
     void                clear();
     size_t              getPriority() const;

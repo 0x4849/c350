@@ -9,19 +9,21 @@ using namespace UAlbertaBot;
 void ParseUtils::ParseConfigFile(const std::string & filename)
 {
     rapidjson::Document doc;
+    BWAPI::Race race = BWAPI::Broodwar->self()->getRace();
+    const char * ourRace = race.getName().c_str();
 
     std::string config = FileUtils::ReadFile(filename);
 
     if (config.length() == 0)
     {
-        UAB_ASSERT_WARNING(config.length() > 0, "Couldn't find any configuration options, using defaults");
         return;
     }
+
+    Config::ConfigFile::ConfigFileFound = true;
 
     bool parsingFailed = doc.Parse(config.c_str()).HasParseError();
     if (parsingFailed)
     {
-        UAB_ASSERT_WARNING(!parsingFailed, "Parsing of configuration file failed, please check that it's valid JSON format");
         return;
     }
 
@@ -40,8 +42,8 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
         const rapidjson::Value & bwapi = doc["BWAPI"];
         JSONTools::ReadInt("SetLocalSpeed", bwapi, Config::BWAPIOptions::SetLocalSpeed);
         JSONTools::ReadInt("SetFrameSkip", bwapi, Config::BWAPIOptions::SetFrameSkip);
-        JSONTools::ReadBool("EnableUserInput", bwapi, Config::BWAPIOptions::EnableUserInput);
-        JSONTools::ReadBool("EnableCompleteMapInformation", bwapi, Config::BWAPIOptions::EnableCompleteMapInformation);
+        JSONTools::ReadBool("UserInput", bwapi, Config::BWAPIOptions::EnableUserInput);
+        JSONTools::ReadBool("CompleteMapInformation", bwapi, Config::BWAPIOptions::EnableCompleteMapInformation);
     }
 
     // Parse the Micro Options
@@ -49,19 +51,37 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
     {
         const rapidjson::Value & micro = doc["Micro"];
         JSONTools::ReadBool("UseSparcraftSimulation", micro, Config::Micro::UseSparcraftSimulation);
-        JSONTools::ReadBool("WorkerDefense", micro, Config::Micro::WorkerDefense);
-        JSONTools::ReadInt("WorkerDefensePerUnit", micro, Config::Micro::WorkerDefensePerUnit);
+        JSONTools::ReadBool("KiteWithRangedUnits", micro, Config::Micro::KiteWithRangedUnits);
+        JSONTools::ReadBool("WorkersDefendRush", micro, Config::Micro::WorkersDefendRush);
+        JSONTools::ReadInt("RetreatMeleeUnitShields", micro, Config::Micro::RetreatMeleeUnitShields);
+        JSONTools::ReadInt("RetreatMeleeUnitHP", micro, Config::Micro::RetreatMeleeUnitHP);
         JSONTools::ReadInt("InCombatRadius", micro, Config::Micro::CombatRadius);
         JSONTools::ReadInt("RegroupRadius", micro, Config::Micro::CombatRegroupRadius);
         JSONTools::ReadInt("UnitNearEnemyRadius", micro, Config::Micro::UnitNearEnemyRadius);
+
+        if (micro.HasMember("KiteLongerRangedUnits") && micro["KiteLongerRangedUnits"].IsArray())
+        {
+            const rapidjson::Value & kite = micro["KiteLongerRangedUnits"];
+
+            for (size_t i(0); i < kite.Size(); ++i)
+            {
+                if (kite[i].IsString())
+                {
+                    MetaType type(kite[i].GetString());
+                    Config::Micro::KiteLongerRangedUnits.insert(type.getUnitType());
+                }
+            }
+        }
     }
 
     // Parse the Macro Options
     if (doc.HasMember("Macro") && doc["Macro"].IsObject())
     {
         const rapidjson::Value & macro = doc["Macro"];
+        JSONTools::ReadInt("BOSSFrameLimit", macro, Config::Macro::BOSSFrameLimit);
         JSONTools::ReadInt("BuildingSpacing", macro, Config::Macro::BuildingSpacing);
         JSONTools::ReadInt("PylongSpacing", macro, Config::Macro::PylonSpacing);
+        JSONTools::ReadInt("WorkersPerRefinery", macro, Config::Macro::WorkersPerRefinery);
     }
 
     // Parse the Debug Options
@@ -69,7 +89,8 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
     {
         const rapidjson::Value & debug = doc["Debug"];
         JSONTools::ReadString("ErrorLogFilename", debug, Config::Debug::ErrorLogFilename);
-        JSONTools::ReadBool("PrintModuleTimeout", debug, Config::Debug::PrintModuleTimeout);
+        JSONTools::ReadBool("LogAssertToErrorFile", debug, Config::Debug::LogAssertToErrorFile);
+        JSONTools::ReadBool("DrawGameInfo", debug, Config::Debug::DrawGameInfo);
         JSONTools::ReadBool("DrawBuildOrderSearchInfo", debug, Config::Debug::DrawBuildOrderSearchInfo);
         JSONTools::ReadBool("DrawUnitHealthBars", debug, Config::Debug::DrawUnitHealthBars);
         JSONTools::ReadBool("DrawResourceInfo", debug, Config::Debug::DrawResourceInfo);
@@ -86,28 +107,8 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
         JSONTools::ReadBool("DrawMapGrid", debug, Config::Debug::DrawMapGrid);
         JSONTools::ReadBool("DrawUnitTargetInfo", debug, Config::Debug::DrawUnitTargetInfo);
         JSONTools::ReadBool("DrawReservedBuildingTiles", debug, Config::Debug::DrawReservedBuildingTiles);
-
-        JSONTools::ReadBool("AllDebugOff", debug, Config::Debug::AllDebugOff);
-
-        if (Config::Debug::AllDebugOff)
-        {
-            Config::Debug::PrintModuleTimeout             = false;	
-            Config::Debug::DrawBuildOrderSearchInfo       = false;
-            Config::Debug::DrawUnitHealthBars             = false;
-            Config::Debug::DrawResourceInfo               = false;
-            Config::Debug::DrawProductionInfo             = false;
-            Config::Debug::DrawWorkerInfo                 = false;
-            Config::Debug::DrawModuleTimers               = false;
-            Config::Debug::DrawReservedBuildingTiles      = false;
-            Config::Debug::DrawCombatSimulationInfo       = false;
-            Config::Debug::DrawBuildingInfo               = false;
-            Config::Debug::DrawMouseCursorInfo            = false;
-            Config::Debug::DrawEnemyUnitInfo              = false;
-            Config::Debug::DrawBWTAInfo                   = false;
-            Config::Debug::DrawMapGrid                    = false;
-            Config::Debug::DrawUnitTargetInfo             = false;
-            Config::Debug::DrawSquadInfo                  = false;
-        }
+        JSONTools::ReadBool("DrawBOSSStateInfo", debug, Config::Debug::DrawBOSSStateInfo); 
+        JSONTools::ReadBool("PrintModuleTimeout", debug, Config::Debug::PrintModuleTimeout);
     }
 
     // Parse the Module Options
@@ -137,31 +138,38 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
     {
         const rapidjson::Value & strategy = doc["Strategy"];
 
+        // read in the various strategic elements
         JSONTools::ReadBool("ScoutGasSteal", strategy, Config::Strategy::GasStealWithScout);
         JSONTools::ReadBool("ScoutHarassEnemy", strategy, Config::Strategy::ScoutHarassEnemy);
-        JSONTools::ReadString("ProtossStrategyName", strategy, Config::Strategy::ProtossStrategyName);
-        JSONTools::ReadString("TerranStrategyName", strategy, Config::Strategy::TerranStrategyName);
-        JSONTools::ReadString("ZergStrategyName", strategy, Config::Strategy::ZergStrategyName);
-
-        BWAPI::Race race = BWAPI::Broodwar->self()->getRace();
-
-        if (race == BWAPI::Races::Protoss)
-        {
-            Config::Strategy::StrategyName = Config::Strategy::ProtossStrategyName;
-        }
-        else if (race == BWAPI::Races::Terran)
-        {
-            Config::Strategy::StrategyName = Config::Strategy::TerranStrategyName;
-        }
-        else if (race == BWAPI::Races::Zerg)
-        {
-            Config::Strategy::StrategyName = Config::Strategy::ZergStrategyName;
-        }
-
-        BWAPI::Broodwar->printf("Race is %s, using Strategy: %s", BWAPI::Broodwar->self()->getRace().getName().c_str(), Config::Strategy::StrategyName.c_str());
-
         JSONTools::ReadString("ReadDirectory", strategy, Config::Strategy::ReadDir);
         JSONTools::ReadString("WriteDirectory", strategy, Config::Strategy::WriteDir);
+
+        // if we have set a strategy for the current race, use it
+        if (strategy.HasMember(race.c_str()) && strategy[race.c_str()].IsString())
+        {
+            Config::Strategy::StrategyName = strategy[race.c_str()].GetString();
+        }
+
+        // check if we are using an enemy specific strategy
+        JSONTools::ReadBool("UseEnemySpecificStrategy", strategy, Config::Strategy::UseEnemySpecificStrategy);
+        if (Config::Strategy::UseEnemySpecificStrategy && strategy.HasMember("EnemySpecificStrategy") && strategy["EnemySpecificStrategy"].IsObject())
+        {
+            const std::string enemyName = BWAPI::Broodwar->enemy()->getName();
+            const rapidjson::Value & specific = strategy["EnemySpecificStrategy"];
+
+            // check to see if our current enemy name is listed anywhere in the specific strategies
+            if (specific.HasMember(enemyName.c_str()) && specific[enemyName.c_str()].IsObject())
+            {
+                const rapidjson::Value & enemyStrategies = specific[enemyName.c_str()];
+
+                // if that enemy has a strategy listed for our current race, use it
+                if (enemyStrategies.HasMember(ourRace) && enemyStrategies[ourRace].IsString())
+                {
+                    Config::Strategy::StrategyName = enemyStrategies[ourRace].GetString();
+                    Config::Strategy::FoundEnemySpecificStrategy = true;
+                }
+            }
+        }
 
         // Parse all the Strategies
         if (strategy.HasMember("Strategies") && strategy["Strategies"].IsObject())
@@ -172,6 +180,7 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
                 const std::string &         name = itr->name.GetString();
                 const rapidjson::Value &    val  = itr->value;
         
+
                 BWAPI::Race strategyRace;
                 if (val.HasMember("Race") && val["Race"].IsString())
                 {
@@ -207,10 +216,12 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
                     }
                 }
 
-                StrategyManager::Instance().addOpeningBuildOrder(name, buildOrder);
+                StrategyManager::Instance().addStrategy(name, Strategy(name, strategyRace, buildOrder));
             }
         }
     }
+
+    Config::ConfigFile::ConfigFileParsed = true;
 }
 
 
@@ -235,13 +246,12 @@ void ParseUtils::ParseTextCommand(const std::string & commandString)
         // BWAPI options
         if (variableName == "setlocalspeed") { Config::BWAPIOptions::SetLocalSpeed = GetIntFromString(val); BWAPI::Broodwar->setLocalSpeed(Config::BWAPIOptions::SetLocalSpeed); }
         else if (variableName == "setframeskip") { Config::BWAPIOptions::SetFrameSkip = GetIntFromString(val); BWAPI::Broodwar->setFrameSkip(Config::BWAPIOptions::SetFrameSkip); }
-        else if (variableName == "enableuserinput") { Config::BWAPIOptions::EnableUserInput = GetBoolFromString(val); if (Config::BWAPIOptions::EnableUserInput) BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput); }
-        else if (variableName == "enablecompletemapinformation") { Config::BWAPIOptions::EnableCompleteMapInformation = GetBoolFromString(val); if (Config::BWAPIOptions::EnableCompleteMapInformation) BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput); }
+        else if (variableName == "userinput") { Config::BWAPIOptions::EnableUserInput = GetBoolFromString(val); if (Config::BWAPIOptions::EnableUserInput) BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput); }
+        else if (variableName == "completemapinformation") { Config::BWAPIOptions::EnableCompleteMapInformation = GetBoolFromString(val); if (Config::BWAPIOptions::EnableCompleteMapInformation) BWAPI::Broodwar->enableFlag(BWAPI::Flag::UserInput); }
         
         // Micro Options
         else if (variableName == "usesparcraftsimulation") { Config::Micro::UseSparcraftSimulation = GetBoolFromString(val); }
-        else if (variableName == "workerdefense") { Config::Micro::WorkerDefense = GetBoolFromString(val); }
-        else if (variableName == "workerdefenseperunit") { Config::Micro::WorkerDefensePerUnit = GetIntFromString(val); }
+        else if (variableName == "workersdefendrush") { Config::Micro::WorkersDefendRush = GetBoolFromString(val); }
         else if (variableName == "incombatradius") { Config::Micro::CombatRadius = GetIntFromString(val); }
         else if (variableName == "regroupradius") { Config::Micro::CombatRegroupRadius = GetIntFromString(val); }
         else if (variableName == "unitnearenemyradius") { Config::Micro::UnitNearEnemyRadius = GetIntFromString(val); }

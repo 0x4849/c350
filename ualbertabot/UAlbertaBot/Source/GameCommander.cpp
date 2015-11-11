@@ -63,27 +63,47 @@ void GameCommander::update()
 
 void GameCommander::drawDebugInterface()
 {
-	_timerManager.displayTimers(490, 225);
-	
-    InformationManager::Instance().drawExtendedInterface();
+	InformationManager::Instance().drawExtendedInterface();
 	InformationManager::Instance().drawUnitInformation(425,30);
 	InformationManager::Instance().drawMapInformation();
-	BOSSManager::Instance().drawSearchInformation(10, 200);
 	BuildingManager::Instance().drawBuildingInformation(200,50);
-	ProductionManager::Instance().drawProductionInformation(30, 30);
-
-    //Micro::drawAPM(2,2);
-
+	BuildingPlacer::Instance().drawReservedTiles();
+	ProductionManager::Instance().drawProductionInformation(30, 50);
+	BOSSManager::Instance().drawSearchInformation(490, 100);
+    BOSSManager::Instance().drawStateInformation(250, 0);
+    
 	_combatCommander.drawSquadInformation(200, 30);
+    _timerManager.displayTimers(490, 225);
+    drawGameInformation(4, 1);
 
 	// draw position of mouse cursor
 	if (Config::Debug::DrawMouseCursorInfo)
 	{
-		BWAPI::Broodwar->drawTextScreen(20, 20, "Frame: %7d\nTime: %4dm %3ds", BWAPI::Broodwar->getFrameCount(), BWAPI::Broodwar->getFrameCount()/(24*60), (BWAPI::Broodwar->getFrameCount()/24)%60);
 		int mouseX = BWAPI::Broodwar->getMousePosition().x + BWAPI::Broodwar->getScreenPosition().x;
 		int mouseY = BWAPI::Broodwar->getMousePosition().y + BWAPI::Broodwar->getScreenPosition().y;
 		BWAPI::Broodwar->drawTextMap(mouseX + 20, mouseY, " %d %d", mouseX, mouseY);
 	}
+}
+
+void GameCommander::drawGameInformation(int x, int y)
+{
+    BWAPI::Broodwar->drawTextScreen(x, y, "\x04Players:");
+	BWAPI::Broodwar->drawTextScreen(x+50, y, "%c%s \x04vs. %c%s", BWAPI::Broodwar->self()->getTextColor(), BWAPI::Broodwar->self()->getName().c_str(), 
+                                                                  BWAPI::Broodwar->enemy()->getTextColor(), BWAPI::Broodwar->enemy()->getName().c_str());
+	y += 12;
+		
+    BWAPI::Broodwar->drawTextScreen(x, y, "\x04Strategy:");
+	BWAPI::Broodwar->drawTextScreen(x+50, y, "\x03%s %s", Config::Strategy::StrategyName.c_str(), Config::Strategy::FoundEnemySpecificStrategy ? "(enemy specific)" : "");
+	BWAPI::Broodwar->setTextSize();
+	y += 12;
+
+    BWAPI::Broodwar->drawTextScreen(x, y, "\x04Map:");
+	BWAPI::Broodwar->drawTextScreen(x+50, y, "\x03%s", BWAPI::Broodwar->mapFileName().c_str());
+	BWAPI::Broodwar->setTextSize();
+	y += 12;
+
+    BWAPI::Broodwar->drawTextScreen(x, y, "\x04Time:");
+    BWAPI::Broodwar->drawTextScreen(x+50, y, "\x04%d %4dm %3ds", BWAPI::Broodwar->getFrameCount(), (int)(BWAPI::Broodwar->getFrameCount()/(23.8*60)), (int)((int)(BWAPI::Broodwar->getFrameCount()/23.8)%60));
 }
 
 // assigns units to various managers
@@ -100,7 +120,7 @@ void GameCommander::handleUnitAssignments()
 	setCombatUnits();
 }
 
-bool GameCommander::isAssigned(BWAPI::UnitInterface* unit) const
+bool GameCommander::isAssigned(BWAPI::Unit unit) const
 {
 	return _combatUnits.contains(unit) || _scoutUnits.contains(unit);
 }
@@ -109,7 +129,7 @@ bool GameCommander::isAssigned(BWAPI::UnitInterface* unit) const
 void GameCommander::setValidUnits()
 {
 	// make sure the unit is completed and alive and usable
-	for (BWAPI::UnitInterface* unit : BWAPI::Broodwar->self()->getUnits())
+	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 	{
 		if (UnitUtil::IsValidUnit(unit))
 		{	
@@ -123,13 +143,13 @@ void GameCommander::setScoutUnits()
     // if we haven't set a scout unit, do it
     if (_scoutUnits.empty() && !_initialScoutSet)
     {
-        BWAPI::UnitInterface* supplyProvider = getFirstSupplyProvider();
+        BWAPI::Unit supplyProvider = getFirstSupplyProvider();
 
 		// if it exists
 		if (supplyProvider)
 		{
 			// grab the closest worker to the supply provider to send to scout
-			BWAPI::UnitInterface* workerScout = getClosestWorkerToTarget(supplyProvider->getPosition());
+			BWAPI::Unit workerScout = getClosestWorkerToTarget(supplyProvider->getPosition());
 
 			// if we find a worker (which we should) add it to the scout units
 			if (workerScout)
@@ -145,7 +165,7 @@ void GameCommander::setScoutUnits()
 // sets combat units to be passed to CombatCommander
 void GameCommander::setCombatUnits()
 {
-	for (BWAPI::UnitInterface* unit : _validUnits)
+	for (auto & unit : _validUnits)
 	{
 		if (!isAssigned(unit) && UnitUtil::IsCombatUnit(unit) || unit->getType().isWorker())		
 		{	
@@ -154,13 +174,13 @@ void GameCommander::setCombatUnits()
 	}
 }
 
-BWAPI::UnitInterface* GameCommander::getFirstSupplyProvider()
+BWAPI::Unit GameCommander::getFirstSupplyProvider()
 {
-	BWAPI::UnitInterface* supplyProvider = NULL;
+	BWAPI::Unit supplyProvider = nullptr;
 
 	if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg)
 	{
-		for (BWAPI::UnitInterface* unit : BWAPI::Broodwar->self()->getUnits())
+		for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 		{
 			if (unit->getType() == BWAPI::UnitTypes::Zerg_Spawning_Pool)
 			{
@@ -171,7 +191,7 @@ BWAPI::UnitInterface* GameCommander::getFirstSupplyProvider()
 	else
 	{
 		
-		for (BWAPI::UnitInterface* unit : BWAPI::Broodwar->self()->getUnits())
+		for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 		{
 			if (unit->getType() == BWAPI::Broodwar->self()->getRace().getSupplyProvider())
 			{
@@ -183,51 +203,51 @@ BWAPI::UnitInterface* GameCommander::getFirstSupplyProvider()
 	return supplyProvider;
 }
 
-void GameCommander::onUnitShow(BWAPI::UnitInterface* unit)			
+void GameCommander::onUnitShow(BWAPI::Unit unit)			
 { 
 	InformationManager::Instance().onUnitShow(unit); 
 	WorkerManager::Instance().onUnitShow(unit);
 }
 
-void GameCommander::onUnitHide(BWAPI::UnitInterface* unit)			
+void GameCommander::onUnitHide(BWAPI::Unit unit)			
 { 
 	InformationManager::Instance().onUnitHide(unit); 
 }
 
-void GameCommander::onUnitCreate(BWAPI::UnitInterface* unit)		
+void GameCommander::onUnitCreate(BWAPI::Unit unit)		
 { 
 	InformationManager::Instance().onUnitCreate(unit); 
 }
 
-void GameCommander::onUnitComplete(BWAPI::UnitInterface* unit)
+void GameCommander::onUnitComplete(BWAPI::Unit unit)
 {
 	InformationManager::Instance().onUnitComplete(unit);
 }
 
-void GameCommander::onUnitRenegade(BWAPI::UnitInterface* unit)		
+void GameCommander::onUnitRenegade(BWAPI::Unit unit)		
 { 
 	InformationManager::Instance().onUnitRenegade(unit); 
 }
 
-void GameCommander::onUnitDestroy(BWAPI::UnitInterface* unit)		
+void GameCommander::onUnitDestroy(BWAPI::Unit unit)		
 { 	
 	ProductionManager::Instance().onUnitDestroy(unit);
 	WorkerManager::Instance().onUnitDestroy(unit);
 	InformationManager::Instance().onUnitDestroy(unit); 
 }
 
-void GameCommander::onUnitMorph(BWAPI::UnitInterface* unit)		
+void GameCommander::onUnitMorph(BWAPI::Unit unit)		
 { 
 	InformationManager::Instance().onUnitMorph(unit);
 	WorkerManager::Instance().onUnitMorph(unit);
 }
 
-BWAPI::UnitInterface* GameCommander::getClosestUnitToTarget(BWAPI::UnitType type, BWAPI::Position target)
+BWAPI::Unit GameCommander::getClosestUnitToTarget(BWAPI::UnitType type, BWAPI::Position target)
 {
-	BWAPI::UnitInterface* closestUnit = NULL;
+	BWAPI::Unit closestUnit = nullptr;
 	double closestDist = 100000;
 
-	for (BWAPI::UnitInterface* unit : _validUnits)
+	for (auto & unit : _validUnits)
 	{
 		if (unit->getType() == type)
 		{
@@ -243,12 +263,12 @@ BWAPI::UnitInterface* GameCommander::getClosestUnitToTarget(BWAPI::UnitType type
 	return closestUnit;
 }
 
-BWAPI::UnitInterface* GameCommander::getClosestWorkerToTarget(BWAPI::Position target)
+BWAPI::Unit GameCommander::getClosestWorkerToTarget(BWAPI::Position target)
 {
-	BWAPI::UnitInterface* closestUnit = NULL;
+	BWAPI::Unit closestUnit = nullptr;
 	double closestDist = 100000;
 
-	for (BWAPI::UnitInterface* unit : _validUnits)
+	for (auto & unit : _validUnits)
 	{
 		if (!isAssigned(unit) && unit->getType().isWorker() && WorkerManager::Instance().isFree(unit))
 		{
@@ -264,7 +284,7 @@ BWAPI::UnitInterface* GameCommander::getClosestWorkerToTarget(BWAPI::Position ta
 	return closestUnit;
 }
 
-void GameCommander::assignUnit(BWAPI::UnitInterface * unit, BWAPI::Unitset & set)
+void GameCommander::assignUnit(BWAPI::Unit unit, BWAPI::Unitset & set)
 {
     if (_scoutUnits.contains(unit)) { _scoutUnits.erase(unit); }
     else if (_combatUnits.contains(unit)) { _combatUnits.erase(unit); }

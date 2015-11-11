@@ -17,22 +17,22 @@ public:
 
     void            clearSquadData();
 
-    bool            canAssignUnitToSquad(BWAPI::UnitInterface * unit, const Squad & squad) const;
-    void            assignUnitToSquad(BWAPI::UnitInterface * unit, Squad & squad);
+    bool            canAssignUnitToSquad(BWAPI::Unit unit, const Squad & squad) const;
+    void            assignUnitToSquad(BWAPI::Unit unit, Squad & squad);
     void            addSquad(const std::string & squadName, const Squad & squad);
     void            removeSquad(const std::string & squadName);
     void            clearSquad(const std::string & squadName);
 	void            drawSquadInformation(int x, int y);
 
     void            update();
-    void            setSquad(const std::vector<BWAPI::UnitInterface *> & units, const SquadOrder & order);
     void            setRegroup();
 
     bool            squadExists(const std::string & squadName);
-    bool            unitIsInSquad(BWAPI::UnitInterface * unit) const;
-    const Squad *   getUnitSquad(BWAPI::UnitInterface * unit) const;
-    Squad *         getUnitSquad(BWAPI::UnitInterface * unit);
+    bool            unitIsInSquad(BWAPI::Unit unit) const;
+    const Squad *   getUnitSquad(BWAPI::Unit unit) const;
+    Squad *         getUnitSquad(BWAPI::Unit unit);
 
     Squad &         getSquad(const std::string & squadName);
+    const std::map<std::string, Squad> & getSquads() const;
 };
 }
