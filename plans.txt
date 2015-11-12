@@ -1,0 +1,66 @@
+getSunkenPosition(...)
+
+If the natural has been made --> As defined by a set that contains locations && location has creep, then make a sunken at the expansion
+else, wait X seconds and recall the function?
+
+
+	const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
+
+	BWAPI::TilePosition mbase = BWAPI::Broodwar->self()->getStartLocation();
+
+	BWTA::BaseLocation *myLocation;
+	double minDistance = 999999999999999;
+	for (BWTA::BaseLocation *p : locations) {
+		BWAPI::TilePosition z = p->getTilePosition();
+		if (z != mbase){
+			double distance = BWTA::getGroundDistance(mbase, z);
+			if (distance < minDistance && distance >= 0)
+			{
+				minDistance = distance;
+				myLocation = p;
+
+			}
+			
+		}
+	}
+
+	//BWAPI::Broodwar->printf("x:%d y:%d dis:%f\n", myLocation->getPosition().x, myLocation->getPosition().y, minDistance);
+                         
+
+	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
+	Building b(sunk, myLocation->getTilePosition());
+	BWAPI::TilePosition tp = BuildingPlacer::Instance().getBuildLocationNear(b, 1, false);
+
+	BWAPI::Broodwar->printf("MYX:%d, MYY:%d, StartX:%d, StartY:%d", tp.x, tp.y,myLocation->getPosition().x, myLocation->getPosition().y);
+	
+	BWAPI::Position AB;
+
+	AB.x = tp.x * 32;
+	AB.y = tp.y * 32;
+
+	
+
+
+	BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+	for (BWAPI::Unit p : myUnits)
+	{
+		if (p->getType().isWorker() && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Creep_Colony) == 0)
+		{
+			//p->move(myLocation->getPosition(), false);
+			p->build(sunk, tp);
+		
+		}
+
+		else if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Creep_Colony) == 1)
+		{
+			p->build(BWAPI::UnitTypes::Zerg_Sunken_Colony);
+		}
+	
+		int xPoint = p->getPosition().x;
+		int yPoint = p->getPosition().y;
+
+
+		//BWAPI::Broodwar->printf("MYX:%d, MYY:%d", xPoint, yPoint);
+
+		// Do something with your units
+	}
