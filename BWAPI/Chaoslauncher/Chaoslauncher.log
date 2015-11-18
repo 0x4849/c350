@@ -241,3 +241,67 @@
 11/18/2015 5:24:31 AM 2228 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
 11/18/2015 5:24:31 AM 2228 ApplyPatch for W-MODE 1.02
 11/18/2015 5:24:31 AM 2228 Starting Starcraft completed
+11/18/2015 5:28:49 AM 2228 Startbutton
+11/18/2015 5:28:49 AM 2228 Starting Game Starcraft 1.16.1 E:\StarCraft\\StarCraft.exe
+11/18/2015 5:28:49 AM 2228 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+11/18/2015 5:28:49 AM 2228 W-MODE 1.02 Version 1.0.2 Compatible
+11/18/2015 5:28:49 AM 2228 Could not obtain SeDebugPrivilege Not all privileges or groups referenced are assigned to the caller.
+(1300)
+11/18/2015 5:28:50 AM 2228 CreateProcess
+11/18/2015 5:28:50 AM 2228 Call ScSuspended for all active Plugins
+11/18/2015 5:28:50 AM 2228 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+11/18/2015 5:28:50 AM 2228 ApplyPatchSuspended for W-MODE 1.02
+11/18/2015 5:28:50 AM 2228 ResumeThread
+11/18/2015 5:28:50 AM 2228 WaitForInputIdle
+11/18/2015 5:28:50 AM 2228 Call ScWindowCreated for all active Plugins
+11/18/2015 5:28:50 AM 2228 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+11/18/2015 5:28:50 AM 2228 ApplyPatch for W-MODE 1.02
+11/18/2015 5:28:50 AM 2228 Starting Starcraft completed
+11/18/2015 5:29:08 AM 2228 Startbutton
+11/18/2015 5:29:08 AM 2228 Starting Game Starcraft 1.16.1 E:\StarCraft\\StarCraft.exe
+11/18/2015 5:29:08 AM 2228 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+11/18/2015 5:29:08 AM 2228 W-MODE 1.02 Version 1.0.2 Compatible
+11/18/2015 5:29:08 AM 2228 Could not obtain SeDebugPrivilege Not all privileges or groups referenced are assigned to the caller.
+(1300)
+11/18/2015 5:29:09 AM 2228 CreateProcess
+11/18/2015 5:29:09 AM 2228 Call ScSuspended for all active Plugins
+11/18/2015 5:29:09 AM 2228 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+11/18/2015 5:29:09 AM 2228 ApplyPatchSuspended for W-MODE 1.02
+11/18/2015 5:29:09 AM 2228 ResumeThread
+11/18/2015 5:29:09 AM 2228 WaitForInputIdle
+11/18/2015 5:29:09 AM 2228 Call ScWindowCreated for all active Plugins
+11/18/2015 5:29:09 AM 2228 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+11/18/2015 5:29:09 AM 2228 ApplyPatch for W-MODE 1.02
+11/18/2015 5:29:09 AM 2228 Starting Starcraft completed
+11/18/2015 8:05:45 AM 2228 Startbutton
+11/18/2015 8:05:45 AM 2228 Starting Game Starcraft 1.16.1 E:\StarCraft\\StarCraft.exe
+11/18/2015 8:05:45 AM 2228 BWAPI 4.1.2 Injector [DEBUG] Version  Compatible
+11/18/2015 8:05:45 AM 2228 W-MODE 1.02 Version 1.0.2 Compatible
+11/18/2015 8:05:45 AM 2228 Could not obtain SeDebugPrivilege Not all privileges or groups referenced are assigned to the caller.
+(1300)
+11/18/2015 8:05:46 AM 2228 CreateProcess
+11/18/2015 8:05:46 AM 2228 Call ScSuspended for all active Plugins
+11/18/2015 8:05:46 AM 2228 ApplyPatchSuspended for BWAPI 4.1.2 Injector [DEBUG]
+11/18/2015 8:05:47 AM 2228 ApplyPatchSuspended for W-MODE 1.02
+11/18/2015 8:05:47 AM 2228 ResumeThread
+11/18/2015 8:05:47 AM 2228 WaitForInputIdle
+11/18/2015 8:05:47 AM 2228 Call ScWindowCreated for all active Plugins
+11/18/2015 8:05:47 AM 2228 ApplyPatch for BWAPI 4.1.2 Injector [DEBUG]
+11/18/2015 8:05:47 AM 2228 ApplyPatch for W-MODE 1.02
+11/18/2015 8:05:47 AM 2228 Starting Starcraft completed
+11/18/2015 8:18:40 AM 2228 Startbutton
+11/18/2015 8:18:40 AM 2228 Starting Game Starcraft 1.16.1 E:\StarCraft\\StarCraft.exe
+11/18/2015 8:18:40 AM 2228 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+11/18/2015 8:18:40 AM 2228 W-MODE 1.02 Version 1.0.2 Compatible
+11/18/2015 8:18:40 AM 2228 Could not obtain SeDebugPrivilege Not all privileges or groups referenced are assigned to the caller.
+(1300)
+11/18/2015 8:18:41 AM 2228 CreateProcess
+11/18/2015 8:18:41 AM 2228 Call ScSuspended for all active Plugins
+11/18/2015 8:18:41 AM 2228 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+11/18/2015 8:18:41 AM 2228 ApplyPatchSuspended for W-MODE 1.02
+11/18/2015 8:18:41 AM 2228 ResumeThread
+11/18/2015 8:18:41 AM 2228 WaitForInputIdle
+11/18/2015 8:18:41 AM 2228 Call ScWindowCreated for all active Plugins
+11/18/2015 8:18:41 AM 2228 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+11/18/2015 8:18:41 AM 2228 ApplyPatch for W-MODE 1.02
+11/18/2015 8:18:41 AM 2228 Starting Starcraft completed

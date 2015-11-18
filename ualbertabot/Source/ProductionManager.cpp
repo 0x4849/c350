@@ -145,8 +145,17 @@ void ProductionManager::manageBuildOrderQueue()
 	// while there is still something left in the _queue
 	while (!_queue.isEmpty()) 
 	{
-		// this is the unit which can produce the currentItem
-        BWAPI::Unit producer = getProducer(currentItem.metaType);
+		BWAPI::Unit producer;
+		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+		{
+			producer = getProducer(currentItem.metaType, BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+		}
+		else
+		{
+			// this is the unit which can produce the currentItem
+			producer = getProducer(currentItem.metaType);
+		}
+
 
 		// check to see if we can make it right now
 		bool canMake = canMakeNow(producer, currentItem.metaType);
