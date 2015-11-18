@@ -16,6 +16,7 @@ void ProductionManager::setBuildOrder(const BuildOrder & buildOrder)
 
 	for (size_t i(0); i<buildOrder.size(); ++i)
 	{
+		MetaType m = buildOrder[i];
 		_queue.queueAsLowestPriority(buildOrder[i], true);
 	}
 }

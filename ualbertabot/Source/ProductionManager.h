@@ -15,13 +15,12 @@ class ProductionManager
 {
     ProductionManager();
     
-    BuildOrderQueue     _queue;
     BWAPI::TilePosition _predictedTilePosition;
     bool                _enemyCloakedDetected;
     bool                _assignedWorkerForThisBuilding;
     bool                _haveLocationForThisBuilding;
     
-    BWAPI::Unit         getClosestUnitToPosition(const BWAPI::Unitset & units,BWAPI::Position closestTo);
+
     BWAPI::Unit         selectUnitOfType(BWAPI::UnitType type,BWAPI::Position closestTo = BWAPI::Position(0,0));
 
     bool                hasResources(BWAPI::UnitType type);
@@ -42,7 +41,8 @@ class ProductionManager
     bool                canPlanBuildOrderNow() const;
 
 public:
-
+	BuildOrderQueue _queue;
+	BWAPI::Unit         getClosestUnitToPosition(const BWAPI::Unitset & units, BWAPI::Position closestTo);
     static ProductionManager &	Instance();
 
     void        drawQueueInformation(std::map<BWAPI::UnitType,int> & numUnits,int x,int y,int index);

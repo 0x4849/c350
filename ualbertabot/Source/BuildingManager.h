@@ -49,6 +49,10 @@ namespace UAlbertaBot
 		int                 getReservedGas();
 
 		bool                isBeingBuilt(BWAPI::UnitType type);
+		bool				sentFirstDroneForSunken = false;
+		bool				madeFirstSunken = false;
+
+		BWAPI::Position		firstHatcheryPosition;
 
 		BWAPI::TilePosition getSunkenPosition(void);
 		std::vector<BWAPI::UnitType> buildingsQueued();
@@ -57,6 +61,9 @@ namespace UAlbertaBot
 		std::vector<BWAPI::TilePosition> createdSunkenVector;
 		std::vector<BWAPI::TilePosition> createdHatcheriesVector;
 		std::set<BWAPI::TilePosition> createdBuilding;
+		std::set<BWAPI::TilePosition> buildableSunkenTilePositions;
+		std::map<int, std::pair<int, int> > knownBuildableLocations;
+
 	};
 }
 

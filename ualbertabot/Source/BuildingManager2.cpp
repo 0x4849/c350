@@ -21,45 +21,11 @@ BuildingManager::BuildingManager()
 BWAPI::TilePosition BuildingManager::getSunkenPosition()
 {
 
-	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
 	// Always make sunkens at natural expansion if you can.
 	if (createdHatcheriesSet.size() >= 1)
 	{
+
 		BWAPI::TilePosition hatchPosition = createdHatcheriesVector[0];
-		BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(hatchPosition), BWAPI::Filter::IsResourceDepot);
-		BWAPI::Unitset myUnits = pExpansion->getUnitsInRadius(200);
-		BWAPI::UnitType larva = BWAPI::UnitTypes::Zerg_Larva;
-		BWAPI::UnitType egg = BWAPI::UnitTypes::Zerg_Egg;
-
-		std::set<BWAPI::TilePosition> stuffBlocking;
-		for (BWAPI::Unit p : myUnits)
-		{
-			if (p->getType() == larva || p->getType() == egg)
-			{
-				stuffBlocking.insert(p->getTilePosition());
-			}
-		}
-
-		while (buildableSunkenTilePositions.size() >= 1)
-		{
-			std::set<BWAPI::TilePosition>::iterator it = buildableSunkenTilePositions.begin();
-
-
-			BWAPI::TilePosition mySunkPosition = *it;
-			Building z(sunk, mySunkPosition);
-
-			if (BWAPI::Broodwar->hasCreep(mySunkPosition) && BuildingPlacer::Instance().canBuildHere(mySunkPosition, z) && createdBuilding.find(mySunkPosition) == createdBuilding.end() && stuffBlocking.find(mySunkPosition) == stuffBlocking.end())
-			{
-				return *it;
-			}
-			else
-			{
-				buildableSunkenTilePositions.erase(*it);
-			}
-
-		
-		}
-
 
 		//BWAPI::Position hatchPositionBWP = BWAPI::Position(hatchPosition);
 		BWAPI::TilePosition sunkPosition;
@@ -105,7 +71,19 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 			break;
 		}
 
+		BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(hatchPosition), BWAPI::Filter::IsResourceDepot);
+		BWAPI::Unitset myUnits = pExpansion->getUnitsInRadius(200);
+		BWAPI::UnitType larva = BWAPI::UnitTypes::Zerg_Larva;
+		BWAPI::UnitType egg = BWAPI::UnitTypes::Zerg_Egg;
 
+		std::set<BWAPI::TilePosition> stuffBlocking;
+		for (BWAPI::Unit p : myUnits)
+		{
+			if (p->getType() == larva || p->getType() == egg)
+			{
+				stuffBlocking.insert(p->getTilePosition());
+			}
+		}
 
 
 
@@ -119,13 +97,12 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 		int beginX = hatchPosition.x;
 		int beginY = hatchPosition.y;
 
-		
-		//sunkPosition = BWAPI::TilePosition(newx, newy);
-
+		BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
+		Building b(sunk, sunkPosition);
 		//test4 = BuildingPlacer::Instance().canBuildHere(sunkPosition, b);
 
 		// Form a new sunken position that starts at the hatchery positive.
-
+		sunkPosition = BWAPI::TilePosition(newx, newy);
 
 		std::vector<bool> incrementDecrement(8);
 
@@ -215,7 +192,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 
 				Go Northwest
 				*/
-				incrementDecrement = { true, false, false, true, false, true, true, false };
+				incrementDecrement = { true, false, false, true,false, true, true, false };
 
 			}
 
@@ -245,7 +222,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 				/* Decrease X(Go West)
 				Increase Y(Go South)
 				Decrease X, Increase Y(Go South West)
-				Decrease X, Decrease Y(Go North West)
+				Decrease X, Decrease Y(Go North West) 
 				I think can try SouthEast ? */
 				incrementDecrement = { false, false, false, true, true, true, true, false };
 
@@ -283,121 +260,18 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 			{
 
 				incrementDecrement = { true, true, true, false, false, false, false, true };
-				/* Increase X(Go East)
+				/* Increase X(Go East)                     
 				Decrease Y(Go North)
 				Increase X, Increase Y(Go South East)
 				Increase X, Decrease Y(Go North East)
 				I think maybe Northwest is okay? */
-
+				
 			}
 		}
 
 		beginX = hatchPosition.x;
 		beginY = hatchPosition.y;
 
-		std::vector<std::pair<int, int> > myVec;
-		std::pair<int, int> p1;
-
-		for (int i = 0; i < 8; i++)
-		{
-			if (incrementDecrement[i])
-			{
-				if (i == 0)
-				{
-					p1.first = 1;
-					p1.second = 1;
-				}
-
-				else if (i == 1)
-				{
-					p1.first = 1;
-					p1.second = -1;
-				}
-
-				else if (i == 2)
-				{
-					p1.first = 1;
-					p1.second = 0;
-				}
-
-				else if (i == 3)
-				{
-					p1.first = -1;
-					p1.second = 1;
-				}
-
-				else if (i == 4)
-				{
-					p1.first = -1;
-					p1.second = -1;
-				}
-
-				else if (i == 5)
-				{
-					p1.first = -1;
-					p1.second = 0;
-				}
-
-				else if (i == 6)
-				{
-					p1.first = 0;
-					p1.second = 1;
-				}
-
-				else if (i == 7)
-				{
-					p1.first = 0;
-					p1.second = -1;
-				}
-
-				myVec.push_back(p1);
-			}
-
-		}
-
-
-		for (int i = 0; i < 30; i++)
-		for (int j = 0; j < 30; j++)
-		for (int k = 0; k < 30; k++)
-		for (int l = 0; l < 30; l++)
-		{
-			int xChange = beginX;
-			int yChange = beginY;
-
-			xChange += i * myVec[0].first;
-			yChange += i * myVec[0].second;
-
-			xChange += j * myVec[1].first;
-			yChange += j * myVec[1].second;
-
-			xChange += k * myVec[2].first;
-			yChange += k * myVec[2].second;
-
-			xChange += l * myVec[3].first;
-			yChange += l * myVec[3].second;
-
-			sunkPosition = BWAPI::TilePosition(xChange, yChange);
-
-			Building b(sunk, sunkPosition);
-
-			if (BWAPI::Broodwar->hasCreep(sunkPosition) && BuildingPlacer::Instance().canBuildHere(sunkPosition, b) && stuffBlocking.find(sunkPosition) == stuffBlocking.end() && createdBuilding.find(sunkPosition) == createdBuilding.end())
-			{
-				buildableSunkenTilePositions.insert(sunkPosition);
-			}
-		}
-
-
-		if (buildableSunkenTilePositions.size() != 0)
-		{
-			std::set<BWAPI::TilePosition>::iterator it = buildableSunkenTilePositions.begin();
-			return *it;
-		}
-		else
-		{
-			return BWAPI::TilePositions::None;
-		}
-	}
-}
 		/* We check the following conditions :
 			Do we not have creep at the sunken position?
 			Can we not build at the sunken position?
@@ -405,15 +279,99 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 			If any of these are true and counter <= 7 --> Remain in loop
 			Is the counter <= 7 --> Makes sure not to go out of bounds for the incrementDecrement vector
 			*/
+		while ((!BWAPI::Broodwar->hasCreep(sunkPosition) || !BuildingPlacer::Instance().canBuildHere(sunkPosition, b) || stuffBlocking.find(sunkPosition)!= stuffBlocking.end() || createdBuilding.find(sunkPosition) != createdBuilding.end()) && counter <= 7)
+		{
+			if (counter == 8)
+			{
+				break;
+			}
+			// If the boolean is true for incrementDecrement and we have checked 15 x+0..x+15 / y+0..y+15 positions in this direction
+			if (incrementDecrement[counter] && outercounter <= 30)
+			{
+				//Increase x Increase y (Try to make sunken in South East direction)
+				if (counter == 0)
+				{
+					beginX += 1;
+					beginY += 1;
+				}
+				//Increase x Decrease y (Try to make sunken in North East)
+				else if (counter == 1)
+				{
+					beginX += 1;
+					beginY -= 1;
+				}
+				//Increase x Don't Change y (Try to make sunken East)
+				else if (counter == 2)
+				{
+					beginX += 1;
+				}
+				//Decrease x Increase y (Try to make sunken South West)
+				else if (counter == 3)
+				{
+					beginX -= 1;
+					beginY += 1;
+				}
+				//Decrease x Decrease y (Try to make sunken North West)
+				else if (counter == 4)
+				{
+					beginX -= 1;
+					beginY -= 1;
+				}
+				//Decrease x Dont Change y (Try to make sunken (West) )
+				else if (counter == 5)
+				{
+					beginX -= 1;
+				}
+				//Don't change X Increase y Try to make sunken South
+				else if (counter == 6)
+				{
+					beginY += 1;
+				}
+				//Don't change X Decrease y Try to make sunken North
+				else if (counter == 7)
+				{
+					beginY -= 1;
+				}
 
-			
+			}
+
+			else
+			{
+				// Since this direction is set to false in incremenetDecrement OR we tried 15 possibile steps, then :
+				//Reset X direction to hatcheryX
+				beginX = newx;
+				//Reset Y direction hatcheryY
+				beginY = newy;
+				//Reset outerCounter to -1(Becomes 0)
+				outercounter = -1;
+				//Increment counter to traverse incrementDecrement vector
+				counter++;
+
+			}
+			// Increment steps taken +1
+			outercounter += 1;
+			// Try to make a sunken at the given X and Y value
+			sunkPosition = BWAPI::TilePosition(beginX, beginY);
+
+			b.desiredPosition.x = sunkPosition.x;
+			b.desiredPosition.y = sunkPosition.y;
+
+		}
+		// Now that we are out of the while loop --> If counter doesnt equal 8, it means that we got a success from one of the 8 directions so return the last sunkPosition that resulted in this.
+		if (counter != 8)
+		{
+			return sunkPosition;
+		}
 
 		// Since counter == 8, it means we tried all 8 directions and couldnt find a sunken position, so return None(sunken will be made in main base)
+		else
+		{
+			return BWAPI::TilePositions::None;
+		}
+	}
 
-
-
-	
-
+	return BWAPI::TilePositions::None;
+}
 
 		
 // gets called every frasme from GameCommander
@@ -564,8 +522,51 @@ void BuildingManager::constructAssignedBuildings()
 					if (sunkPos != BWAPI::TilePositions::None)
 					{
 						b.finalPosition = sunkPos;
-						buildableSunkenTilePositions.erase(sunkPos);
 					}
+					else if (sunkPos == BWAPI::TilePositions::None)
+					{
+						//BWAPI::Position myPos = b.builderUnit->getPosition();
+						//myPos.x += 5;
+						//myPos.y += 5;
+						//b.builderUnit->move(myPos);
+						BWAPI::TilePosition sunkPos = getSunkenPosition();
+						if (sunkPos != BWAPI::TilePositions::None)
+						{
+							b.finalPosition = sunkPos;
+						}
+						
+						else
+						{
+							//_reservedMinerals -= 75;
+							//_reservedMinerals -= b.buildingUnit->getType().mineralPrice();
+							//_reservedGas -= b.buildingUnit->getType().gasPrice();
+							//b.buildCommandGiven = true;
+							//std::vector<Building> toRemove;
+							//toRemove.push_back(b);
+							//removeBuildings(toRemove);
+							//MetaType type(BWAPI::UnitTypes::Zerg_Creep_Colony);
+							//ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
+					
+
+							/*
+							//removeBuildings(b.buildingUnit);
+							MetaType type(BWAPI::UnitTypes::Zerg_Creep_Colony);
+							ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
+							b.buildCommandGiven = true;
+							b.underConstruction = true;
+							//b.builderUnit = nullptr;
+							b.status = BuildingStatus::UnderConstruction;
+							//std::vector<Building> toRemove;
+							//toRemove.push_back(b);
+							//BuildingPlacer::Instance().freeTiles(b.finalPosition, b.type.tileWidth(), b.type.tileHeight());
+							//removeBuildings(toRemove);
+							return;
+							*/
+						}
+
+					}
+
+				
 
 					createdSunkenSet.insert(b.finalPosition);
 					createdSunkenVector.push_back(b.finalPosition);
@@ -591,13 +592,6 @@ void BuildingManager::checkForStartedConstruction()
 	// for each building unit which is being constructed
 	for (auto & buildingStarted : BWAPI::Broodwar->self()->getUnits())
 	{
-		/*if (buildingStarted->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony && !buildingStarted->isBeingConstructed())
-		{
-			//b.buildingUnit->morph(BWAPI::UnitTypes::Zerg_Creep_Colony);
-			MetaType type(BWAPI::UnitTypes::Zerg_Creep_Colony);
-			ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
-		}
-		*/
 		// filter out units which aren't buildings under construction
 		if (!buildingStarted->getType().isBuilding() || !buildingStarted->isBeingConstructed())
 		{

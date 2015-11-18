@@ -133,8 +133,19 @@ void WorkerManager::handleIdleWorkers()
 		// if it is idle
 		if (workerData.getWorkerJob(worker) == WorkerData::Idle) 
 		{
+			BWAPI::Position myPosition = worker->getPosition();
+			//BWAPI::Position tempPosition;
+
+			//tempPosition.x = BuildingManager::Instance().firstHatcheryPosition.x + 3;
+			//tempPosition.y = BuildingManager::Instance().firstHatcheryPosition.y + 3;
 			// send it to the nearest mineral patch
-			setMineralWorker(worker);
+			if (myPosition != BuildingManager::Instance().firstHatcheryPosition)
+			{	
+				setMineralWorker(worker);
+				
+			}
+			//BWAPI::Broodwar->printf("Yes it does");
+			
 		}
 	}
 }
