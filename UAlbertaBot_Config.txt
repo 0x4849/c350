@@ -8,7 +8,7 @@
         
     "BWAPI" : 
     {
-        "SetLocalSpeed"             : 3,
+        "SetLocalSpeed"             : 2,
         "SetFrameSkip"              : 0,
         "UserInput"                 : true,
         "CompleteMapInformation"    : false
@@ -21,7 +21,7 @@
         "KiteLongerRangedUnits"     : ["Mutalisk", "Vulture"],
         "WorkersDefendRush"         : true,
         "RetreatMeleeUnitShields"   : 0,
-        "RetreatMeleeUnitHP"        : 0,
+        "RetreatMeleeUnitHP"        : 5,
         "InCombatRadius"            : 1000,
         "RegroupRadius"             : 300,
         "UnitNearEnemyRadius"       : 600

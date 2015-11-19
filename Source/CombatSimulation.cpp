@@ -202,6 +202,22 @@ void CombatSimulation::addToState(BWAPI::Unit unit)
 }
 
 //NEW
+void CombatSimulation::addToState(const UnitInfo &ui)
+{
+	// if (!SparCraft::System::isSupportedUnitType(unit->getType()))
+
+	try
+	{
+		state.addUnit(getSparCraftUnit(ui));
+	}
+	catch (int e)
+	{
+		e = 1;
+		BWAPI::Broodwar->printf("Problem Adding Self Unit");
+	}
+}
+
+//NEW
 void CombatSimulation::finishMoving()
 {
 	state.finishedMoving();

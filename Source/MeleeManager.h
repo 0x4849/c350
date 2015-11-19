@@ -17,11 +17,11 @@ class MeleeManager : public MicroManager
 	std::map<BWAPI::Unit, std::vector<BWAPI::Position>> _currentRegionVertices;	// holds border of region that each unit is currently in
 	//NEW
 	int                             getClosestVertexIndex(BWAPI::Unit unit);	// edge of current region closest to unit
-	BWAPI::Position                 getFleePosition(BWAPI::Unit unit);			// figure out where to run to
-	void                            followPerimeter(BWAPI::Unit unit);			// run around the current region
+	BWAPI::Position                 getFleePosition(BWAPI::Unit unit, BWAPI::Unit enemy);			// figure out where to run to
+	void                            followPerimeter(BWAPI::Unit unit, BWAPI::Unit enemy);			// run around the current region
 	void                            calculateCurrentRegionVertices(BWAPI::Unit unit);		
-									// calculate edge of current region for a unit. returns false if unit isn't in a region
-	void                            calculateCurrentRegionVertices2(BWAPI::Unit unit);
+									// calculate edge of current region for a unit by ScoutManager's algorithm
+	void                            calculateCurrentRegionVertices2(BWAPI::Unit unit);	// uses BWTA::getPolygon instead
 
 public:
 	
@@ -32,10 +32,10 @@ public:
 	~MeleeManager() {}
 	void executeMicro(const BWAPI::Unitset & targets);
 
-	BWAPI::Unit chooseTarget(BWAPI::Unit meleeUnit, const BWAPI::Unitset & targets, std::map<BWAPI::Unit, int> & numTargeting);
-	BWAPI::Unit closestMeleeUnit(BWAPI::Unit target, const BWAPI::Unitset & meleeUnitToAssign);
-	int getAttackPriority(BWAPI::Unit attacker, BWAPI::Unit unit);
-	BWAPI::Unit getTarget(BWAPI::Unit meleeUnit, const BWAPI::Unitset & targets);
+	BWAPI::Unit chooseTarget(BWAPI::Unit meleeUnit, const BWAPI::Unitset & targets, std::map<BWAPI::Unit, int> & numTargeting);	// unused
+	BWAPI::Unit closestMeleeUnit(BWAPI::Unit target, const BWAPI::Unitset & meleeUnitToAssign);	// unused
+	int getAttackPriority(BWAPI::Unit attacker, BWAPI::Unit unit);	// allows certain units to be focused
+	BWAPI::Unit getTarget(BWAPI::Unit meleeUnit, const BWAPI::Unitset & targets);	// uses getAttackPriority and distance to choose a target
     bool meleeUnitShouldRetreat(BWAPI::Unit meleeUnit, const BWAPI::Unitset & targets);
     std::pair<BWAPI::Unit, BWAPI::Unit> findClosestUnitPair(const BWAPI::Unitset & attackers, const BWAPI::Unitset & targets);
 

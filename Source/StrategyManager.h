@@ -61,7 +61,8 @@ class StrategyManager
 																   // independent of Config.txt. this build order seems to be looped
 
 	//NEW
-	const	bool					shouldBuildSunkens() const;
+	const	bool					shouldBuildSunkens() const;		// TO-DO: needs to account for enemy unit production
+	const	bool					shouldMakeMacroHatchery() const;	// TO-DO: needs to replace shouldExpand() at >3000 minerals
 
 public:
     

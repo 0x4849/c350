@@ -37,6 +37,7 @@ public:
 
 	//NEW
 	void addToState(BWAPI::Unit unit); // adds to a simulation a single unit
+	void addToState(const UnitInfo &ui);
 	void finishMoving(); // call right before simulating combat
 };
 }

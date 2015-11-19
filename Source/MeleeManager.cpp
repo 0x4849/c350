@@ -107,8 +107,22 @@ void MeleeManager::assignTargetsOld(const BWAPI::Unitset & targets)
 					}
 					else
 					{
+						double closestZealotDist = std::numeric_limits<double>::infinity();
+						BWAPI::Unit closestZealotTarget = nullptr;
+						for (auto &unit : meleeUnitTargets)
+						{
+							if (unit->getType() == BWAPI::UnitTypes::Protoss_Zealot)
+							{
+								int distance = meleeUnit->getDistance(unit);
+								if (!closestZealotTarget || (distance < closestZealotDist))
+								{
+									closestZealotDist = distance;
+									closestZealotTarget = unit;
+								}
+							}
+						}
 						calculateCurrentRegionVertices2(meleeUnit);
-						followPerimeter(meleeUnit);
+						followPerimeter(meleeUnit, closestZealotTarget);
 					}
 				}
 			}
@@ -549,7 +563,7 @@ int MeleeManager::getClosestVertexIndex(BWAPI::Unit unit)
 	return closestIndex;
 }
 
-BWAPI::Position MeleeManager::getFleePosition(BWAPI::Unit unit)
+BWAPI::Position MeleeManager::getFleePosition(BWAPI::Unit unit, BWAPI::Unit enemy)
 {
 	UAB_ASSERT_WARNING(!_currentRegionVertices[unit].empty(), "We should have an enemy region vertices if we are fleeing");
 
@@ -581,20 +595,36 @@ BWAPI::Position MeleeManager::getFleePosition(BWAPI::Unit unit)
 	else
 	{
 		double distanceFromCurrentVertex = _currentRegionVertices[unit][_currentRegionVertexIndex[unit]].getDistance(unit->getPosition());
-
+	
 		// keep going to the next vertex in the perimeter until we get to one we're far enough from to issue another move command
-		while (distanceFromCurrentVertex < 192)
-		{
-			_currentRegionVertexIndex[unit] = (_currentRegionVertexIndex[unit] + 1) % _currentRegionVertices[unit].size();
-			distanceFromCurrentVertex = _currentRegionVertices[unit][_currentRegionVertexIndex[unit]].getDistance(unit->getPosition());
-		}
+		// cycle through vertices clockwise or counterclockwise depending on where the enemy is
+		// THE FOLLOWING CODE SOMETIMES IMPROVES PATHING BUT ALSO MAY FAIL PATHING OR CAUSE CRASHES
+		//int posDist = enemy->getDistance(_currentRegionVertices[unit][(_currentRegionVertexIndex[unit] + 1) % _currentRegionVertices[unit].size()]);
+		//int negDist = enemy->getDistance(_currentRegionVertices[unit][(_currentRegionVertexIndex[unit] - 1) % _currentRegionVertices[unit].size()]);
+
+		//if (posDist >= negDist)
+		//{
+			while (distanceFromCurrentVertex < 192)
+			{
+				_currentRegionVertexIndex[unit] = (_currentRegionVertexIndex[unit] + 1) % _currentRegionVertices[unit].size();
+				distanceFromCurrentVertex = _currentRegionVertices[unit][_currentRegionVertexIndex[unit]].getDistance(unit->getPosition());
+			}
+		//}
+		//else
+		//{
+		//	while (distanceFromCurrentVertex < 192)
+		//	{
+		//		_currentRegionVertexIndex[unit] = (_currentRegionVertexIndex[unit] - 1) % _currentRegionVertices[unit].size();
+		//		distanceFromCurrentVertex = _currentRegionVertices[unit][_currentRegionVertexIndex[unit]].getDistance(unit->getPosition());
+		//	}
+		//}
 		return _currentRegionVertices[unit][_currentRegionVertexIndex[unit]];
 	}
 }
 
-void MeleeManager::followPerimeter(BWAPI::Unit unit)
+void MeleeManager::followPerimeter(BWAPI::Unit unit, BWAPI::Unit enemy)
 {
-	BWAPI::Position fleeTo = getFleePosition(unit);
+	BWAPI::Position fleeTo = getFleePosition(unit, enemy);
 
 	if (Config::Debug::DrawScoutInfo)
 	{
