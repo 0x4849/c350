@@ -22,3 +22,6 @@
 [11/18/2015 3:59:17 AM] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 [11/18/2015 3:59:17 AM] Injected into process "Chaoslauncher.exe"
 [11/18/2015 3:59:17 AM] ICC module loaded
+[11/19/2015 6:10:48 AM] ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[11/19/2015 6:10:48 AM] Injected into process "Chaoslauncher - MultiInstance.exe"
+[11/19/2015 6:10:48 AM] ICC module loaded
