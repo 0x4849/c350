@@ -35,7 +35,7 @@ class ProductionManager
     void                predictWorkerMovement(const Building & b);
 
     bool                detectBuildOrderDeadlock();
-	bool		        canOverlord = true;
+	bool		        canOverlord = false;
     int                 getFreeMinerals();
     int                 getFreeGas();
     bool                canPlanBuildOrderNow() const;
