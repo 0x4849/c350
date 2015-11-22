@@ -38,6 +38,7 @@ namespace UAlbertaBot
 
 		static BuildingManager &    Instance();
 
+		double				Euclidean_Distance(int x1, int x2, int y1, int y2);
 		bool				buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const;
 		void                update();
 		void                onUnitMorph(BWAPI::Unit unit);
@@ -53,8 +54,10 @@ namespace UAlbertaBot
 		bool				sentFirstDroneForSunken = false;
 		bool				madeFirstSunken = false;
 	
-		int					sunkenBuildTimer;
+		int					sunkenBuildTimer = 9999999999999;
 		bool				canBuild = false;
+		bool				canSunken = false;
+		bool				canBuildTrigger = true;
 		double				mainToRampDistance;
 		BWAPI::Position		ourRampPosition;
 		BWAPI::Position		firstHatcheryPosition;

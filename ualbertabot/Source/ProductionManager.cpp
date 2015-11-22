@@ -61,11 +61,11 @@ void ProductionManager::update()
 		performBuildOrderSearch();
 	}
 
-	if (BWAPI::Broodwar->getFrameCount() > overlordBuildTimer && BWAPI::Broodwar->getFrameCount() % 24 == 0 && detectBuildOrderDeadlock())
+	if (canOverlord && BWAPI::Broodwar->getFrameCount() > overlordBuildTimer && BWAPI::Broodwar->getFrameCount() % 24 == 0 && detectBuildOrderDeadlock())
 	{
 
 	
-
+		canOverlord = false;
 		if (Config::Debug::DrawBuildOrderSearchInfo)
 		{
 			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
@@ -440,6 +440,7 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
         {
 			if (t.getUnitType() == BWAPI::UnitTypes::Zerg_Overlord)
 			{
+				canOverlord = false;
 				overlordBuildTimer = BWAPI::Broodwar->getFrameCount() + t.getUnitType().buildTime();
 		
 			}
@@ -743,6 +744,10 @@ void ProductionManager::drawProductionInformation(int x, int y)
         if (t == BWAPI::UnitTypes::Zerg_Egg)
         {
             t = unit->getBuildType();
+			if (t == BWAPI::UnitTypes::Zerg_Overlord)
+			{
+				canOverlord = true;
+			}
         }
 
 		BWAPI::Broodwar->drawTextScreen(x, yy, " %s%s", prefix.c_str(), t.getName().c_str());
