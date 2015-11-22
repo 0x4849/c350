@@ -20,12 +20,15 @@ BuildingManager::BuildingManager()
 // Get a sunken position depending on whether or not we have an expansion.
 BWAPI::TilePosition BuildingManager::getSunkenPosition()
 {
-
+	
 	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
 	// Always make sunkens at natural expansion if you can.
 	if (createdHatcheriesSet.size() >= 1)
 	{
 		BWAPI::TilePosition hatchPosition = createdHatcheriesVector[0];
+		
+		
+		/*
 		BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(hatchPosition), BWAPI::Filter::IsResourceDepot);
 		BWAPI::Unitset myUnits = pExpansion->getUnitsInRadius(200);
 		BWAPI::UnitType larva = BWAPI::UnitTypes::Zerg_Larva;
@@ -39,7 +42,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 				stuffBlocking.insert(p->getTilePosition());
 			}
 		}
-
+		*/
 		while (buildableSunkenTilePositions.size() >= 1)
 		{
 			std::set<BWAPI::TilePosition>::iterator it = buildableSunkenTilePositions.begin();
@@ -355,7 +358,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 
 		}
 
-		int N = 10;
+		int N = 20;
 
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < N; j++)
@@ -420,6 +423,35 @@ Is the counter <= 7 --> Makes sure not to go out of bounds for the incrementDecr
 // gets called every frasme from GameCommander
 void BuildingManager::update()
 {
+	/*
+	std::set<BWAPI::Unit> CreepSet;
+	BWAPI::Unit testUnit;
+	for (BWAPI::Unit p : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (p->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+		{
+			CreepSet.insert(p);
+			testUnit = p;
+			//BWAPI::Broodwar->printf("Creep Position %d %d\n", p->getTilePosition().x, p->getTilePosition().y);
+		}
+	}
+
+	for (auto x : CreepSet)
+	{
+		int tempDist = x->getDistance(testUnit);
+
+		BWAPI::Broodwar->printf("Creep Position %d %d Distance is : %d\n", x->getTilePosition().x, x->getTilePosition().y,tempDist);
+	}
+	*/
+	//BWTA::getNearestChokepoint(BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition());
+
+
+	//BWTA::getStartLocation(BWAPI::Broodwar->self())->getNearestChokePoint();
+
+	//BWTA::BaseLocation = BWTA::getStartLocation(BWAPI::Broodwar->self());
+
+	//BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y);
+	//BWAPI::Broodwar->printf("My ChokePoint is %d %d", baseChoke.x, baseChoke.y, 
 	if (canBuild && BWAPI::Broodwar->getFrameCount() > sunkenBuildTimer)
 	{
 		MetaType type(BWAPI::UnitTypes::Zerg_Creep_Colony);
@@ -572,10 +604,67 @@ void BuildingManager::constructAssignedBuildings()
 					{
 						b.finalPosition = sunkPos;
 						buildableSunkenTilePositions.erase(sunkPos);
+						//BWTA::getStartLocation(BWAPI::Broodwar->self())->getNearestChokePoint();
+						
 
-						BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y);
+						/*
+						const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
+
+						BWAPI::Unit myHatch;
+						BWAPI::Unit myExpansion;
+						for (BWAPI::BaseLocation *p : BWAPI::Bro)
+						{
+							if (p->getTilePosition() == BWAPI::Broodwar->self()->getStartLocation())
+							{
+								myHatch = p;
+
+							}
+							else if (p->getTilePosition() == createdHatcheriesVector[0])
+							{
+								myExpansion = p;
+							}
+
+
+						}
+
+						*/
+
+
+
+
+
+						//BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d, Nearest ChokePoint is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y, baseChoke.x, baseChoke.y);
+
+
+
+						/*
+						for (BWAPI::Unit p : BWAPI::Broodwar->self()->getUnits())
+						{
+							if (p->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+							{
+								p->move(rampPosition);
+								break;
+							}
+						}
+						*/
+
+						
+						//BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d, Nearest ChokePoint is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y, baseChoke.x, baseChoke.y);
+
+						
 					}
 
+					/*
+					if (p->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+					{
+						p->move(BWAPI::Position(baseChoke));
+						break;
+					}
+					*/
+					else
+					{
+						BWAPI::Broodwar->printf("Could not find a suitable location. Using %d %d\n", b.finalPosition.x, b.finalPosition.y);
+					}
 					createdSunkenSet.insert(b.finalPosition);
 					createdSunkenVector.push_back(b.finalPosition);
 
@@ -697,6 +786,26 @@ void BuildingManager::checkForCompletedBuildings()
 			{
 				canBuild = true;
 				sunkenBuildTimer = BWAPI::Broodwar->getFrameCount() + 8 * 25;
+				std::set<BWTA::Chokepoint *> chokePoints = BWTA::getChokepoints();
+				double lowestDistance = 999999.0;
+				BWAPI::Position ourRampPosition;
+
+				for (auto x : chokePoints)
+				{
+
+					double distance1 = BWTA::getGroundDistance(createdHatcheriesVector[0], BWAPI::TilePosition(x->getCenter()));
+					double distance2 = BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), BWAPI::TilePosition(x->getCenter()));
+					double sum = distance1 + distance2;
+
+					if (sum < lowestDistance)
+					{
+						lowestDistance = sum;
+						ourRampPosition = x->getCenter();
+						mainToRampDistance = distance2;
+					}
+
+				}
+	
 			}
 
 			// if we are terran, give the worker back to worker manager
@@ -915,13 +1024,37 @@ void BuildingManager::removeBuildings(const std::vector<Building> & toRemove)
 	}
 }
 
+bool BuildingManager::sunkenIntersection(BWAPI::TilePosition mySunkPosition) const
+{
+	std::set<BWAPI::Unit> sunkens;
+	for (BWAPI::Unit p : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (p->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+		{
+			sunkens.insert(p);
+		}
+	
+	}
+	for (auto x : sunkens)
+	{
+		if (x->getDistance(BWAPI::Position(mySunkPosition)) < 16)
+		{
+			return true;
+		}
+
+	}
+	return false;
+}
+
 bool BuildingManager::buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const
 {
 	//returns true if this tile is currently buildable, takes into account units on tile
-	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(mySunkPosition) != createdBuilding.end()) // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
+	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(mySunkPosition) != createdBuilding.end() || BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), mySunkPosition) < mainToRampDistance || sunkenIntersection(mySunkPosition))  // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
 	{
 		
 		return false;
 	}
 	return true;
 }
+
+//BWAPI::Broodwar->printf("Creep Position %d %d Distance is : %f\n", x->getTilePosition().x, x->getTilePosition().y, tempDist);

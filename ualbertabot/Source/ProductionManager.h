@@ -54,6 +54,8 @@ public:
     void        setSearchGoal(MetaPairVector & goal);
     void        queueGasSteal();
 
+	int		    overlordBuildTimer = 0;
+
     BWAPI::Unit getProducer(MetaType t,BWAPI::Position closestTo = BWAPI::Positions::None);
 };
 

@@ -38,7 +38,7 @@ namespace UAlbertaBot
 
 		static BuildingManager &    Instance();
 
-		bool buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const;
+		bool				buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const;
 		void                update();
 		void                onUnitMorph(BWAPI::Unit unit);
 		void                onUnitDestroy(BWAPI::Unit unit);
@@ -52,11 +52,13 @@ namespace UAlbertaBot
 		bool                isBeingBuilt(BWAPI::UnitType type);
 		bool				sentFirstDroneForSunken = false;
 		bool				madeFirstSunken = false;
-		bool				buildable(int x, int y, const Building & b) const;
+	
 		int					sunkenBuildTimer;
 		bool				canBuild = false;
-
+		double				mainToRampDistance;
+		BWAPI::Position		ourRampPosition;
 		BWAPI::Position		firstHatcheryPosition;
+		bool				sunkenIntersection(BWAPI::TilePosition) const;
 
 		BWAPI::TilePosition getSunkenPosition(void);
 		std::vector<BWAPI::UnitType> buildingsQueued();

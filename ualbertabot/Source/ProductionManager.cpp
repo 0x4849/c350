@@ -46,6 +46,7 @@ void ProductionManager::performBuildOrderSearch()
 
 void ProductionManager::update() 
 {
+	//BWAPI::Broodwar->printf("Value of canOverlord is %d\n", canOverlord);
 	// check the _queue for stuff we can build
 	manageBuildOrderQueue();
     
@@ -60,15 +61,20 @@ void ProductionManager::update()
 		performBuildOrderSearch();
 	}
 
-	// detect if there's a build order deadlock once per second
-	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && detectBuildOrderDeadlock())
+	if (BWAPI::Broodwar->getFrameCount() > overlordBuildTimer && BWAPI::Broodwar->getFrameCount() % 24 == 0 && detectBuildOrderDeadlock())
 	{
-        if (Config::Debug::DrawBuildOrderSearchInfo)
-        {
-		    BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
-        }
+
+	
+
+		if (Config::Debug::DrawBuildOrderSearchInfo)
+		{
+			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
+		}
 		_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
+	
+
+
 
 	// if they have cloaked units get a new goal asap
 	if (!_enemyCloakedDetected && InformationManager::Instance().enemyHasCloakedUnits())
@@ -432,6 +438,11 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
         // if the race is zerg, morph the unit
         if (t.getUnitType().getRace() == BWAPI::Races::Zerg) 
         {
+			if (t.getUnitType() == BWAPI::UnitTypes::Zerg_Overlord)
+			{
+				overlordBuildTimer = BWAPI::Broodwar->getFrameCount() + t.getUnitType().buildTime();
+		
+			}
             producer->morph(t.getUnitType());
         // if not, train the unit
         } 
@@ -486,6 +497,7 @@ bool ProductionManager::canMakeNow(BWAPI::Unit producer, MetaType t)
 
 bool ProductionManager::detectBuildOrderDeadlock()
 {
+	
 	// if the _queue is empty there is no deadlock
 	if (_queue.size() == 0 || BWAPI::Broodwar->self()->supplyTotal() >= 390)
 	{
@@ -501,6 +513,7 @@ bool ProductionManager::detectBuildOrderDeadlock()
         {
             if (unit->getBuildType() == BWAPI::UnitTypes::Zerg_Overlord)
             {
+				BWAPI::Broodwar->printf("overlord is building");
                 supplyInProgress = true;
                 break;
             }
@@ -513,7 +526,7 @@ bool ProductionManager::detectBuildOrderDeadlock()
 	int supplyAvailable		= std::max(0, BWAPI::Broodwar->self()->supplyTotal() - BWAPI::Broodwar->self()->supplyUsed());
 
 	// if we don't have enough supply and none is being built, there's a deadlock
-	if ((supplyAvailable < supplyCost) && !supplyInProgress)
+	if ((supplyAvailable < supplyCost) && !supplyInProgress && _queue.getHighestPriorityItem().metaType.getUnitType() != BWAPI::UnitTypes::Zerg_Overlord)
 	{
         // if we're zerg, check to see if a building is planned to be built
         if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg && BuildingManager::Instance().buildingsQueued().size() > 0)
