@@ -133,17 +133,21 @@ void WorkerManager::handleIdleWorkers()
 		// if it is idle
 		if (workerData.getWorkerJob(worker) == WorkerData::Idle) 
 		{
-			BWAPI::Position myPosition = worker->getPosition();
+			//BWAPI::Position myPosition = worker->getPosition();
+			//int workerID = worker->getID();
+
 			//BWAPI::Position tempPosition;
 
 			//tempPosition.x = BuildingManager::Instance().firstHatcheryPosition.x + 3;
 			//tempPosition.y = BuildingManager::Instance().firstHatcheryPosition.y + 3;
 			// send it to the nearest mineral patch
-			if (myPosition != BuildingManager::Instance().firstHatcheryPosition)
-			{	
+			//if (worker != BuildingManager::Instance().sunkenUnit)
+			//{	
 				setMineralWorker(worker);
 				
-			}
+			//}
+			
+			//setMineralWorker(worker);
 			//BWAPI::Broodwar->printf("Yes it does");
 			
 		}
@@ -418,8 +422,19 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		// mining worker check
 		if (unit->isCompleted() && (workerData.getWorkerJob(unit) == WorkerData::Minerals))
 		{
+			double distance;
 			// if it is a new closest distance, set the pointer
-			double distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			/*if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			{
+				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			}
+			else
+			{
+			*/
+				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			//}
+	
 			if (!closestMiningWorker || distance < closestMiningWorkerDistance)
 			{
 				closestMiningWorker = unit;
@@ -430,8 +445,19 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		// moving worker check
 		if (unit->isCompleted() && (workerData.getWorkerJob(unit) == WorkerData::Move))
 		{
+			double distance;
 			// if it is a new closest distance, set the pointer
-			double distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			/*if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			{
+				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+				//workerData.setWorkerJob(BuildingManager::Instance().sunkenUnit, WorkerData::Build, b.type);
+				//return BuildingManager::Instance().sunkenUnit;
+				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			}
+			else
+			{*/
+				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+		//	}
 			if (!closestMovingWorker || distance < closestMovingWorkerDistance)
 			{
 				closestMovingWorker = unit;

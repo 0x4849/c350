@@ -148,7 +148,7 @@ void ProductionManager::manageBuildOrderQueue()
 		BWAPI::Unit producer;
 		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 		{
-			producer = getProducer(currentItem.metaType, BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			producer = getProducer(currentItem.metaType,BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
 		}
 		else
 		{
@@ -305,6 +305,8 @@ BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo
 
 BWAPI::Unit ProductionManager::getClosestUnitToPosition(const BWAPI::Unitset & units, BWAPI::Position closestTo)
 {
+	
+
     if (units.size() == 0)
     {
         return nullptr;
@@ -318,9 +320,71 @@ BWAPI::Unit ProductionManager::getClosestUnitToPosition(const BWAPI::Unitset & u
 
     BWAPI::Unit closestUnit = nullptr;
     double minDist(1000000);
+	
+	/*
+	bool makeFirstSunken = false;
+	if (!BuildingManager::Instance().isCreepStarted())
+	{
+	
+		BWAPI::TilePosition myHatchPos = BuildingManager::Instance().createdHatcheriesVector[0];
+		if (closestTo == BWAPI::Position(myHatchPos))
+		{
+			makeFirstSunken = true;
+			BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
 
+			for (auto & unit : myUnits)
+			{
+				if (unit->getID() == BuildingManager::Instance().sunkenID)
+				{
+					return unit;
+				}
+			}
+
+			//return BWAPI::Unit(BuildingManager::Instance().sunkenID);
+		}
+	
+	
+	}
+	/*
+	std::vector<BWAPI::TilePosition> myUnitsTile;
+	std::vector<BWAPI::Position> myUnitsPosition;
+
+	std::vector<BWAPI::TilePosition> myUnitsTile2;
+	std::vector<BWAPI::Position> myUnitsPosition2;
+	for (auto & unit : units)
+	{
+		myUnitsTile.push_back(unit->getTilePosition());
+		myUnitsPosition.push_back(unit->getPosition());
+	}
+	BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+	for (BWAPI::Unit p : myUnits)
+	{
+		if (p->getType().isWorker())
+		{
+			myUnitsTile2.push_back(p->getTilePosition());
+			myUnitsPosition2.push_back(p->getPosition());
+		}
+	}
+	*/
 	for (auto & unit : units) 
-    {
+	{ 
+		
+		/**
+		if (makeFirstSunken)
+		{
+			BWAPI::TilePosition myHatchPos = BuildingManager::Instance().createdHatcheriesVector[0];
+			BWAPI::TilePosition tempPosition;
+			tempPosition.x = myHatchPos.x+2;
+			tempPosition.y = myHatchPos.y+2;
+
+			if (tempPosition == unit->getTilePosition())
+			{
+				return unit;
+			}
+			
+		}
+		*/
+
         UAB_ASSERT(unit != nullptr, "Unit was null");
 
 		double distance = unit->getDistance(closestTo);
@@ -330,6 +394,8 @@ BWAPI::Unit ProductionManager::getClosestUnitToPosition(const BWAPI::Unitset & u
 			minDist = distance;
 		}
 	}
+	//BWAPI::TilePosition myHatchPos = BuildingManager::Instance().createdHatcheriesVector[0];
+	//BWAPI::TilePosition finalTilePos = closestUnit->getTilePosition();
 
     return closestUnit;
 }
