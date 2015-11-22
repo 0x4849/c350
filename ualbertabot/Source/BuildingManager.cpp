@@ -795,6 +795,7 @@ void BuildingManager::checkForCompletedBuildings()
 
 			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.finalPosition == createdHatcheriesVector[0] && canBuildTrigger)
 			{
+				hatcheryUnit = b.buildingUnit;
 				canBuild = true;
 				canBuildTrigger = false;
 				sunkenBuildTimer = BWAPI::Broodwar->getFrameCount() + 8 * 25;

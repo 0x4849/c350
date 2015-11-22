@@ -61,6 +61,7 @@ namespace UAlbertaBot
 		double				mainToRampDistance;
 		BWAPI::Position		ourRampPosition;
 		BWAPI::Position		firstHatcheryPosition;
+		BWAPI::Unit			hatcheryUnit;
 		bool				sunkenIntersection(BWAPI::TilePosition) const;
 
 		BWAPI::TilePosition getSunkenPosition(void);
