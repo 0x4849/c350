@@ -48,7 +48,7 @@ struct UnitInfo // generally accessed through InformationManager
 };
 
 typedef std::vector<UnitInfo> UnitInfoVector;
-typedef std::map<BWAPI::Unit,UnitInfo> UIMap;
+typedef std::map<BWAPI::Unit,UnitInfo> UIMap;	// when working with UIMap, always access data from UnitInfo
 
 class UnitData
 {

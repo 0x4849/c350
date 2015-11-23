@@ -69,6 +69,27 @@ void ProductionManager::update()
 		_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
 
+	//NEW
+	if (BWAPI::Broodwar->getFrameCount() % 24 == 0)
+	{
+		std::map<BWAPI::UnitType, int> defenses = StrategyManager::Instance().shouldBuildSunkens();
+		if (!defenses.empty())
+		{
+			if (Config::Debug::DrawBuildOrderSearchInfo)
+			{
+				BWAPI::Broodwar->printf("Need defenses");
+			}
+			for (int i = 0; i < defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony]; i++)
+			{
+				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Creep_Colony), true);
+			}
+			for (int j = 0; j < defenses[BWAPI::UnitTypes::Zerg_Zergling]; j++)
+			{
+				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Zergling), true);
+			}
+		}
+	}
+
 	// if they have cloaked units get a new goal asap
 	if (!_enemyCloakedDetected && InformationManager::Instance().enemyHasCloakedUnits())
 	{
@@ -160,9 +181,15 @@ void ProductionManager::manageBuildOrderQueue()
 		// if the next item in the list is a building and we can't yet make it
         if (currentItem.metaType.isBuilding() && !(producer && canMake) && currentItem.metaType.whatBuilds().isWorker())
 		{
+			//NEW: consider macro hatchery
 			// construct a temporary building object
 			Building b(currentItem.metaType.getUnitType(), BWAPI::Broodwar->self()->getStartLocation());
             b.isGasSteal = currentItem.isGasSteal;
+			if (StrategyManager::Instance().getMacroHatchCount() > 0)
+			{
+				b.isMacro = true;
+				StrategyManager::Instance().removeMacroHatch();
+			}
 
 			// set the producer as the closest worker, but do not set its job yet
 			producer = WorkerManager::Instance().getBuilder(b, false);
@@ -175,6 +202,13 @@ void ProductionManager::manageBuildOrderQueue()
 		if (producer && canMake) 
 		{
 			// create it
+			//NEW
+			if ((StrategyManager::Instance().getMacroHatchCount() > 0) &&
+				(currentItem.metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Hatchery))
+			{
+				currentItem.isMacro = true;
+				StrategyManager::Instance().removeMacroHatch();
+			}
 			create(producer, currentItem);
 			_assignedWorkerForThisBuilding = false;
 			_haveLocationForThisBuilding = false;
@@ -342,7 +376,7 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
         && !t.getUnitType().isAddon())
     {
         // send the building task to the building manager
-        BuildingManager::Instance().addBuildingTask(t.getUnitType(), BWAPI::Broodwar->self()->getStartLocation(), item.isGasSteal);
+        BuildingManager::Instance().addBuildingTask(t.getUnitType(), BWAPI::Broodwar->self()->getStartLocation(), item.isGasSteal, item.isMacro);
     }
     else if (t.getUnitType().isAddon())
     {

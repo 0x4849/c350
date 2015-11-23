@@ -11,7 +11,7 @@ StrategyManager::StrategyManager()
 	, _enemyRace(BWAPI::Broodwar->enemy()->getRace())
     , _emptyBuildOrder(BWAPI::Broodwar->self()->getRace())
 {
-	
+	macroHatchCount = 0;
 }
 
 // get an instance of this
@@ -323,6 +323,12 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
         goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 10));
     }
 
+	if (shouldMakeMacroHatchery())
+	{
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
+		macroHatchCount++;
+	}
+
 	return goal;
 }
 
@@ -489,79 +495,68 @@ void StrategyManager::setLearnedStrategy()
 //NEW
 // only start the production manager loop for this function when the scout sees enemies move out
 // stop the loop when we are all-inning
-const bool StrategyManager::shouldBuildSunkens() const
+std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 {
+	std::map<BWAPI::UnitType, int> defenses;
+
 	SparCraft::ScoreType score = 0;
 	CombatSimulation sim;
+	//sim.generateMap(); THIS IS NOT WORKING LOL
 
-	for (auto &unit : BWAPI::Broodwar->self()->getUnits())
-	{
-		if (UnitUtil::IsCombatUnit(unit))	// will this code add our sunkens to the sim?
-		{
-			sim.addToState(unit);
-		}
-	}
+	sim.generateCurrentSituation();
 
-	for (auto &unit : BWAPI::Broodwar->enemy()->getUnits())
-	{
-		if (UnitUtil::IsCombatUnit(unit))
-		{
-			sim.addToState(unit);
-		}
-
-		// if unit is building and can produce a combat unit seen in the enemy's roster
-		// add to state all the units of that type the building can produce in the time to build a sunken
-		BWAPI::UnitType::set thingsUnitCanMake(unit->getType().buildsWhat());
-		int buildTime;
-		int sunkenTime = BWAPI::UnitTypes::Zerg_Sunken_Colony.buildTime() + BWAPI::UnitTypes::Zerg_Creep_Colony.buildTime();
-		int unitCount = 0;
-		for (auto &seenUnit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
-		{
-			if (thingsUnitCanMake.find(seenUnit.second.type) != thingsUnitCanMake.end())
-			{
-				buildTime = seenUnit.second.type.buildTime();
-				unitCount = sunkenTime / buildTime;
-				while (unitCount > 0)
-				{
-					sim.addToState(seenUnit.second);
-					unitCount--;
-				}
-			}
-		}
-
-		// if enemy has no combat units, but they have a building that can produce combat units, add to state 
-		// as many of the cheapest combat unit that building can produce in the time to build a sunken
-
-		// do not consider enemy static defenses: those must be reacted to elsewhere
-	}
-
-	CombatSimulation test(sim);	// will CC constructor work here?
+	CombatSimulation test(sim);
 
 	test.finishMoving();
 	score = test.simulateCombat();
-	bool buildSunkens = score < 0;
 
+	if (score >= 0)
+	{
+		BWAPI::Broodwar->printf("Don't need defenses");
+		return defenses;
+	}
+
+	if (score < 0)
+	{
+		BWAPI::Broodwar->printf("Defenses required");
+	}
+	
 	int newSunkens = 0;
 	int newLings = 0;
 	// if we lose, add one sunken and resimulate
 	if (score < 0)
 	{
+		sim.addAllySunken();
 		newSunkens++;
+
+		CombatSimulation test(sim);
+		test.finishMoving();
+		score = test.simulateCombat();
 	}
 	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
 	while ((score < 0) && (newLings < 6))
 	{
+		sim.addAllyZergling();
 		newLings++;
+
+		CombatSimulation test(sim);
+		test.finishMoving();
+		score = test.simulateCombat();
 	}
 	// if we still lose, keep adding sunkens until we win
 	while ((score < 0) && (newSunkens < 4))
 	{
+		sim.addAllySunken();
 		newSunkens++;
+
+		CombatSimulation test(sim);
+		test.finishMoving();
+		score = test.simulateCombat();
 	}
 	// possibly may need to cap the number of sunkens (3-6)
 
 	// build 1 sunken at a time. actually, this code may be useless
-	if (buildSunkens)
+	/*if (score < 0)
 	{
 		for (auto &unit : BWAPI::Broodwar->enemy()->getUnits())
 		{
@@ -572,13 +567,30 @@ const bool StrategyManager::shouldBuildSunkens() const
 				return false;
 			}
 		}
-	}
-
-	if (buildSunkens)
-	{
-		BWAPI::Broodwar->printf("Gonna make a sunken");
-	}
+	}*/
 
 	// return a list of units to be made. production manager should queue these at highest priority
-	return buildSunkens;
+	defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony] = newSunkens;
+	defenses[BWAPI::UnitTypes::Zerg_Zergling] = newLings;
+	return defenses;
+}
+
+//NEW
+const bool StrategyManager::shouldMakeMacroHatchery() const
+{
+	if (BWAPI::Broodwar->self()->minerals() > 600)
+	{
+		return true;
+	}
+}
+
+int StrategyManager::getMacroHatchCount()
+{
+	return macroHatchCount;
+}
+
+void StrategyManager::removeMacroHatch()
+{
+	macroHatchCount--;
+	BWAPI::Broodwar->printf("Minerals > 600; building macro hatchery");
 }

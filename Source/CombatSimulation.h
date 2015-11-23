@@ -13,11 +13,19 @@
 #include "..\..\SparCraft\source\AllPlayers.h"
 #include "InformationManager.h"
 
+//NEW
+#include "..\..\SparCraft\source\SparCraft.h"
+#include "UnitUtil.h"
+
 namespace UAlbertaBot
 {
 class CombatSimulation
 {
 	SparCraft::GameState		state;
+
+	//NEW: used to mark where to add new sunkens or zerglings
+	int current_x;
+	int current_y;
 
 public:
 
@@ -38,7 +46,16 @@ public:
 	//NEW
 	void addToState(BWAPI::Unit unit); // adds to a simulation a single unit
 	void addToState(const UnitInfo &ui);
-	void finishMoving(); // call right before simulating combat
+	void addToState(SparCraft::Unit unit);
+	void finishMoving(); // call right before simulating combat. actually, may not need to!
+	void addHypothetically(BWAPI::UnitType unit); // can be used to generate a hypothetical unit
+	const SparCraft::Unit getSparCraftUnit(BWAPI::UnitType unit, int player, int x, int y) const;	// if player is 1, it is us. if player is 2, enemy. pass in x and y coordinates
+																						// based on half-tile positions
+	void generateMap();	// sets the map for the state
+	void addAllyZergling();
+	void addAllySunken();
+	void generateCurrentSituation();	// if copy constructing fails, use these. this is based on all seen enemies
+	void generateCurrentSituation2();	// this is based on the enemy's potential for unit creation. does not work against zerg
 };
 }
 

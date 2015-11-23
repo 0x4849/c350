@@ -51,6 +51,9 @@ class StrategyManager
     int                             _totalGamesPlayed;
     const BuildOrder                _emptyBuildOrder;
 
+	//NEW
+	mutable int						macroHatchCount;
+
 	        void	                writeResults();
 	const	int					    getScore(BWAPI::Player player) const;
 	const	double				    getUCBValue(const size_t & strategy) const;
@@ -61,7 +64,6 @@ class StrategyManager
 																   // independent of Config.txt. this build order seems to be looped
 
 	//NEW
-	const	bool					shouldBuildSunkens() const;		// TO-DO: needs to account for enemy unit production
 	const	bool					shouldMakeMacroHatchery() const;	// TO-DO: needs to replace shouldExpand() at >3000 minerals
 
 public:
@@ -82,5 +84,11 @@ public:
 																	  // theory: since ProdManager's _queue is not updated until
 																	  // its current units are completed, openingBookBO builds all 
 																	  // its items, then you use getBOGoal to continue production
+
+	//NEW
+	int								getMacroHatchCount();
+	void							removeMacroHatch();
+	// returns map corresponding to units that need to be made and how many
+	std::map<BWAPI::UnitType, int>	shouldBuildSunkens() const;		// TO-DO: needs to account for enemy unit production
 };
 }

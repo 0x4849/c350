@@ -4,7 +4,8 @@ using namespace UAlbertaBot;
 
 CombatSimulation::CombatSimulation()
 {
-	
+	current_x = 17;
+	current_y = 17;
 }
 
 // sets the starting states based on the combat units within a radius of a given position
@@ -217,8 +218,160 @@ void CombatSimulation::addToState(const UnitInfo &ui)
 	}
 }
 
+void CombatSimulation::addToState(SparCraft::Unit unit)
+{
+	// if (!SparCraft::System::isSupportedUnitType(unit->getType()))
+
+	try
+	{
+		state.addUnit(unit);
+	}
+	catch (int e)
+	{
+		e = 1;
+		BWAPI::Broodwar->printf("Problem Adding Self Unit");
+	}
+}
+
 //NEW
 void CombatSimulation::finishMoving()
 {
 	state.finishedMoving();
 }
+
+void CombatSimulation::addHypothetically(BWAPI::UnitType unit)
+{
+
+}
+
+const SparCraft::Unit CombatSimulation::getSparCraftUnit(BWAPI::UnitType unit, int player, int x, int y) const
+{
+	SparCraft::IDType p;
+	if (player == 1)
+	{
+		p = SparCraft::Players::Player_One;
+	}
+	else
+	{
+		p = SparCraft::Players::Player_Two;
+	}
+	SparCraft::Position position(x, y);
+	SparCraft::Unit sparUnit(unit, p, position);
+	return sparUnit;
+}
+
+void CombatSimulation::generateMap()
+{
+	SparCraft::Map smallMap(32, 32);
+	state.setMap(&smallMap);
+}
+
+void CombatSimulation::addAllyZergling()
+{
+	SparCraft::Unit sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Zerg_Zergling, 1, current_x, current_y);
+	addToState(sparUnit);
+	current_x += 16;
+	if (current_x >= 129)
+	{
+		current_x = 17;
+		current_y += 32;
+	}
+}
+
+void CombatSimulation::addAllySunken()
+{
+	SparCraft::Unit sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Zerg_Sunken_Colony, 1, current_x, current_y);
+	addToState(sparUnit);
+	current_x += 16;
+	if (current_x >= 129)
+	{
+		current_x = 17;
+		current_y += 32;
+	}
+}
+
+// currently need to adjust this to make all units hypothetical
+void CombatSimulation::generateCurrentSituation()
+{
+	// add our units along one side of the map
+	// space them half a tile apart
+	// when you have 7 units in a row start a new row one tile under
+	int xPos = 17;
+	int yPos = 17;
+	SparCraft::Unit sparUnit;
+	for (auto &unit : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (UnitUtil::IsCombatUnit(unit))	// will this code add our sunkens to the sim? (I think so)
+		{
+			sparUnit = getSparCraftUnit(unit->getType(), 1, xPos, yPos);
+			addToState(sparUnit);
+			xPos += 16;
+			if (xPos >= 129)
+			{
+				xPos = 17;
+				yPos += 32;
+			}
+		}
+	}
+
+	current_x = xPos;
+	current_y = yPos;
+
+	// add enemy units along the other side of the map and let them start at the range of a marine
+	int range = BWAPI::UnitTypes::Terran_Marine.groundWeapon().maxRange();
+	yPos += range;
+	xPos = 17;
+	// using InfoManager to see former enemy units
+	// apparently InfoManager can recognize previously seen enemy units, so this is always more accurate than counting
+	// currently visible enemy units
+	for (auto &unit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
+	{
+		// consider enemy combat units and not static defenses
+		if ((UnitUtil::IsCombatUnit(unit.second.unit)) && (!unit.second.type.isBuilding()))
+		{
+			sparUnit = getSparCraftUnit(unit.second.type, 2, xPos, yPos);
+			addToState(sparUnit);
+			xPos += 16;
+			if (xPos >= 129)
+			{
+				xPos = 17;
+				yPos += 32;
+			}
+		}
+
+		// if unit is building and can produce a combat unit seen in the enemy's roster
+		// add to state all the units of that type the building can produce in the time to build a sunken
+		/*
+		if (unit.first->getType().isBuilding())
+		{
+			BWAPI::UnitType::set thingsUnitCanMake(unit.first->getType().buildsWhat());
+			int buildTime;
+			int sunkenTime = BWAPI::UnitTypes::Zerg_Sunken_Colony.buildTime() + BWAPI::UnitTypes::Zerg_Creep_Colony.buildTime();
+			int unitCount = 0;
+			// only consider potential unit production of enemy units we know they have made. is this bad?
+			for (auto &seenUnit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
+			{
+				// potential issue: if enemy has been making two types of units from the same building, it will overestimate
+				// production. however it is quite unlikely for the enemy to do this early in the game
+				if (thingsUnitCanMake.find(seenUnit.second.type) != thingsUnitCanMake.end())
+				{
+					buildTime = seenUnit.second.type.buildTime();
+					unitCount = sunkenTime / buildTime;
+					while (unitCount > 0)
+					{
+						sparUnit = getSparCraftUnit(seenUnit.first->getType(), 2, xPos, yPos);
+						addToState(sparUnit);
+						xPos += 16;
+						if (xPos >= 129)
+						{
+							xPos = 17;
+							yPos += 32;
+						}
+						unitCount--;
+					}
+				}
+			}
+		}*/
+	}
+}
+//NEW: all CombatSimulation2 definitions below

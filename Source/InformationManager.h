@@ -25,6 +25,10 @@ class InformationManager
 																		  // a player's building on it. by this logic more than one
 																		  // player can occupy the same region
 
+	//NEW: estimate of number of enemy units based on production buildings. initialized with the number of currently known enemy
+	// units upon seeing an enemy production building
+	std::map<BWAPI::UnitType, int>						_enemyProductionEstimate;
+
     int                     getIndex(BWAPI::Player player) const; // unused
 
     void                    updateUnit(BWAPI::Unit unit); // calls updateUnit() on unitData. part of update loop
@@ -47,7 +51,8 @@ public:
     void                    update(); // called by gameCommander loop. updateUnitInfo() and updateBaseLocationInfo()
 
     // event driven stuff. allows InfoManager to keep track of all units
-    void					onUnitShow(BWAPI::Unit unit)        { updateUnit(unit); }
+	//NEW: modified to start the production timer when an enemy prod building is seen, or increase rate when another building is seen
+	void					onUnitShow(BWAPI::Unit unit)        { updateUnit(unit); }
     void					onUnitHide(BWAPI::Unit unit)        { updateUnit(unit); }
     void					onUnitCreate(BWAPI::Unit unit)		{ updateUnit(unit); }
     void					onUnitComplete(BWAPI::Unit unit)    { updateUnit(unit); }
@@ -76,5 +81,10 @@ public:
     void                    drawMapInformation();
 
     const UnitData &        getUnitData(BWAPI::Player player) const; // useful: returns UnitData of a player
+
+	//NEW: if it is the first time seeing an enemy production building, initialize. otherwise, increase timer rate
+	void					initializeEnemyProductionEstimate();
+	//NEW: once initialized, it increments enemy unit counts every time one is guessed to have been created
+	void					updateEnemyProductionEstimate();
 };
 }

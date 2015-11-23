@@ -41,12 +41,14 @@ public:
     void                update(); // gameCommander update cycle
     void                onUnitMorph(BWAPI::Unit unit);
     void                onUnitDestroy(BWAPI::Unit unit);
-    void                addBuildingTask(BWAPI::UnitType type,BWAPI::TilePosition desiredLocation,bool isGasSteal); // called only by ProdManager
+    void                addBuildingTask(BWAPI::UnitType type,BWAPI::TilePosition desiredLocation,bool isGasSteal, bool isMacro); // called only by ProdManager
     void                drawBuildingInformation(int x,int y);
     BWAPI::TilePosition getBuildingLocation(const Building & b); // figures out where to put a building. considers refineries,
 															     // bases, and gas steals. all other buildings are handled with a
 																 // call to BuildingPlacer.getBuildLocationNear()
 																 // distance padding between buildings defined in Config
+																 // TO-DO: all hatcheries are considered expansions! what if
+																 // we want macro hatchery?
 
     int                 getReservedMinerals();
     int                 getReservedGas();

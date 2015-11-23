@@ -277,13 +277,14 @@ bool BuildingManager::isEvolvedBuilding(BWAPI::UnitType type)
 }
 
 // add a new building to be constructed
-void BuildingManager::addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal)
+void BuildingManager::addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal, bool isMacro)
 {
     _reservedMinerals += type.mineralPrice();
     _reservedGas	     += type.gasPrice();
 
     Building b(type, desiredLocation);
     b.isGasSteal = isGasSteal;
+	b.isMacro = isMacro;
     b.status = BuildingStatus::Unassigned;
 
     _buildings.push_back(b);
@@ -419,7 +420,8 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
         return BuildingPlacer::Instance().getRefineryPosition();
     }
 
-    if (b.type.isResourceDepot())
+	//NEW
+    if ((b.type.isResourceDepot()) && (!b.isMacro))
     {
         // get the location 
         BWAPI::TilePosition tile = MapTools::Instance().getNextExpansion();

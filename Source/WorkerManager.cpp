@@ -29,6 +29,9 @@ void WorkerManager::update()
 	workerData.drawDepotDebugInfo();
 
     handleRepairWorkers();
+
+	//NEW
+	rebalanceWorkers();
 }
 
 void WorkerManager::updateWorkerStatus() 
@@ -297,14 +300,14 @@ void WorkerManager::setMineralWorker(BWAPI::Unit unit)
 	BWAPI::Unit depot = getClosestDepot(unit);
 
 	// if there is a valid mineral
-	if (depot)
+	if ((depot) && (!workerData.isMacroHatch(depot)))
 	{
 		// update workerData with the new job
 		workerData.setWorkerJob(unit, WorkerData::Minerals, depot);
 	}
 	else
 	{
-		// BWAPI::Broodwar->printf("No valid depot for mineral worker");
+		 BWAPI::Broodwar->printf("No valid depot for mineral worker");
 	}
 }
 
@@ -318,8 +321,11 @@ BWAPI::Unit WorkerManager::getClosestDepot(BWAPI::Unit worker)
 	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 	{
         UAB_ASSERT(unit != nullptr, "Unit was null");
-
-		if (unit->getType().isResourceDepot() && (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair) && !workerData.depotIsFull(unit))
+		//NEW
+		if ((unit->getType().isResourceDepot()) 
+			&& (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair)
+			&& (!workerData.depotIsFull(unit))
+			&& (!workerData.isMacroHatch(unit)))
 		{
 			double distance = unit->getDistance(worker);
 			if (!closestDepot || distance < closestDistance)
@@ -607,10 +613,32 @@ void WorkerManager::rebalanceWorkers()
 
 		BWAPI::Unit depot = workerData.getWorkerDepot(worker);
 
-		if (depot && workerData.depotIsFull(depot))
+		//NEW
+		if ((depot && workerData.depotIsFull(depot)) || (workerData.isMacroHatch(depot)))
 		{
-			workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);
+			for (auto &newDepot : workerData.getDepots())
+			{
+				if (!workerData.depotIsFull(newDepot))
+				{
+					BWAPI::Broodwar->printf("Depot is full; moving to different one");
+					workerData.setWorkerJob(worker, WorkerData::Minerals, newDepot);
+				}
+			}
 		}
+
+		//NEW
+		else if (depot && workerData.depotIsSemiFull(depot))
+		{
+			for (auto &goodDepot : workerData.getDepots())
+			{
+				if ((!workerData.depotIsSemiFull(goodDepot)) && (!workerData.depotIsFull(goodDepot)))
+				{
+					BWAPI::Broodwar->printf("Depot is semifull; moving to optimal one");
+					workerData.setWorkerJob(worker, WorkerData::Minerals, goodDepot);
+				}
+			}
+		}
+
 		else if (!depot)
 		{
 			workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);

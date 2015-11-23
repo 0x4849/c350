@@ -13,11 +13,15 @@ struct BuildOrderItem
     bool				blocking;	// whether or not we block further items. a way of saying "i need this item ASAP"
     bool                isGasSteal;
 
-    BuildOrderItem(MetaType m,int p,bool b,bool gasSteal = false)
+	//NEW
+	bool				isMacro;
+
+    BuildOrderItem(MetaType m,int p,bool b,bool gasSteal = false, bool macro = false)
         : metaType(m)
         , priority(p)
         , blocking(b)
-        , isGasSteal(gasSteal) 
+        , isGasSteal(gasSteal)
+		, isMacro(macro)
     {
     }
 

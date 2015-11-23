@@ -62,6 +62,7 @@ public:
 						  // calls performBuildOrderSearch() when _queue is empty; i.e. nothing building.
 	                      // also queues supply at highest priority if detectBuildOrderDeadlock()
 	                      // also queues detectors if stealth is detected, except for zerg which has overlords
+						  // NEW: calls shouldBuildSunkens(). if yes, it queues at highest priority the requested items
     void        onUnitMorph(BWAPI::Unit unit);
     void        onUnitDestroy(BWAPI::Unit unit);
     void        performBuildOrderSearch(); // called in update loop. getsBuildOrder() from BOSS and setsBuildOrder()

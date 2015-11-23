@@ -24,12 +24,19 @@ namespace Micro // contains all underlying micro actions. consider adding other 
 																		 // does actually seem to move in the opposite direction
 																		 // of target
 																		 // try implementing something similar for zergling kite
-    void Rotate(double &x, double &y, double angle);
+    void Rotate(double &x, double &y, double angle);	// could give this a distance vector, then rotate it
     void Normalize(double &x, double &y);
 
     void drawAPM(int x, int y);
 
 	//NEW
-	void StormDodge(BWAPI::Unit unit); // TO BE IMPLEMENTED. the given unit moves away from the nearest templar. move away for 3 seconds and come back as the storm ends
+	void StormDodge(BWAPI::Unit unit); // TO BE IMPLEMENTED. the given unit moves away from the nearest templar. move away for 2 seconds and come back as the storm ends
+
+	BWAPI::Position GetNearbyPos(BWAPI::Position pos); //TO BE IMPLEMENTED. helper function in the case that you move to an unwalkable tile
+	int CalcDistance(BWAPI::Unit unit, int time); // TO BE IMPLEMENTED. helper function that gets a distance a unit will travel
+												  // in the given time
+	BWAPI::Position GetFleeVector(BWAPI::Unit unit, BWAPI::Unit enemy); // TO BE IMPLEMENTED. helper function that gets the direction
+																		// of movement to flee directly away a given enemy
+	// try creating helper functions 
 };
 }
