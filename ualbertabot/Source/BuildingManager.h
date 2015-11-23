@@ -55,7 +55,7 @@ namespace UAlbertaBot
 		bool				sentFirstDroneForSunken = false;
 		bool				madeFirstSunken = false;
 		bool				isBaseLocation(BWAPI::TilePosition);
-		int					sunkenBuildTimer = 9999999999999;
+		int					sunkenBuildTimer = 9999999;
 		bool				canBuild = false;
 		bool				canSunken = false;
 		bool				canBuildTrigger = true;
