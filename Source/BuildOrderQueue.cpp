@@ -197,3 +197,8 @@ void BuildOrderQueue::drawQueueInformation(int x, int y)
 		BWAPI::Broodwar->drawTextScreen(x, y+(i*10), " %s%s", prefix.c_str(), type.getName().c_str());
 	}
 }
+
+std::deque< BuildOrderItem > BuildOrderQueue::getQueue()
+{
+	return queue;
+}

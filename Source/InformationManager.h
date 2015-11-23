@@ -7,6 +7,9 @@
 
 #include "..\..\SparCraft\source\SparCraft.h"
 
+//NEW
+#include "UnitUtil.h"
+
 namespace UAlbertaBot
 {
 struct BaseInfo; // unused. seems useful in theory though
@@ -28,6 +31,7 @@ class InformationManager
 	//NEW: estimate of number of enemy units based on production buildings. initialized with the number of currently known enemy
 	// units upon seeing an enemy production building
 	std::map<BWAPI::UnitType, int>						_enemyProductionEstimate;
+	int													_firstProdBuildingTime;
 
     int                     getIndex(BWAPI::Player player) const; // unused
 
@@ -52,13 +56,13 @@ public:
 
     // event driven stuff. allows InfoManager to keep track of all units
 	//NEW: modified to start the production timer when an enemy prod building is seen, or increase rate when another building is seen
-	void					onUnitShow(BWAPI::Unit unit)        { updateUnit(unit); }
+	void					onUnitShow(BWAPI::Unit unit);
     void					onUnitHide(BWAPI::Unit unit)        { updateUnit(unit); }
     void					onUnitCreate(BWAPI::Unit unit)		{ updateUnit(unit); }
     void					onUnitComplete(BWAPI::Unit unit)    { updateUnit(unit); }
     void					onUnitMorph(BWAPI::Unit unit)       { updateUnit(unit); }
     void					onUnitRenegade(BWAPI::Unit unit)    { updateUnit(unit); }
-    void					onUnitDestroy(BWAPI::Unit unit);
+    void					onUnitDestroy(BWAPI::Unit unit);	//NEW: modified to adjust enemy production estimate as enemies are defeated
 
     bool					isEnemyBuildingInRegion(BWTA::Region * region); // could be useful. used by updateBaseLocationInfo()
     int						getNumUnits(BWAPI::UnitType type,BWAPI::Player player); // # of units of given type that a player has?
@@ -82,9 +86,9 @@ public:
 
     const UnitData &        getUnitData(BWAPI::Player player) const; // useful: returns UnitData of a player
 
-	//NEW: if it is the first time seeing an enemy production building, initialize. otherwise, increase timer rate
-	void					initializeEnemyProductionEstimate();
 	//NEW: once initialized, it increments enemy unit counts every time one is guessed to have been created
+	// called in update() loop
 	void					updateEnemyProductionEstimate();
+	std::map<BWAPI::UnitType, int>		getEnemyProductionEstimate();
 };
 }

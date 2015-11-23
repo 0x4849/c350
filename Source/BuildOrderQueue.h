@@ -76,5 +76,8 @@ public:
 
     // overload the bracket operator for ease of use
     BuildOrderItem operator [] (int i);
+
+	//NEW
+	std::deque< BuildOrderItem > getQueue();
 };
 }

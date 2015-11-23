@@ -70,9 +70,10 @@ void ProductionManager::update()
 	}
 
 	//NEW
-	if (BWAPI::Broodwar->getFrameCount() % 24 == 0)
+	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && (checkDefenses()))
 	{
-		std::map<BWAPI::UnitType, int> defenses = StrategyManager::Instance().shouldBuildSunkens();
+		// edit this and see which works better: shouldBuildSunkens or shouldBuildSunkens2
+		std::map<BWAPI::UnitType, int> defenses = StrategyManager::Instance().shouldBuildSunkens2();
 		if (!defenses.empty())
 		{
 			if (Config::Debug::DrawBuildOrderSearchInfo)
@@ -82,6 +83,8 @@ void ProductionManager::update()
 			for (int i = 0; i < defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony]; i++)
 			{
 				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Creep_Colony), true);
+				// EVERY TIME WE MAKE A SUNKEN, SHOULD WE MAKE A DRONE TO REPLACE IT???? and at what priority? and block or no?
+				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Drone), false);
 			}
 			for (int j = 0; j < defenses[BWAPI::UnitTypes::Zerg_Zergling]; j++)
 			{
@@ -727,4 +730,29 @@ bool ProductionManager::canPlanBuildOrderNow() const
     }
 
     return true;
+}
+
+//NEW
+bool ProductionManager::checkDefenses()
+{
+	std::deque< BuildOrderItem > items = _queue.getQueue();
+
+	for (auto it = items.begin(); it != items.end(); it++)
+	{
+		if (it->metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+		{
+			return false;
+		}
+	}
+
+
+	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (unit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

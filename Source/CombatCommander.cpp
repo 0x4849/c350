@@ -87,18 +87,25 @@ void CombatCommander::updateDistractSquad()
 	{
 		return;
 	}
+	if (!_squadData.squadExists("Distract"))
+	{
+		return;
+	}
 	Squad &distractSquad = _squadData.getSquad("Distract");
 	// disable once a non-zealot combat unit is seen
 	bool keepDistracting = true;
 	for (auto &item : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
 	{
-		if ((UnitUtil::IsCombatUnit(item.second.unit)) && (item.second.unit->getType() != BWAPI::UnitTypes::Protoss_Zealot))
+		if ((UnitUtil::IsCombatUnit(item.second.unit)) && 
+			(item.second.unit->getType() != BWAPI::UnitTypes::Protoss_Zealot) &&
+			(!item.second.unit->getType().isBuilding()))
 		{
-			// keepDistracting = false;
+			BWAPI::Broodwar->printf("Not just zealots; stop distracting");
+			keepDistracting = false;
 		}
 	}
 	// disable if zealots get too close to a base (they aren't buying it). MAYBE THIS BLOCK IS FAULTY
-	BWAPI::Unitset nearbyEnemies;
+	/*BWAPI::Unitset nearbyEnemies;
 	for (auto &unit : BWAPI::Broodwar->self()->getUnits())
 	{
 		if (unit->getType() == BWAPI::UnitTypes::Zerg_Hatchery ||
@@ -111,8 +118,8 @@ void CombatCommander::updateDistractSquad()
 	}
 	if (!nearbyEnemies.empty())
 	{
-		// keepDistracting = false;
-	}
+		 keepDistracting = false;
+	}*/
 
 	if (!keepDistracting) // free all units
 	{

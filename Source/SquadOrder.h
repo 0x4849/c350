@@ -9,7 +9,7 @@ namespace UAlbertaBot
 namespace SquadOrderTypes
 {
 	// the only relevant ones seem to be Attack and Defend. Idle does nothing, Regroup isn't used, and Drop is Situational
-    enum { None, Idle, Attack, Defend, Regroup, Drop, Confuse, SquadOrderTypes };
+    enum { None, Idle, Attack, Defend, Regroup, Drop, Confuse, Harass, SquadOrderTypes };
 }
 
 class SquadOrder

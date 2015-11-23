@@ -48,7 +48,6 @@ public:
 	void addToState(const UnitInfo &ui);
 	void addToState(SparCraft::Unit unit);
 	void finishMoving(); // call right before simulating combat. actually, may not need to!
-	void addHypothetically(BWAPI::UnitType unit); // can be used to generate a hypothetical unit
 	const SparCraft::Unit getSparCraftUnit(BWAPI::UnitType unit, int player, int x, int y) const;	// if player is 1, it is us. if player is 2, enemy. pass in x and y coordinates
 																						// based on half-tile positions
 	void generateMap();	// sets the map for the state

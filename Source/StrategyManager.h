@@ -89,6 +89,9 @@ public:
 	int								getMacroHatchCount();
 	void							removeMacroHatch();
 	// returns map corresponding to units that need to be made and how many
+	// current control: in prod manager, if creep colonies or sunkens are currently in the queue, don't call this
+	// when testing, try each version and see which works better
 	std::map<BWAPI::UnitType, int>	shouldBuildSunkens() const;		// TO-DO: needs to account for enemy unit production
+	std::map<BWAPI::UnitType, int>	shouldBuildSunkens2() const;
 };
 }

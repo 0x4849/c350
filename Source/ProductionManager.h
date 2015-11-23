@@ -51,7 +51,10 @@ class ProductionManager // in general, gets build orders from StratManager, send
 
     int                 getFreeMinerals();
     int                 getFreeGas();
-    bool                canPlanBuildOrderNow() const; // performBuildOrderSearch uses this as a check		
+    bool                canPlanBuildOrderNow() const; // performBuildOrderSearch uses this as a check
+
+	//NEW
+	bool				checkDefenses();	// checks if creep colonies are in queue or morphing
 
 public:
 

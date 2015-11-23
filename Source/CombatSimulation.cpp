@@ -239,11 +239,6 @@ void CombatSimulation::finishMoving()
 	state.finishedMoving();
 }
 
-void CombatSimulation::addHypothetically(BWAPI::UnitType unit)
-{
-
-}
-
 const SparCraft::Unit CombatSimulation::getSparCraftUnit(BWAPI::UnitType unit, int player, int x, int y) const
 {
 	SparCraft::IDType p;
@@ -341,10 +336,10 @@ void CombatSimulation::generateCurrentSituation()
 
 		// if unit is building and can produce a combat unit seen in the enemy's roster
 		// add to state all the units of that type the building can produce in the time to build a sunken
-		/*
-		if (unit.first->getType().isBuilding())
+		
+		if (unit.second.type.isBuilding())
 		{
-			BWAPI::UnitType::set thingsUnitCanMake(unit.first->getType().buildsWhat());
+			BWAPI::UnitType::set thingsUnitCanMake(unit.second.type.buildsWhat());
 			int buildTime;
 			int sunkenTime = BWAPI::UnitTypes::Zerg_Sunken_Colony.buildTime() + BWAPI::UnitTypes::Zerg_Creep_Colony.buildTime();
 			int unitCount = 0;
@@ -359,7 +354,7 @@ void CombatSimulation::generateCurrentSituation()
 					unitCount = sunkenTime / buildTime;
 					while (unitCount > 0)
 					{
-						sparUnit = getSparCraftUnit(seenUnit.first->getType(), 2, xPos, yPos);
+						sparUnit = getSparCraftUnit(seenUnit.second.type, 2, xPos, yPos);
 						addToState(sparUnit);
 						xPos += 16;
 						if (xPos >= 129)
@@ -371,7 +366,108 @@ void CombatSimulation::generateCurrentSituation()
 					}
 				}
 			}
-		}*/
+		}
 	}
 }
+
+void CombatSimulation::generateCurrentSituation2()
+{
+	// add our units along one side of the map
+	// space them half a tile apart
+	// when you have 7 units in a row start a new row one tile under
+	int xPos = 17;
+	int yPos = 17;
+	SparCraft::Unit sparUnit;
+	for (auto &unit : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (UnitUtil::IsCombatUnit(unit))	// will this code add our sunkens to the sim? (I think so)
+		{
+			sparUnit = getSparCraftUnit(unit->getType(), 1, xPos, yPos);
+			addToState(sparUnit);
+			xPos += 16;
+			if (xPos >= 129)
+			{
+				xPos = 17;
+				yPos += 32;
+			}
+		}
+	}
+
+	current_x = xPos;
+	current_y = yPos;
+
+	// add enemy units along the other side of the map and let them start at the range of a marine
+	int range = BWAPI::UnitTypes::Terran_Marine.groundWeapon().maxRange();
+	yPos += range;
+	xPos = 17;
+	for (auto &unit : InformationManager::Instance().getEnemyProductionEstimate())
+	{
+		if (unit.first == BWAPI::UnitTypes::Terran_Barracks)
+		{
+			for (int i = 0; i < unit.second; i++)
+			{
+				sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Terran_Marine, 2, xPos, yPos);
+				addToState(sparUnit);
+				xPos += 16;
+				if (xPos >= 129)
+				{
+					xPos = 17;
+					yPos += 32;
+				}
+			}
+		}
+		if (unit.first == BWAPI::UnitTypes::Protoss_Gateway)
+		{
+			for (int j = 0; j < unit.second; j++)
+			{
+				sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Protoss_Zealot, 2, xPos, yPos);
+				addToState(sparUnit);
+				xPos += 16;
+				if (xPos >= 129)
+				{
+					xPos = 17;
+					yPos += 32;
+				}
+			}
+		}
+	}
+
+	for (auto &unit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
+	{
+		// if unit is building and can produce a combat unit seen in the enemy's roster
+		// add to state all the units of that type the building can produce in the time to build a sunken
+
+		if (unit.second.type.isBuilding())
+		{
+			BWAPI::UnitType::set thingsUnitCanMake(unit.second.type.buildsWhat());
+			int buildTime;
+			int sunkenTime = BWAPI::UnitTypes::Zerg_Sunken_Colony.buildTime() + BWAPI::UnitTypes::Zerg_Creep_Colony.buildTime();
+			int unitCount = 0;
+			// only consider potential unit production of enemy units we know they have made. is this bad?
+			for (auto &seenUnit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
+			{
+				// potential issue: if enemy has been making two types of units from the same building, it will overestimate
+				// production. however it is quite unlikely for the enemy to do this early in the game
+				if (thingsUnitCanMake.find(seenUnit.second.type) != thingsUnitCanMake.end())
+				{
+					buildTime = seenUnit.second.type.buildTime();
+					unitCount = sunkenTime / buildTime;
+					while (unitCount > 0)
+					{
+						sparUnit = getSparCraftUnit(seenUnit.second.type, 2, xPos, yPos);
+						addToState(sparUnit);
+						xPos += 16;
+						if (xPos >= 129)
+						{
+							xPos = 17;
+							yPos += 32;
+						}
+						unitCount--;
+					}
+				}
+			}
+		}
+	}
+}
+
 //NEW: all CombatSimulation2 definitions below

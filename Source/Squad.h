@@ -32,7 +32,7 @@ class Squad // important features: a squad has some units, an order, a priority,
     TankManager         _tankManager;
     MedicManager        _medicManager;
 
-	std::map<BWAPI::Unit, bool>	_nearEnemy;
+	std::map<BWAPI::Unit, bool>	_nearEnemy;	// enemies are defined as near if they are within 400 units of the unit
 
     
 	BWAPI::Unit		getRegroupUnit(); // unused

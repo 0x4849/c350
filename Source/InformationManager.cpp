@@ -20,6 +20,8 @@ void InformationManager::update()
 {
 	updateUnitInfo();
 	updateBaseLocationInfo();
+	//NEW
+	updateEnemyProductionEstimate();
 }
 
 void InformationManager::updateUnitInfo() 
@@ -579,4 +581,54 @@ bool InformationManager::enemyHasCloakedUnits()
     }
 
 	return false;
+}
+
+//NEW
+void InformationManager::updateEnemyProductionEstimate()
+{
+	if (_enemyProductionEstimate.empty())
+	{
+		return;
+	}
+
+	int currentTime = BWAPI::Broodwar->getFrameCount() - _firstProdBuildingTime;
+	int numGateways = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumUnits(BWAPI::UnitTypes::Protoss_Gateway);
+	int numBarracks = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumUnits(BWAPI::UnitTypes::Terran_Barracks);
+	int zealotBuildTime = BWAPI::UnitTypes::Protoss_Zealot.buildTime() / numGateways;
+	int marineBuildTime = BWAPI::UnitTypes::Terran_Marine.buildTime() / numBarracks;
+	int possibleZealots = currentTime / zealotBuildTime;
+	int possibleMarines = currentTime / marineBuildTime;
+	int deadZealots = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumDeadUnits(BWAPI::UnitTypes::Protoss_Zealot);
+	int deadMarines = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumDeadUnits(BWAPI::UnitTypes::Terran_Marine);
+
+	_enemyProductionEstimate[BWAPI::UnitTypes::Protoss_Gateway] = possibleZealots - deadZealots;
+	_enemyProductionEstimate[BWAPI::UnitTypes::Terran_Barracks] = possibleMarines - deadMarines;
+}
+
+std::map<BWAPI::UnitType, int> InformationManager::getEnemyProductionEstimate()
+{
+	return _enemyProductionEstimate;
+}
+
+//NEW
+void InformationManager::onUnitShow(BWAPI::Unit unit)
+{
+	updateUnit(unit);
+	if ((_enemyProductionEstimate.empty()) && ((unit->getType() == BWAPI::UnitTypes::Terran_Barracks) ||
+		//(unit->getType() == BWAPI::UnitTypes::Terran_Factory) ||
+		//(unit->getType() == BWAPI::UnitTypes::Protoss_Stargate) ||
+		(unit->getType() == BWAPI::UnitTypes::Protoss_Gateway)))
+	{
+		BWAPI::Broodwar->printf("Omg a gateway/barracks");
+		_firstProdBuildingTime = BWAPI::Broodwar->getFrameCount();
+		UIMap enemies = getUnitInfo(BWAPI::Broodwar->enemy());
+		_enemyProductionEstimate[unit->getType()] = 0;
+		for (auto it = enemies.begin(); it != enemies.end(); it++)
+		{
+			if (UnitUtil::IsCombatUnit(it->second.unit))
+			{
+				_enemyProductionEstimate[unit->getType()]++;
+			}
+		}
+	}
 }

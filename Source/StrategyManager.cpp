@@ -575,6 +575,86 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 	return defenses;
 }
 
+std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
+{
+	std::map<BWAPI::UnitType, int> defenses;
+
+	SparCraft::ScoreType score = 0;
+	CombatSimulation sim;
+	//sim.generateMap(); THIS IS NOT WORKING LOL
+
+	sim.generateCurrentSituation2();
+
+	CombatSimulation test(sim);
+
+	test.finishMoving();
+	score = test.simulateCombat();
+
+	if (score >= 0)
+	{
+		BWAPI::Broodwar->printf("Don't need defenses");
+		return defenses;
+	}
+
+	if (score < 0)
+	{
+		BWAPI::Broodwar->printf("Defenses required");
+	}
+
+	int newSunkens = 0;
+	int newLings = 0;
+	// if we lose, add one sunken and resimulate
+	if (score < 0)
+	{
+		sim.addAllySunken();
+		newSunkens++;
+
+		CombatSimulation test(sim);
+		test.finishMoving();
+		score = test.simulateCombat();
+	}
+	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
+	while ((score < 0) && (newLings < 6))
+	{
+		sim.addAllyZergling();
+		newLings++;
+
+		CombatSimulation test(sim);
+		test.finishMoving();
+		score = test.simulateCombat();
+	}
+	// if we still lose, keep adding sunkens until we win
+	while ((score < 0) && (newSunkens < 4))
+	{
+		sim.addAllySunken();
+		newSunkens++;
+
+		CombatSimulation test(sim);
+		test.finishMoving();
+		score = test.simulateCombat();
+	}
+	// possibly may need to cap the number of sunkens (3-6)
+
+	// build 1 sunken at a time. actually, this code may be useless
+	/*if (score < 0)
+	{
+	for (auto &unit : BWAPI::Broodwar->enemy()->getUnits())
+	{
+	if ( ( (unit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony) && (unit->isBeingConstructed()) ) ||
+	((unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony) && (unit->isMorphing())) )
+	{
+	BWAPI::Broodwar->printf("Already making a sunken");
+	return false;
+	}
+	}
+	}*/
+
+	// return a list of units to be made. production manager should queue these at highest priority
+	defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony] = newSunkens;
+	defenses[BWAPI::UnitTypes::Zerg_Zergling] = newLings;
+	return defenses;
+}
+
 //NEW
 const bool StrategyManager::shouldMakeMacroHatchery() const
 {
