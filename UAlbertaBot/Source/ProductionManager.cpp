@@ -177,7 +177,7 @@ void ProductionManager::manageBuildOrderQueue()
 		BWAPI::Unit producer;
 		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 		{
-			producer = getProducer(currentItem.metaType, BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			producer = getProducer(currentItem.metaType);
 		}
 
 		else
@@ -280,7 +280,7 @@ BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo
 		UAB_ASSERT(unit != nullptr, "Unit was null");
 
 		// reasons a unit can not train the desired type
-		if (unit->isUpgrading())								{ continue; }
+
 		if (unit->getType() != producerType)                    { continue; }
 		if (!unit->isCompleted())                               { continue; }
 		if (unit->isTraining())                                 { continue; }
@@ -406,6 +406,7 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
 		&& t.getUnitType() != BWAPI::UnitTypes::Zerg_Lair
 		&& t.getUnitType() != BWAPI::UnitTypes::Zerg_Hive
 		&& t.getUnitType() != BWAPI::UnitTypes::Zerg_Greater_Spire
+		&& t.getUnitType() != BWAPI::UnitTypes::Zerg_Sunken_Colony
 		&& !t.getUnitType().isAddon())
 	{
 		// send the building task to the building manager
