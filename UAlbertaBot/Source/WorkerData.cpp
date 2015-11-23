@@ -1,5 +1,6 @@
 #include "WorkerData.h"
 #include "Micro.h"
+#include "BuildingManager.h"
 
 using namespace UAlbertaBot;
 
@@ -279,10 +280,27 @@ bool WorkerData::depotIsFull(BWAPI::Unit depot)
 {
 	if (!depot) { return false; }
 
+	int N = 3;
 	int assignedWorkers = getNumAssignedWorkers(depot);
 	int mineralsNearDepot = getMineralsNearDepot(depot);
 
-	if (assignedWorkers >= mineralsNearDepot * 3)
+
+	if (BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+	{
+		int assignedWorkers2 = getNumAssignedWorkers(BuildingManager::Instance().hatcheryUnit);
+		int mineralsNearDepot2 = getMineralsNearDepot(BuildingManager::Instance().hatcheryUnit);
+		if (assignedWorkers < mineralsNearDepot || assignedWorkers2 < mineralsNearDepot2)
+		{
+			N = 1;
+		}
+		else
+		{
+
+			N = 3;
+		}
+	}
+
+	if (assignedWorkers >= mineralsNearDepot * N)
 	{
 		return true;
 	}

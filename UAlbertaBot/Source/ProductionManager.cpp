@@ -47,6 +47,11 @@ void ProductionManager::performBuildOrderSearch()
 
 void ProductionManager::update()
 {
+	if (muscBuild && BWAPI::Broodwar->getFrameCount() > muscBuildTimer)
+	{
+		muscBuild = false;
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UpgradeTypes::Grooved_Spines), true);
+	}
 	// check the _queue for stuff we can build
 	manageBuildOrderQueue();
 
@@ -166,8 +171,17 @@ void ProductionManager::manageBuildOrderQueue()
 	// while there is still something left in the _queue
 	while (!_queue.isEmpty())
 	{
-		// this is the unit which can produce the currentItem
-		BWAPI::Unit producer = getProducer(currentItem.metaType);
+		BWAPI::Unit producer;
+		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+		{
+			producer = getProducer(currentItem.metaType, BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+		}
+		else
+		{
+			// this is the unit which can produce the currentItem
+			BWAPI::Unit producer = getProducer(currentItem.metaType);
+		}
+		
 
 		// check to see if we can make it right now
 		bool canMake = canMakeNow(producer, currentItem.metaType);
@@ -224,6 +238,19 @@ void ProductionManager::manageBuildOrderQueue()
 	}
 }
 
+bool ProductionManager::canProduce(BWAPI::UnitType producerType)
+{
+	for (auto x : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (x->getType() == producerType && !x->isUpgrading())
+		{
+			return true;
+		}
+	}
+	return false;
+
+}
+
 BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo)
 {
 	// get the type of unit that builds this
@@ -236,6 +263,7 @@ BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo
 		UAB_ASSERT(unit != nullptr, "Unit was null");
 
 		// reasons a unit can not train the desired type
+		if (unit->isUpgrading())								{ continue; }
 		if (unit->getType() != producerType)                    { continue; }
 		if (!unit->isCompleted())                               { continue; }
 		if (unit->isTraining())                                 { continue; }
@@ -398,6 +426,12 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
 	else if (t.isUpgrade())
 	{
 		//Logger::Instance().log("Produce Upgrade: " + t.getName() + "\n");
+		
+		if (t.getUpgradeType() == BWAPI::UpgradeTypes::Muscular_Augments)
+		{
+			muscBuildTimer = BWAPI::Broodwar->getFrameCount() + t.getUpgradeType().upgradeTime();
+			muscBuild = true;
+		}
 		producer->upgrade(t.getUpgradeType());
 	}
 	else

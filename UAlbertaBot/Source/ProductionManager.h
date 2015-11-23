@@ -15,7 +15,7 @@ namespace UAlbertaBot
 	{
 		ProductionManager();
 
-		BuildOrderQueue     _queue;
+		
 		BWAPI::TilePosition _predictedTilePosition;
 		bool                _enemyCloakedDetected;
 		bool                _assignedWorkerForThisBuilding;
@@ -45,7 +45,10 @@ namespace UAlbertaBot
 	public:
 
 		static ProductionManager &	Instance();
-
+		bool		muscBuild = false;
+		int			muscBuildTimer = 0;
+		bool		canProduce(BWAPI::UnitType);
+		BuildOrderQueue     _queue;
 		void        drawQueueInformation(std::map<BWAPI::UnitType, int> & numUnits, int x, int y, int index);
 		void        update();
 		void        onUnitMorph(BWAPI::Unit unit);

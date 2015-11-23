@@ -422,8 +422,22 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		// mining worker check
 		if (unit->isCompleted() && (workerData.getWorkerJob(unit) == WorkerData::Minerals))
 		{
+			double distance;
 			// if it is a new closest distance, set the pointer
-			double distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			{
+				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			}
+			else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+			{
+				distance = unit->getDistance(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+			}
+			else
+			{
+				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			}
+
 			if (!closestMiningWorker || distance < closestMiningWorkerDistance)
 			{
 				closestMiningWorker = unit;
@@ -434,8 +448,22 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		// moving worker check
 		if (unit->isCompleted() && (workerData.getWorkerJob(unit) == WorkerData::Move))
 		{
+			double distance;
 			// if it is a new closest distance, set the pointer
-			double distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			{
+				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			}
+			else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+			{
+				distance = unit->getDistance(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+			}
+			else
+			{
+				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			}
+			//	}
 			if (!closestMovingWorker || distance < closestMovingWorkerDistance)
 			{
 				closestMovingWorker = unit;
