@@ -200,8 +200,17 @@ BWAPI::TilePosition BuildingPlacer::getBuildLocationNear(const Building & b,int 
     SparCraft::Timer t;
     t.start();
 
+	std::vector<BWAPI::TilePosition> closestToBuilding;
     // get the precomputed vector of tile positions which are sorted closes to this location
-    const std::vector<BWAPI::TilePosition> & closestToBuilding = MapTools::Instance().getClosestTilesTo(BWAPI::Position(b.desiredPosition));
+	if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+	{
+		closestToBuilding = MapTools::Instance().getClosestTilesTo(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+	}
+	else
+	{
+		closestToBuilding = MapTools::Instance().getClosestTilesTo(BWAPI::Position(b.desiredPosition));
+	}
+    
 
     double ms1 = t.getElapsedTimeInMilliSec();
 

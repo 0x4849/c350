@@ -1,5 +1,4 @@
 #include "ProductionManager.h"
-#include "UnitUtil.h"
 
 using namespace UAlbertaBot;
 
@@ -17,10 +16,8 @@ void ProductionManager::setBuildOrder(const BuildOrder & buildOrder)
 
 	for (size_t i(0); i<buildOrder.size(); ++i)
 	{
-		bool block = true;
 		MetaType m = buildOrder[i];
-
-		_queue.queueAsLowestPriority(buildOrder[i], block);
+		_queue.queueAsLowestPriority(buildOrder[i], true);
 	}
 }
 
@@ -49,14 +46,10 @@ void ProductionManager::performBuildOrderSearch()
 
 void ProductionManager::update() 
 {
-	if (muscBuild && BWAPI::Broodwar->getFrameCount() > muscBuildTimer)
-	{
-		muscBuild = false;
-		_queue.queueAsHighestPriority(MetaType(BWAPI::UpgradeTypes::Grooved_Spines), true);
-	}
 	//BWAPI::Broodwar->printf("Value of canOverlord is %d\n", canOverlord);
 	// check the _queue for stuff we can build
 	manageBuildOrderQueue();
+	onEvoUpgradeComplete();
     
 	// if nothing is currently building, get a new goal from the strategy manager
 	if ((_queue.size() == 0) && (BWAPI::Broodwar->getFrameCount() > 10))
@@ -82,6 +75,7 @@ void ProductionManager::update()
 		_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
 	
+
 
 
 	// if they have cloaked units get a new goal asap
@@ -120,6 +114,7 @@ void ProductionManager::update()
         }
 
 		_enemyCloakedDetected = true;
+
 	}
 }
 
@@ -145,24 +140,6 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit unit)
 	}
 }
 
-BWAPI::Unit ProductionManager::getUnusedEvo()
-{
-	BWAPI::Unit last;
-	for (auto x : BuildingManager::Instance().evoCompleted)
-	{
-		if (x->isUpgrading())
-		{
-			continue;
-		}
-		else
-		{
-			last = x;
-			return x;
-		}
-	}
-	return last;
-}
-
 void ProductionManager::manageBuildOrderQueue() 
 {
 	// if there is nothing in the _queue, oh well
@@ -174,57 +151,34 @@ void ProductionManager::manageBuildOrderQueue()
 	// the current item to be used
 	BuildOrderItem & currentItem = _queue.getHighestPriorityItem();
 
-
 	// while there is still something left in the _queue
 	while (!_queue.isEmpty()) 
 	{
-
-		/*
-		if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Evolution_Chamber) == 1)
-		{
-			MetaType type(BWAPI::UnitTypes::Zerg_Evolution_Chamber);
-			ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
-		}
-		*/
-		/*
-		else if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Evolution_Chamber) == 2)
-		{
-			BWAPI::Unit myEvo = getUnusedEvo();
-			myEvo->upgrade(currentItem.metaType.getUpgradeType());
-
-		}
-		*/
-			//BWAPI::Broodwar->printf("%d\n", UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Evolution_Chamber));
-		
 		BWAPI::Unit producer;
 		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 		{
 			producer = getProducer(currentItem.metaType,BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
 		}
-		/*
-		else if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Evolution_Chamber) == 2)
-		{
-			// this is the unit which can produce the currentItem
-			//producer = getProducer(currentItem.metaType);
-			producer = getUnusedEvo();
-			producer->upgrade(currentItem.metaType.getUpgradeType());
-		}
-		*/
 		else
 		{
-			/*
-			if (currentItem.metaType.whatBuilds().isBuilding() && !canProduce(currentItem.metaType.whatBuilds()))
-			{
-				_queue.queueAsHighestPriority(currentItem.metaType.whatBuilds(), false);
-
-			}
-			*/
+			// this is the unit which can produce the currentItem
 			producer = getProducer(currentItem.metaType);
+
+				//producer = getEvolutionChamberProducer(producer, currentItem.metaType);
+			
 		}
+
 
 		// check to see if we can make it right now
 		bool canMake = canMakeNow(producer, currentItem.metaType);
-
+		if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace)
+		{
+			BWAPI::Broodwar->printf("The type is evo chamber and the request was carapace. canMake is %d\n", canMake);
+		}
+		else if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Missile_Attacks)
+		{
+			BWAPI::Broodwar->printf("The type is evo chamber and the request was Misisle Attacks. canMake is %d\n", canMake);
+		}
 		// if we try to build too many refineries manually remove it
 		if (currentItem.metaType.isRefinery() && (BWAPI::Broodwar->self()->allUnitCount(BWAPI::Broodwar->self()->getRace().getRefinery() >= 3)))
 		{
@@ -277,18 +231,6 @@ void ProductionManager::manageBuildOrderQueue()
 	}
 }
 
-bool ProductionManager::canProduce(BWAPI::UnitType producerType)
-{
-	for (auto x : BWAPI::Broodwar->self()->getUnits())
-	{
-		if (x->getType() == producerType && !x->isUpgrading())
-		{
-			return true;
-		}
-	}
-	return false;
-
-}
 BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo)
 {
     // get the type of unit that builds this
@@ -310,47 +252,47 @@ BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo
         // if the type is an addon, some special cases
         if (t.getUnitType().isAddon())
         {
-            // if the unit already has an addon, it can't make one
-            if (unit->getAddon() != nullptr)
-            {
-                continue;
-            }
+				// if the unit already has an addon, it can't make one
+			if (unit->getAddon() != nullptr)
+			{
+				continue;
+			}
 
-            // if we just told this unit to build an addon, then it will not be building another one
-            // this deals with the frame-delay of telling a unit to build an addon and it actually starting to build
-            if (unit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Build_Addon 
-                && (BWAPI::Broodwar->getFrameCount() - unit->getLastCommandFrame() < 10)) 
-            { 
-                continue; 
-            }
+			// if we just told this unit to build an addon, then it will not be building another one
+			// this deals with the frame-delay of telling a unit to build an addon and it actually starting to build
+			if (unit->getLastCommand().getType() == BWAPI::UnitCommandTypes::Build_Addon 
+				&& (BWAPI::Broodwar->getFrameCount() - unit->getLastCommandFrame() < 10)) 
+			{ 
+				continue; 
+			}
 
-            bool isBlocked = false;
+			bool isBlocked = false;
 
-            // if the unit doesn't have space to build an addon, it can't make one
-            BWAPI::TilePosition addonPosition(unit->getTilePosition().x + unit->getType().tileWidth(), unit->getTilePosition().y + unit->getType().tileHeight() - t.getUnitType().tileHeight());
-            BWAPI::Broodwar->drawBoxMap(addonPosition.x*32, addonPosition.y*32, addonPosition.x*32 + 64, addonPosition.y*32 + 64, BWAPI::Colors::Red);
+			// if the unit doesn't have space to build an addon, it can't make one
+			BWAPI::TilePosition addonPosition(unit->getTilePosition().x + unit->getType().tileWidth(), unit->getTilePosition().y + unit->getType().tileHeight() - t.getUnitType().tileHeight());
+			BWAPI::Broodwar->drawBoxMap(addonPosition.x*32, addonPosition.y*32, addonPosition.x*32 + 64, addonPosition.y*32 + 64, BWAPI::Colors::Red);
             
-            for (int i=0; i<unit->getType().tileWidth() + t.getUnitType().tileWidth(); ++i)
-            {
-                for (int j=0; j<unit->getType().tileHeight(); ++j)
-                {
-                    BWAPI::TilePosition tilePos(unit->getTilePosition().x + i, unit->getTilePosition().y + j);
+			for (int i=0; i<unit->getType().tileWidth() + t.getUnitType().tileWidth(); ++i)
+			{
+				for (int j=0; j<unit->getType().tileHeight(); ++j)
+				{
+					BWAPI::TilePosition tilePos(unit->getTilePosition().x + i, unit->getTilePosition().y + j);
 
-                    // if the map won't let you build here, we can't build it
-                    if (!BWAPI::Broodwar->isBuildable(tilePos))
-                    {
-                        isBlocked = true;
-                        BWAPI::Broodwar->drawBoxMap(tilePos.x*32, tilePos.y*32, tilePos.x*32 + 32, tilePos.y*32 + 32, BWAPI::Colors::Red);
-                    }
+					// if the map won't let you build here, we can't build it
+					if (!BWAPI::Broodwar->isBuildable(tilePos))
+					{
+						isBlocked = true;
+						BWAPI::Broodwar->drawBoxMap(tilePos.x*32, tilePos.y*32, tilePos.x*32 + 32, tilePos.y*32 + 32, BWAPI::Colors::Red);
+					}
 
-                    // if there are any units on the addon tile, we can't build it
-                    BWAPI::Unitset uot = BWAPI::Broodwar->getUnitsOnTile(tilePos.x, tilePos.y);
-                    if (uot.size() > 0 && !(uot.size() == 1 && *(uot.begin()) == unit))
-                    {
-                        isBlocked = true;;
-                        BWAPI::Broodwar->drawBoxMap(tilePos.x*32, tilePos.y*32, tilePos.x*32 + 32, tilePos.y*32 + 32, BWAPI::Colors::Red);
-                    }
-                }
+					// if there are any units on the addon tile, we can't build it
+					BWAPI::Unitset uot = BWAPI::Broodwar->getUnitsOnTile(tilePos.x, tilePos.y);
+					if (uot.size() > 0 && !(uot.size() == 1 && *(uot.begin()) == unit))
+					{
+						isBlocked = true;;
+						BWAPI::Broodwar->drawBoxMap(tilePos.x*32, tilePos.y*32, tilePos.x*32 + 32, tilePos.y*32 + 32, BWAPI::Colors::Red);
+					}
+				}
             }
 
             if (isBlocked)
@@ -376,7 +318,15 @@ BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo
         // if we haven't cut it, add it to the set of candidates
         candidateProducers.insert(unit);
     }
-
+	if (t.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace)
+	{
+		/*
+		for (auto x : candidateProducers)
+		{
+			BWAPI::Broodwar->printf("Candidate Position : %d %d\n", x->getTilePosition().x, x->getTilePosition().y);
+		}
+		*/
+	}
     return getClosestUnitToPosition(candidateProducers, closestTo);
 }
 
@@ -529,15 +479,20 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
     }
     else if (t.isUpgrade())
     {
-		if (t.getUpgradeType() == BWAPI::UpgradeTypes::Muscular_Augments)
+		if (t.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace)
 		{
-			muscBuildTimer = BWAPI::Broodwar->getFrameCount() + t.getUpgradeType().upgradeTime();
-			muscBuild = true;
+			BWAPI::Broodwar->printf("Got a request for carapace upgrade using producer x %d y %d: \n", producer->getTilePosition().x, producer->getTilePosition().y);
 		}
-		
-		
+		else if (t.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Missile_Attacks)
+		{
+			BWAPI::Broodwar->printf("Got a request for missile attacks upgrade using producer x %d y %d : \n", producer->getTilePosition().x, producer->getTilePosition().y);
+		}
+		producer = getEvolutionChamberProducer(producer, t);
+		//BWAPI::Broodwar->printf("Got request for capace or missile attacks with producer type : x : %d  y: %d\n", producer->getTilePosition().x, producer->getTilePosition().y);
+		//}
         //Logger::Instance().log("Produce Upgrade: " + t.getName() + "\n");
         producer->upgrade(t.getUpgradeType());
+		upgradingStuff.insert(producer);
     }
     else
     {	
@@ -545,6 +500,40 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
     }
 }
 
+BWAPI::Unit ProductionManager::getEvolutionChamberProducer(BWAPI::Unit producer, MetaType t)
+{
+	if (upgradingStuff.find(producer) != upgradingStuff.end())
+	{
+		BWAPI::Broodwar->printf("Entered uprgading stuff loop\n");
+		for (auto x : BWAPI::Broodwar->self()->getUnits())
+		{
+			if (x->getType() == producer->getType() && x != producer)
+			{
+				if (upgradeMap.find(x) == upgradeMap.end() || (upgradeMap.find(x) != upgradeMap.end() && upgradeMap[x] == 0))
+				{
+					upgradeMap[x] = BWAPI::Broodwar->getFrameCount() + t.getUpgradeType().upgradeTime();
+					return x;
+				}
+			}
+		}
+	}
+	return producer;
+}
+
+void ProductionManager::onEvoUpgradeComplete()
+{
+	for (auto x : upgradeMap)
+	{
+		if (BWAPI::Broodwar->getFrameCount() > x.second)
+		{
+			if (upgradingStuff.find(x.first) != upgradingStuff.end())
+			{
+				upgradingStuff.erase(x.first);
+			}
+			x.second = 0;
+		}
+	}
+}
 bool ProductionManager::canMakeNow(BWAPI::Unit producer, MetaType t)
 {
     //UAB_ASSERT(producer != nullptr, "Producer was null");
@@ -562,6 +551,14 @@ bool ProductionManager::canMakeNow(BWAPI::Unit producer, MetaType t)
 		}
 		else if (t.isUpgrade())
 		{
+			if (t.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace)
+			{
+				BWAPI::Broodwar->printf("Trying to create carapace with %d %d EVO CHAMBER\n", producer->getTilePosition().x, producer->getTilePosition().y);
+			}
+			else if ((t.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Missile_Attacks))
+			{
+				BWAPI::Broodwar->printf("Trying to create misisle attacks with %d %d EVO CHAMBER\n", producer->getTilePosition().x, producer->getTilePosition().y);
+			}
 			canMake = BWAPI::Broodwar->canUpgrade(t.getUpgradeType(), producer);
 		}
 		else

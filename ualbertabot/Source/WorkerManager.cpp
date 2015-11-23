@@ -96,7 +96,6 @@ void WorkerManager::handleGasWorkers()
 			}
 		}
 	}
-
 }
 
 bool WorkerManager::isGasStealRefinery(BWAPI::Unit unit)
@@ -424,17 +423,20 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		{
 			double distance;
 			// if it is a new closest distance, set the pointer
-			/*if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 			{
 				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
 				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
 			}
+			else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+			{
+				distance = unit->getDistance(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+			}
 			else
 			{
-			*/
 				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
-			//}
-	
+			}
+
 			if (!closestMiningWorker || distance < closestMiningWorkerDistance)
 			{
 				closestMiningWorker = unit;
@@ -447,16 +449,19 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		{
 			double distance;
 			// if it is a new closest distance, set the pointer
-			/*if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 			{
 				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
-				//workerData.setWorkerJob(BuildingManager::Instance().sunkenUnit, WorkerData::Build, b.type);
-				//return BuildingManager::Instance().sunkenUnit;
 				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
 			}
+			else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+			{
+				distance = unit->getDistance(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+			}
 			else
-			{*/
+			{
 				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			}
 		//	}
 			if (!closestMovingWorker || distance < closestMovingWorkerDistance)
 			{

@@ -44,7 +44,7 @@ public:
 	BuildOrderQueue _queue;
 	BWAPI::Unit         getClosestUnitToPosition(const BWAPI::Unitset & units, BWAPI::Position closestTo);
     static ProductionManager &	Instance();
-
+	bool		canProduce(BWAPI::UnitType);
     void        drawQueueInformation(std::map<BWAPI::UnitType,int> & numUnits,int x,int y,int index);
     void        update();
     void        onUnitMorph(BWAPI::Unit unit);
@@ -52,10 +52,19 @@ public:
     void        performBuildOrderSearch();
     void        drawProductionInformation(int x,int y);
     void        setSearchGoal(MetaPairVector & goal);
-    void        queueGasSteal();
+	void        queueGasSteal();
+	void		onEvoUpgradeComplete();
+	BWAPI::Unit getUnusedEvo();
+	int		    evoUpgradeTimer = 0;
+	bool		muscBuild = false;
+	int			muscBuildTimer = 0;
+	
+	std::set<BWAPI::UpgradeType> upgradeSearch;
 
+	std::map<BWAPI::Unit, int> upgradeMap;
+	BWAPI::Unit getEvolutionChamberProducer(BWAPI::Unit, MetaType t);
 	int		    overlordBuildTimer = 0;
-
+	std::set<BWAPI::Unit> upgradingStuff;
     BWAPI::Unit getProducer(MetaType t,BWAPI::Position closestTo = BWAPI::Positions::None);
 };
 

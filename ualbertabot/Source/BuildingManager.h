@@ -40,6 +40,7 @@ namespace UAlbertaBot
 
 		double				Euclidean_Distance(int x1, int x2, int y1, int y2);
 		bool				buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const;
+		bool				buildable2(int x, int y, BWAPI::TilePosition mySunkPosition) const;
 		void                update();
 		void                onUnitMorph(BWAPI::Unit unit);
 		void                onUnitDestroy(BWAPI::Unit unit);
@@ -53,26 +54,33 @@ namespace UAlbertaBot
 		bool                isBeingBuilt(BWAPI::UnitType type);
 		bool				sentFirstDroneForSunken = false;
 		bool				madeFirstSunken = false;
-	
+		bool				isBaseLocation(BWAPI::TilePosition);
 		int					sunkenBuildTimer = 9999999999999;
 		bool				canBuild = false;
 		bool				canSunken = false;
 		bool				canBuildTrigger = true;
 		double				mainToRampDistance;
 		BWAPI::Position		ourRampPosition;
+		BWAPI::Unit			naturalGas;
 		BWAPI::Position		firstHatcheryPosition;
 		BWAPI::Unit			hatcheryUnit;
+		BWAPI::TilePosition getExtractorPosition(BWAPI::TilePosition);
 		bool				sunkenIntersection(BWAPI::TilePosition) const;
 
+		std::set<BWAPI::Unit> evoCompleted;
+		std::set<int> sentSunkenCommand;
+		int baseCount = 0;
 		BWAPI::TilePosition getSunkenPosition(void);
 		std::vector<BWAPI::UnitType> buildingsQueued();
 		std::set<BWAPI::TilePosition> createdHatcheriesSet;
 		std::set<BWAPI::TilePosition> createdSunkenSet;
 		std::vector<BWAPI::TilePosition> createdSunkenVector;
+		std::vector<BWAPI::TilePosition> createdBaseVector;
 		std::vector<BWAPI::TilePosition> createdHatcheriesVector;
 		std::set<BWAPI::TilePosition> createdBuilding;
 		std::set<BWAPI::TilePosition> buildableSunkenTilePositions;
 		std::map<int, std::pair<int, int> > knownBuildableLocations;
+
 
 		
 	};
