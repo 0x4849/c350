@@ -168,20 +168,37 @@ void ProductionManager::manageBuildOrderQueue()
 	// the current item to be used
 	BuildOrderItem & currentItem = _queue.getHighestPriorityItem();
 
+
 	// while there is still something left in the _queue
 	while (!_queue.isEmpty())
 	{
+
+
 		BWAPI::Unit producer;
 		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 		{
 			producer = getProducer(currentItem.metaType, BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
 		}
+
 		else
 		{
-			// this is the unit which can produce the currentItem
-			BWAPI::Unit producer = getProducer(currentItem.metaType);
+			/*
+			if (currentItem.metaType.whatBuilds().isBuilding() && !canProduce(currentItem.metaType.whatBuilds()))
+			{
+			_queue.queueAsHighestPriority(currentItem.metaType.whatBuilds(), false);
+
+			}
+			*/
+			producer = getProducer(currentItem.metaType);
+			if (currentItem.metaType.isUpgrade())
+			{
+				if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace)
+				{
+					BWAPI::Broodwar->printf("First evo chamber is %d, chosen Evo chamber is %d\n", BuildingManager::Instance().firstEvoChamber, producer->getID());
+				}
+			}
+
 		}
-		
 
 		// check to see if we can make it right now
 		bool canMake = canMakeNow(producer, currentItem.metaType);

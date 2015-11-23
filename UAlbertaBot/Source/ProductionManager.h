@@ -59,7 +59,20 @@ namespace UAlbertaBot
 		void        queueGasSteal();
 		void        performCommand(BWAPI::UnitCommandType t);
 
+
+		void		onEvoUpgradeComplete();
+		BWAPI::Unit getUnusedEvo();
+		int		    evoUpgradeTimer = 0;
+
+
+		std::set<BWAPI::UpgradeType> upgradeSearch;
+
+		std::map<BWAPI::Unit, int> upgradeMap;
+		BWAPI::Unit getEvolutionChamberProducer(BWAPI::Unit, MetaType t);
+		int		    overlordBuildTimer = 0;
+		std::set<BWAPI::Unit> upgradingStuff;
 		BWAPI::Unit getProducer(MetaType t, BWAPI::Position closestTo = BWAPI::Positions::None);
+
 	};
 
 
