@@ -8,6 +8,7 @@ namespace UAlbertaBot
 {
 class ScoutManager // does not use overlords!
 {
+/*
 	BWAPI::Unit	        _workerScout;
     std::string                     _scoutStatus;
     std::string                     _gasStealStatus;
@@ -33,7 +34,12 @@ class ScoutManager // does not use overlords!
 	void                            moveScouts(); // main method for looping scout activity
     void                            drawScoutInformation(int x, int y);
     void                            calculateEnemyRegionVertices(); // calculates the edge of the enemy region. could be useful
-
+*/
+BWAPI::Unit						_scouter1;
+	BWAPI::Unit						_scouter2;
+	BWAPI::Unit						_overlordScout;
+  
+	void                            moveScouts();
 	ScoutManager();
 
 public:
@@ -43,7 +49,7 @@ public:
 	void update(); // moveScouts(). called by gameCommander
 
     void setWorkerScout(BWAPI::Unit unit); // frees the old worker scout and sets a new one. called by gameCommander
-
+bool setScout(BWAPI::Unit unit);
 	void onSendText(std::string text);
 	void onUnitShow(BWAPI::Unit unit);
 	void onUnitHide(BWAPI::Unit unit);

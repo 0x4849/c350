@@ -73,7 +73,15 @@ void ProductionManager::update()
 	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && (checkDefenses()))
 	{
 		// edit this and see which works better: shouldBuildSunkens or shouldBuildSunkens2
-		std::map<BWAPI::UnitType, int> defenses = StrategyManager::Instance().shouldBuildSunkens2();
+		std::map<BWAPI::UnitType, int> defenses;
+		if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss)
+		{
+			defenses = StrategyManager::Instance().shouldBuildSunkens();
+		}
+		if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Terran)
+		{
+			defenses = StrategyManager::Instance().shouldBuildSunkens2();
+		}
 		if (!defenses.empty())
 		{
 			if (Config::Debug::DrawBuildOrderSearchInfo)

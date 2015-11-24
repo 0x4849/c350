@@ -2,6 +2,7 @@
 #include "StrategyManager.h"
 #include "UnitUtil.h"
 #include "CombatSimulation.h" //NEW
+#include "ProductionManager.h"
 
 using namespace UAlbertaBot;
 
@@ -28,6 +29,27 @@ const int StrategyManager::getScore(BWAPI::Player player) const
 
 const BuildOrder & StrategyManager::getOpeningBookBuildOrder() const
 {
+	if (Config::Strategy::StrategyName.empty()){
+		if (_enemyRace == BWAPI::Races::Protoss){
+			Config::Strategy::StrategyName = Config::Strategy::AgainstProtossStrategyName;
+		} 
+		else if (_enemyRace == BWAPI::Races::Terran){
+			Config::Strategy::StrategyName = Config::Strategy::AgainstTerranStrategyName;
+		}
+		else if (_enemyRace == BWAPI::Races::Zerg){
+			Config::Strategy::StrategyName = Config::Strategy::AgainstZergStrategyName;
+		}
+		else {
+			Config::Strategy::StrategyName = Config::Strategy::AgainstZergStrategyName;
+		}
+	}
+
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstZergStrategyName){
+			Config::Micro::UseSparcraftSimulation = false;
+			Config::Micro::WorkersDefendRush = true;
+			Config::Macro::WorkersPerRefinery = 2;
+	}
+
     auto buildOrderIt = _strategies.find(Config::Strategy::StrategyName);
 
     // look for the build order in the build order map
@@ -40,6 +62,35 @@ const BuildOrder & StrategyManager::getOpeningBookBuildOrder() const
         UAB_ASSERT_WARNING(false, "Strategy not found: %s, returning empty initial build order", Config::Strategy::StrategyName.c_str());
         return _emptyBuildOrder;
     }
+}
+
+const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
+{
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
+	{
+		if (InformationManager::Instance().isEnemyExpand())
+		{
+			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ep")->second._buildOrder;
+		}
+		else
+		{
+			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ne")->second._buildOrder;
+		}
+	}
+
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerranStrategyName)
+	{
+		if (InformationManager::Instance().isEnemyExpand())
+		{
+			return _strategies.find(Config::Strategy::AgainstTerranStrategyName + "_ep")->second._buildOrder;
+		}
+		else
+		{
+			return _strategies.find(Config::Strategy::AgainstTerranStrategyName + "_ne")->second._buildOrder;
+		}
+	}
+
+	return _emptyBuildOrder;
 }
 
 const bool StrategyManager::shouldExpandNow() const
@@ -278,7 +329,12 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	int mutasWanted = numMutas + 6;
 	int hydrasWanted = numHydras + 6;
 
-    if (Config::Strategy::StrategyName == "Zerg_ZerglingRush")
+
+if (Config::Strategy::StrategyName == "Zerg_9Pool")
+    {
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 6));
+    }
+    else if (Config::Strategy::StrategyName == "Zerg_ZerglingRush")
     {
         goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 6));
     }
@@ -288,15 +344,7 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
         goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Grooved_Spines, 1));
         goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
     }
-	//NEW
-	else if (Config::Strategy::StrategyName == "Zerg_9Pool")
-	{
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 12));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 6));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 4));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Metabolic_Boost, 1));
-		// goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Adrenal_Glands, 1));
-	}
+	
     else if (Config::Strategy::StrategyName == "Zerg_3HatchMuta")
     {
         goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 12));
@@ -316,6 +364,10 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
         
         goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
     }
+	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch" || Config::Strategy::StrategyName == "Zerg_3HatchHydra"){
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 12));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
+	}
 
     if (shouldExpandNow())
     {
@@ -512,13 +564,13 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 
 	if (score >= 0)
 	{
-		BWAPI::Broodwar->printf("Don't need defenses");
+		//BWAPI::Broodwar->printf("Don't need defenses");
 		return defenses;
 	}
 
 	if (score < 0)
 	{
-		BWAPI::Broodwar->printf("Defenses required");
+		//BWAPI::Broodwar->printf("Defenses required");
 	}
 	
 	int newSunkens = 0;
@@ -592,13 +644,13 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
 
 	if (score >= 0)
 	{
-		BWAPI::Broodwar->printf("Don't need defenses");
+		//BWAPI::Broodwar->printf("Don't need defenses");
 		return defenses;
 	}
 
 	if (score < 0)
 	{
-		BWAPI::Broodwar->printf("Defenses required");
+		//BWAPI::Broodwar->printf("Defenses required");
 	}
 
 	int newSunkens = 0;
@@ -662,6 +714,7 @@ const bool StrategyManager::shouldMakeMacroHatchery() const
 	{
 		return true;
 	}
+	return false;
 }
 
 int StrategyManager::getMacroHatchCount()

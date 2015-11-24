@@ -21,6 +21,8 @@ class CombatCommander
     void            updateDropSquads();
 	void            updateIdleSquad();
 	void			updateDistractSquad();
+	void			updateHarassSquad();
+	void			updateHydraSquad();
 	bool            isSquadUpdateFrame(); // only update the various squads every 10th frame, to make units move efficiently
 										  // examine this code for an example of how to control update periodicity
 										  // uses BWAPI::Broodwar->getFrameCount() for elapsed total logical FPS

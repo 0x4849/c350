@@ -11,8 +11,7 @@ namespace UAlbertaBot
     
 typedef std::shared_ptr<BOSS::DFBB_BuildOrderSmartSearch> SearchPtr;
 
-class BOSSManager // in general just give some items you want and it figures out what to do
-	              // to be safe pass it items in small portions
+class BOSSManager
 {
     int                                     _previousSearchStartFrame;
     int                                     _savedSearchStartFrame;
@@ -34,9 +33,9 @@ class BOSSManager // in general just give some items you want and it figures out
     // functions
 	BOSS::DFBB_BuildOrderSearchResults		search(const std::vector<MetaPair> & goalUnits);
 
-	void						            loadOpeningBook(); // unused
+	void						            loadOpeningBook();
 
-	std::vector<std::vector<MetaType>>      openingBook; // unused
+	std::vector<std::vector<MetaType>>      openingBook;
     const BOSS::RaceID                      getRace() const;
 
     void                                    logBadSearch();

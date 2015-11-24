@@ -6,6 +6,7 @@ using namespace UAlbertaBot;
 InformationManager::InformationManager()
     : _self(BWAPI::Broodwar->self())
     , _enemy(BWAPI::Broodwar->enemy())
+	, _enemyExpand(false)
 {
 	initializeRegionInformation();
 }
@@ -113,6 +114,8 @@ void InformationManager::updateBaseLocationInfo()
 	}
 
 	// for each enemy unit we know about
+	size_t enemyBaseCount = 0;
+	size_t enemySunkenCount = 0;
 	for (const auto & kv : _unitData[_enemy].getUnits())
 	{
 		const UnitInfo & ui(kv.second);
@@ -124,7 +127,25 @@ void InformationManager::updateBaseLocationInfo()
 			// update the enemy occupied regions
 			updateOccupiedRegions(BWTA::getRegion(BWAPI::TilePosition(ui.lastPosition)), BWAPI::Broodwar->enemy());
 		}
+		
+		if (type.isResourceDepot())
+		{
+			++enemyBaseCount;
+		}
+
+		if (type == BWAPI::UnitTypes::Zerg_Sunken_Colony){
+			++enemySunkenCount;
+		}
+
 	}
+	
+	if (enemyBaseCount > 1){
+		_enemyExpand = true;
+	}
+
+	if (enemySunkenCount > 1){
+		Config::Micro::UseSparcraftSimulation = true;
+	} 
 
 	// for each of our units
 	for (const auto & kv : _unitData[_self].getUnits())
@@ -581,6 +602,10 @@ bool InformationManager::enemyHasCloakedUnits()
     }
 
 	return false;
+}
+
+bool InformationManager::isEnemyExpand(){
+	return _enemyExpand;
 }
 
 //NEW

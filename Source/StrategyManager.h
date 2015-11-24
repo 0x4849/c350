@@ -50,7 +50,7 @@ class StrategyManager
 												 // for getOpeningBookBuildOrder()
     int                             _totalGamesPlayed;
     const BuildOrder                _emptyBuildOrder;
-
+bool							_isLastBuildOrder;
 	//NEW
 	mutable int						macroHatchCount;
 
@@ -69,7 +69,7 @@ class StrategyManager
 public:
     
 	static	StrategyManager &	    Instance();
-
+const   BuildOrder &			getAdaptiveBuildOrder() const;
 			void				    onEnd(const bool isWinner);
             void                    addStrategy(const std::string & name, Strategy & strategy); // currently only used by the parser
             void                    setLearnedStrategy();
@@ -91,7 +91,7 @@ public:
 	// returns map corresponding to units that need to be made and how many
 	// current control: in prod manager, if creep colonies or sunkens are currently in the queue, don't call this
 	// when testing, try each version and see which works better
-	std::map<BWAPI::UnitType, int>	shouldBuildSunkens() const;		// TO-DO: needs to account for enemy unit production
-	std::map<BWAPI::UnitType, int>	shouldBuildSunkens2() const;
+	std::map<BWAPI::UnitType, int>	shouldBuildSunkens() const;		// probably use this vs protoss. visible units
+	std::map<BWAPI::UnitType, int>	shouldBuildSunkens2() const;	// and this vs terran. estimate based on prod structures
 };
 }

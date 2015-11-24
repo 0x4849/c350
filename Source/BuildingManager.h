@@ -5,6 +5,7 @@
 #include "BuildingPlacer.h"
 #include "InformationManager.h"
 #include "MapTools.h"
+#include "ScoutManager.h"
 
 namespace UAlbertaBot
 {
@@ -38,6 +39,9 @@ public:
     
     static BuildingManager &	Instance();
 
+double				Euclidean_Distance(int x1, int x2, int y1, int y2);
+		bool				buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const;
+		bool				buildable2(int x, int y, BWAPI::TilePosition mySunkPosition) const;
     void                update(); // gameCommander update cycle
     void                onUnitMorph(BWAPI::Unit unit);
     void                onUnitDestroy(BWAPI::Unit unit);
@@ -57,5 +61,39 @@ public:
 														    // in _buildings. i.e. learn if we will be building something or not
 
     std::vector<BWAPI::UnitType> buildingsQueued();
+
+	bool				sentFirstDroneForSunken = false;
+		bool				madeFirstSunken = false;
+		bool				isBaseLocation(BWAPI::TilePosition);
+		int					sunkenBuildTimer = 9999999;
+		bool				canBuild = false;
+		bool				canSunken = false;
+		bool				canBuildTrigger = true;
+		double				mainToRampDistance;
+		BWAPI::Position		ourRampPosition;
+		BWAPI::Unit			naturalGas;
+		BWAPI::Position		firstHatcheryPosition;
+		BWAPI::Unit			hatcheryUnit;
+		BWAPI::TilePosition getExtractorPosition(BWAPI::TilePosition);
+		bool				sunkenIntersection(BWAPI::TilePosition) const;
+		int					firstEvoChamber;
+
+
+		std::set<BWAPI::Unit> evoCompleted;
+		std::set<int> sentSunkenCommand;
+		int baseCount = 0;
+		BWAPI::TilePosition getSunkenPosition(void);
+		std::set<BWAPI::TilePosition> createdHatcheriesSet;
+		std::set<BWAPI::TilePosition> createdSunkenSet;
+		std::vector<BWAPI::TilePosition> createdSunkenVector;
+		std::vector<BWAPI::TilePosition> createdBaseVector;
+		std::vector<BWAPI::TilePosition> createdHatcheriesVector;
+		std::set<BWAPI::TilePosition> createdBuilding;
+		std::set<BWAPI::TilePosition> buildableSunkenTilePositions;
+		std::map<int, std::pair<int, int> > knownBuildableLocations;
+
+		std::set<BWAPI::UpgradeType> upgradeEvo;
+
+
 };
 }

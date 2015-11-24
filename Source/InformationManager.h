@@ -25,7 +25,7 @@ class InformationManager
     std::map<BWAPI::Player, UnitData>                   _unitData;  // UnitData carries a map of UnitInfo for every Unit
     std::map<BWAPI::Player, BWTA::BaseLocation *>       _mainBaseLocations; // just holds our base and the enemy base
     std::map<BWAPI::Player, std::set<BWTA::Region *> >  _occupiedRegions; // an occupied region is defined as a BWTA::Region with
-																		  // a player's building on it. by this logic more than one
+		bool					_enemyExpand;																	  // a player's building on it. by this logic more than one
 																		  // player can occupy the same region
 
 	//NEW: estimate of number of enemy units based on production buildings. initialized with the number of currently known enemy
@@ -90,5 +90,7 @@ public:
 	// called in update() loop
 	void					updateEnemyProductionEstimate();
 	std::map<BWAPI::UnitType, int>		getEnemyProductionEstimate();
+
+bool					isEnemyExpand();
 };
 }

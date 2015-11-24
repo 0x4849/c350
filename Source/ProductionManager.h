@@ -16,11 +16,13 @@ class ProductionManager // in general, gets build orders from StratManager, send
 {
     ProductionManager();
     
-    BuildOrderQueue     _queue;
+
     BWAPI::TilePosition _predictedTilePosition;
     bool                _enemyCloakedDetected;
     bool                _assignedWorkerForThisBuilding;
     bool                _haveLocationForThisBuilding;
+int					_overlordTimer;
+		bool				_isLastBuildOrder;
     
     BWAPI::Unit         getClosestUnitToPosition(const BWAPI::Unitset & units,BWAPI::Position closestTo);
     BWAPI::Unit         selectUnitOfType(BWAPI::UnitType type,BWAPI::Position closestTo = BWAPI::Position(0,0));
@@ -41,7 +43,6 @@ class ProductionManager // in general, gets build orders from StratManager, send
 											     // if you can make it, call create() on it
 											     // if you can skip it, skips it and moves to the next item in _queue
 	                                             // presumably, skipping moves the item to the back of the queue?
-    void                performCommand(BWAPI::UnitCommandType t); // specifically for the extractor trick. not currently in use
     bool                canMakeNow(BWAPI::Unit producer,MetaType t); // called in manageBuildOrderQueue()
     void                predictWorkerMovement(const Building & b); // call to BuildingManager.getBuildingLocation()
 
@@ -59,7 +60,10 @@ class ProductionManager // in general, gets build orders from StratManager, send
 public:
 
     static ProductionManager &	Instance();
-
+bool		muscBuild = false;
+		int			muscBuildTimer = 0;
+BuildOrderQueue     _queue;
+	bool		canProduce(BWAPI::UnitType);
     void        drawQueueInformation(std::map<BWAPI::UnitType,int> & numUnits,int x,int y,int index);
     void        update(); // always calls manageBuildOrderQueue()
 						  // calls performBuildOrderSearch() when _queue is empty; i.e. nothing building.
@@ -73,7 +77,18 @@ public:
     void        drawProductionInformation(int x,int y);
     void        setSearchGoal(MetaPairVector & goal); // unused
     void        queueGasSteal(); // called by gasSteal() in scoutManager
+	void        performCommand(BWAPI::UnitCommandType t);	// extractor trick
+void		onEvoUpgradeComplete();
+		BWAPI::Unit getUnusedEvo();
+		int		    evoUpgradeTimer = 0;
 
+
+		std::set<BWAPI::UpgradeType> upgradeSearch;
+
+		std::map<BWAPI::Unit, int> upgradeMap;
+		BWAPI::Unit getEvolutionChamberProducer(BWAPI::Unit, MetaType t);
+		int		    overlordBuildTimer = 0;
+		std::set<BWAPI::Unit> upgradingStuff;
     BWAPI::Unit getProducer(MetaType t,BWAPI::Position closestTo = BWAPI::Positions::None);
 };
 

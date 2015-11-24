@@ -1,5 +1,6 @@
 #include "WorkerData.h"
 #include "Micro.h"
+#include "BuildingManager.h"
 
 using namespace UAlbertaBot;
 
@@ -284,10 +285,27 @@ bool WorkerData::depotIsFull(BWAPI::Unit depot)
 {
 	if (!depot) { return false; }
 
+	int N = 3;
 	int assignedWorkers = getNumAssignedWorkers(depot);
 	int mineralsNearDepot = getMineralsNearDepot(depot);
 
-	if (assignedWorkers >= mineralsNearDepot * 3)
+
+	if (BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+	{
+		int assignedWorkers2 = getNumAssignedWorkers(BuildingManager::Instance().hatcheryUnit);
+		int mineralsNearDepot2 = getMineralsNearDepot(BuildingManager::Instance().hatcheryUnit);
+		if (assignedWorkers < mineralsNearDepot || assignedWorkers2 < mineralsNearDepot2)
+		{
+			N = 1;
+		}
+		else
+		{
+
+			N = 3;
+		}
+	}
+
+	if (assignedWorkers >= mineralsNearDepot * N)
 	{
 		return true;
 	}
@@ -414,8 +432,8 @@ BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
 
 	return bestMineral;
 }
-/*
-BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
+
+BWAPI::Unit WorkerData::getMineralNearWorker(BWAPI::Unit worker)
 {
 	if (!worker) { return nullptr; }
 
@@ -426,7 +444,7 @@ BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
 
 	if (depot)
 	{
-		BOOST_FOREACH (BWAPI::Unit unit, BWAPI::Broodwar->getAllUnits())
+		for (BWAPI::Unit unit : BWAPI::Broodwar->getAllUnits())
 		{
 			if (unit->getType() == BWAPI::UnitTypes::Resource_Mineral_Field && unit->getResources() > 0)
 			{
@@ -442,7 +460,7 @@ BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
 	}
 
 	return mineral;
-}*/
+}
 
 BWAPI::Unit WorkerData::getWorkerRepairUnit(BWAPI::Unit unit)
 {

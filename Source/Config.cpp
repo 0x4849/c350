@@ -12,6 +12,9 @@ namespace Config // apparently this never needs to be edited
 
     namespace Strategy
     {
+std::string AgainstProtossStrategyName     = "Zerg_9/10Hatch";
+        std::string AgainstTerranStrategyName      = "Zerg_3HatchHydra";
+        std::string AgainstZergStrategyName        = "Zerg_9Pool";
         std::string ProtossStrategyName     = "Protoss_ZealotRush";
         std::string TerranStrategyName      = "Terran_MarineRush";
         std::string ZergStrategyName        = "Zerg_3HatchMuta";
@@ -34,7 +37,8 @@ namespace Config // apparently this never needs to be edited
         bool UsingAutoObserver              = false;
         bool UsingStrategyIO                = false;    // toggle the use of file io for strategy
         bool UsingUnitCommandManager        = false;    // handles all unit commands
-		
+		bool UsingWorkerScout				= false;
+
         // extra things, don't enable unless you know what they are
         bool UsingBuildOrderDemo            = false;
     }
