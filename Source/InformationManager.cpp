@@ -594,10 +594,18 @@ void InformationManager::updateEnemyProductionEstimate()
 	int currentTime = BWAPI::Broodwar->getFrameCount() - _firstProdBuildingTime;
 	int numGateways = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumUnits(BWAPI::UnitTypes::Protoss_Gateway);
 	int numBarracks = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumUnits(BWAPI::UnitTypes::Terran_Barracks);
-	int zealotBuildTime = BWAPI::UnitTypes::Protoss_Zealot.buildTime() / numGateways;
-	int marineBuildTime = BWAPI::UnitTypes::Terran_Marine.buildTime() / numBarracks;
-	int possibleZealots = currentTime / zealotBuildTime;
-	int possibleMarines = currentTime / marineBuildTime;
+	int possibleZealots = 0;
+	int possibleMarines = 0;
+	if (numGateways > 0)
+	{
+		double zealotBuildTime = BWAPI::UnitTypes::Protoss_Zealot.buildTime() / numGateways;
+		int possibleZealots = currentTime / zealotBuildTime;
+	}
+	if (numBarracks > 0)
+	{
+		double marineBuildTime = BWAPI::UnitTypes::Terran_Marine.buildTime() / numBarracks;
+		int possibleMarines = currentTime / marineBuildTime;
+	}
 	int deadZealots = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumDeadUnits(BWAPI::UnitTypes::Protoss_Zealot);
 	int deadMarines = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumDeadUnits(BWAPI::UnitTypes::Terran_Marine);
 

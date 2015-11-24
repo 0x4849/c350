@@ -351,6 +351,10 @@ void CombatSimulation::generateCurrentSituation()
 				if (thingsUnitCanMake.find(seenUnit.second.type) != thingsUnitCanMake.end())
 				{
 					buildTime = seenUnit.second.type.buildTime();
+					if (!(buildTime > 0))
+					{
+						continue;
+					}
 					unitCount = sunkenTime / buildTime;
 					while (unitCount > 0)
 					{
@@ -451,6 +455,10 @@ void CombatSimulation::generateCurrentSituation2()
 				if (thingsUnitCanMake.find(seenUnit.second.type) != thingsUnitCanMake.end())
 				{
 					buildTime = seenUnit.second.type.buildTime();
+					if (!(buildTime > 0))
+					{
+						continue;
+					}
 					unitCount = sunkenTime / buildTime;
 					while (unitCount > 0)
 					{

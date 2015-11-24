@@ -10,6 +10,8 @@ const size_t BaseDefensePriority = 2;
 const size_t ScoutDefensePriority = 3;
 const size_t DropPriority = 4;
 const size_t DistractPriority = 5;
+const size_t HydraPriority = 6;
+const size_t HarassPriority = 7;
 
 CombatCommander::CombatCommander() 
     : _initialized(false)
@@ -68,6 +70,8 @@ void CombatCommander::update(const BWAPI::Unitset & combatUnits)
 	//NEW: must update these in priority orders
 	if (isSquadUpdateFrame())
 	{
+		updateHydraSquad();
+		updateHarassSquad();
 		updateDistractSquad();
         updateDropSquads();
         updateScoutDefenseSquad();
@@ -77,6 +81,18 @@ void CombatCommander::update(const BWAPI::Unitset & combatUnits)
 	}
 
 	_squadData.update();
+}
+
+//NEW
+void CombatCommander::updateHydraSquad()
+{
+
+}
+
+//NEW
+void CombatCommander::updateHarassSquad()
+{
+
 }
 
 //NEW
@@ -98,9 +114,10 @@ void CombatCommander::updateDistractSquad()
 	{
 		if ((UnitUtil::IsCombatUnit(item.second.unit)) && 
 			(item.second.unit->getType() != BWAPI::UnitTypes::Protoss_Zealot) &&
+			(item.second.unit->getType() != BWAPI::UnitTypes::Unknown) &&
 			(!item.second.unit->getType().isBuilding()))
 		{
-			BWAPI::Broodwar->printf("Not just zealots; stop distracting");
+			BWAPI::Broodwar->printf("Not just zealots; stop distracting saw a %d\n", item.second.unit->getType());
 			keepDistracting = false;
 		}
 	}
