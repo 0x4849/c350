@@ -50,7 +50,7 @@ namespace UAlbertaBot
 
 		int                 getReservedMinerals();
 		int                 getReservedGas();
-
+		void				checkSunkenUpgrade();
 		bool                isBeingBuilt(BWAPI::UnitType type);
 		bool				sentFirstDroneForSunken = false;
 		bool				madeFirstSunken = false;
@@ -66,11 +66,13 @@ namespace UAlbertaBot
 		BWAPI::Unit			hatcheryUnit;
 		BWAPI::TilePosition getExtractorPosition(BWAPI::TilePosition);
 		bool				sunkenIntersection(BWAPI::TilePosition) const;
+		int					firstEvoChamber;
+		void				checkForBuildingProblems();
 
 		std::set<BWAPI::Unit> evoCompleted;
 		std::set<int> sentSunkenCommand;
 		int baseCount = 0;
-		BWAPI::TilePosition getSunkenPosition(void);
+		BWAPI::TilePosition getSunkenPosition(BWAPI::Unit myBuilder);
 		std::vector<BWAPI::UnitType> buildingsQueued();
 		std::set<BWAPI::TilePosition> createdHatcheriesSet;
 		std::set<BWAPI::TilePosition> createdSunkenSet;
@@ -80,6 +82,20 @@ namespace UAlbertaBot
 		std::set<BWAPI::TilePosition> createdBuilding;
 		std::set<BWAPI::TilePosition> buildableSunkenTilePositions;
 		std::map<int, std::pair<int, int> > knownBuildableLocations;
+
+		std::map<BWAPI::UnitType, int> expectedBuildingNumber;
+		std::map<BWAPI::UnitType, int> expectedBuildingCheck;
+
+
+		std::map<BWAPI::Unit, int> sentBuildingCommandFrame;
+		std::map<BWAPI::Unit, MetaType> sentBuildingCommandBuilding;
+		std::set<BWAPI::UpgradeType> upgradeEvo;
+		std::set<BWAPI::UpgradeType> upgradeHydra;
+		std::set<BWAPI::Unit> hydraCompleted;
+
+		std::map<BWAPI::Unit, int> createdCreeps;
+
+
 
 
 		

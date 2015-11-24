@@ -22,6 +22,7 @@ class InformationManager
     std::map<BWAPI::Player, UnitData>                   _unitData;
     std::map<BWAPI::Player, BWTA::BaseLocation *>       _mainBaseLocations;
     std::map<BWAPI::Player, std::set<BWTA::Region *> >  _occupiedRegions;
+	bool					_enemyExpand;
 
     int                     getIndex(BWAPI::Player player) const;
 
@@ -32,6 +33,7 @@ class InformationManager
     void                    updateBaseLocationInfo();
     void                    updateOccupiedRegions(BWTA::Region * region,BWAPI::Player player);
     bool                    isValidUnit(BWAPI::Unit unit);
+
 
 public:
 
@@ -68,5 +70,7 @@ public:
     void                    drawMapInformation();
 
     const UnitData &        getUnitData(BWAPI::Player player) const;
+
+	bool					isEnemyExpand();
 };
 }

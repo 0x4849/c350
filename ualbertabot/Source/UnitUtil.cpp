@@ -146,10 +146,10 @@ int UnitUtil::GetAttackRange(BWAPI::UnitType attacker, BWAPI::UnitType target)
     return weapon.maxRange();
 }
 
-size_t UnitUtil::GetAllUnitCount(BWAPI::UnitType type)
+size_t UnitUtil::GetAllUnitCount(BWAPI::UnitType type ,BWAPI::Player player)
 {
     size_t count = 0;
-    for (const auto & unit : BWAPI::Broodwar->self()->getUnits())
+    for (const auto & unit : player ->getUnits())
     {
         // trivial case: unit which exists matches the type
         if (unit->getType() == type)
@@ -177,6 +177,7 @@ size_t UnitUtil::GetAllUnitCount(BWAPI::UnitType type)
 
     return count;
 }
+
 
 
 BWAPI::Unit UnitUtil::GetClosestUnitTypeToTarget(BWAPI::UnitType type, BWAPI::Position target)

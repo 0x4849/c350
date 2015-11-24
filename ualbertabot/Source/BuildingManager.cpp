@@ -4,7 +4,7 @@
 #include "ScoutManager.h"
 #include "ProductionManager.h"
 #include <algorithm>
-
+#include "UnitUtil.h"
 using namespace UAlbertaBot;
 
 BuildingManager::BuildingManager()
@@ -53,7 +53,7 @@ BWAPI::TilePosition BuildingManager::getExtractorPosition(BWAPI::TilePosition de
 	}
 }
 // Get a sunken position depending on whether or not we have an expansion.
-BWAPI::TilePosition BuildingManager::getSunkenPosition()
+BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 {
 	
 	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
@@ -62,6 +62,20 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 	{
 		BWAPI::TilePosition hatchPosition = createdHatcheriesVector[0];
 		
+		/*
+		if (sentCreepColonyCommand.find(myBuilder->getID()) != sentCreepColonyCommand.end())
+		{
+			int builderID = myBuilder->getID();
+			int builderX = sentCreepColonyCommand[builderID].x;
+			int builderY = sentCreepColonyCommand[builderID].y;
+			
+			if (buildable(builderX, builderY, sentCreepColonyCommand[builderID]))
+			{
+				return sentCreepColonyCommand[builderID];
+			}
+
+		}
+		*/
 		
 		/*
 		BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(hatchPosition), BWAPI::Filter::IsResourceDepot);
@@ -451,15 +465,129 @@ Is the counter <= 7 --> Makes sure not to go out of bounds for the incrementDecr
 // Since counter == 8, it means we tried all 8 directions and couldnt find a sunken position, so return None(sunken will be made in main base)
 
 
+void BuildingManager::checkSunkenUpgrade()
+{
+	std::vector<BWAPI::Unit> toRemove;
+	int currentFrameNumber = BWAPI::Broodwar->getFrameCount();
+	if (createdCreeps.size() >= 1)
+	{
+		for (auto x : createdCreeps)
+		{
+			if (currentFrameNumber >= x.second && x.first->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+			{
+				ProductionManager::Instance()._queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Sunken_Colony), true);
+				toRemove.push_back(x.first);
+			}
+
+		}
+	}
+
+	if (toRemove.size() >= 1)
+	{
+		for (auto x : toRemove)
+		{
+			createdCreeps.erase(x);
+		}
+	}
+}
+
+void BuildingManager::checkForBuildingProblems()
+{
+
+	std::vector<BWAPI::Unit> toRemove;
+	std::vector<BWAPI::UnitType> toRemove2;
+
+	int currentFrameNumber = BWAPI::Broodwar->getFrameCount();
+	if (expectedBuildingCheck.size() >= 1)
+	{
+		for (auto x : expectedBuildingNumber)
+		{
+
+			if (currentFrameNumber >= expectedBuildingCheck[x.first])
+			{
 
 
+				
+				if (UnitUtil::GetAllUnitCount(x.first) < x.second)
+				{
+					
+					if (x.first == BWAPI::UnitTypes::Zerg_Hydralisk_Den && UnitUtil::GetAllUnitCount(x.first) == 1)
+					{
+						continue;
+					}
+					else if (x.first == BWAPI::UnitTypes::Zerg_Extractor && UnitUtil::GetAllUnitCount(x.first) == baseCount + 1)
+					{
+						BWAPI::Broodwar->printf("Extractor didnt build. BaseCount is %d. unit count x.first is %d\n", baseCount, UnitUtil::GetAllUnitCount(x.first));
+						continue;
+					}
+					else if (x.first == BWAPI::UnitTypes::Zerg_Evolution_Chamber && UnitUtil::GetAllUnitCount(x.first) == 2)
+					{
+						continue;
+					}
+					expectedBuildingCheck[x.first] = BWAPI::Broodwar->getFrameCount() + 500;
+					toRemove2.push_back(x.first);
+					ProductionManager::Instance()._queue.queueAsHighestPriority(MetaType(x.first), true);
+					
 
+				}
+
+			}
+		}
+	}
+
+	if (toRemove2.size() >= 1)
+	{
+		for (auto y : toRemove2)
+		{
+			expectedBuildingCheck.erase(y);
+			expectedBuildingNumber.erase(y);
+		}
+	}
+			
+	/*
+		for (auto x : sentBuildingCommandFrame)
+		{
+			if (x.first->getType() != BWAPI::UnitTypes::Zerg_Drone)
+			{
+				//BWAPI::Broodwar->printf("Does not equal drone.\n");
+				toRemove.push_back(x.first);
+			}
+			//BWAPI::Broodwar->printf("%d\n", x.first->getID());
+			if (x.first->getType() == BWAPI::UnitTypes::Zerg_Drone && currentFrameNumber > x.second)
+			{
+				ProductionManager::Instance()._queue.queueAsHighestPriority(sentBuildingCommandBuilding[x.first], true);
+				toRemove.push_back(x.first);
+			}
+		}
+
+		if (toRemove.size() >= 1)
+		{
+			for (auto y : toRemove)
+			{
+				sentBuildingCommandFrame.erase(y);
+				sentBuildingCommandBuilding.erase(y);
+			}
+		}
+	}
+	*/
+	//for (a)
+}
 
 
 // gets called every frasme from GameCommander
 void BuildingManager::update()
 {
-
+	/**
+	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hatchery) >= 2)
+	{
+		BWAPI::Broodwar->printf("WE HAVE HATCH\n");
+	}
+	*/
+	if (BWAPI::Broodwar->getFrameCount() % 24 == 0)
+	{
+		checkForBuildingProblems();
+		checkSunkenUpgrade();
+	}
 	/*
 	std::set<BWAPI::Unit> CreepSet;
 	std::set<BWAPI::TilePosition> CreepSet2;
@@ -645,22 +773,23 @@ void BuildingManager::constructAssignedBuildings()
 						createdHatcheriesSet.insert(b.finalPosition);
 						createdHatcheriesVector.push_back(b.finalPosition);
 					}
-		
+
 					//firstHatcheryPosition = BWAPI::Position(b.finalPosition);
 				}
 
 
-
+				/*
 				else if (b.type == BWAPI::UnitTypes::Zerg_Extractor)
 				{
 					b.finalPosition = getExtractorPosition(b.finalPosition);
 				}
+				*/
 
 				//|| b.type == 146 is sunken
 				else if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony)
 				{
 
-					BWAPI::TilePosition sunkPos = getSunkenPosition();
+					BWAPI::TilePosition sunkPos = getSunkenPosition(b.builderUnit);
 					//b.finalPosition = sunkPos;
 					if (sunkPos != BWAPI::TilePositions::None)
 					{
@@ -669,63 +798,10 @@ void BuildingManager::constructAssignedBuildings()
 						createdSunkenSet.insert(b.finalPosition);
 						createdSunkenVector.push_back(b.finalPosition);
 
-						//BWTA::getStartLocation(BWAPI::Broodwar->self())->getNearestChokePoint();
-						
-
-						/*
-						const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-
-						BWAPI::Unit myHatch;
-						BWAPI::Unit myExpansion;
-						for (BWAPI::BaseLocation *p : BWAPI::Bro)
-						{
-							if (p->getTilePosition() == BWAPI::Broodwar->self()->getStartLocation())
-							{
-								myHatch = p;
-
-							}
-							else if (p->getTilePosition() == createdHatcheriesVector[0])
-							{
-								myExpansion = p;
-							}
-
-
-						}
-
-						*/
-
-
-
-
-
-						//BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d, Nearest ChokePoint is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y, baseChoke.x, baseChoke.y);
-
-
-
-						/*
-						for (BWAPI::Unit p : BWAPI::Broodwar->self()->getUnits())
-						{
-							if (p->getType() == BWAPI::UnitTypes::Zerg_Overlord)
-							{
-								p->move(rampPosition);
-								break;
-							}
-						}
-						*/
-
-						
-						//BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d, Nearest ChokePoint is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y, baseChoke.x, baseChoke.y);
-
-						
+						//sentCreepColonyCommand[b.builderUnit->getID()] = b.finalPosition;
 					}
 
-					/*
-					if (p->getType() == BWAPI::UnitTypes::Zerg_Overlord)
-					{
-						p->move(BWAPI::Position(baseChoke));
-						break;
-					}
-					*/
+
 					else
 					{
 						BWAPI::Broodwar->printf("Could not find a suitable location. Using %d %d\n", b.finalPosition.x, b.finalPosition.y);
@@ -736,7 +812,8 @@ void BuildingManager::constructAssignedBuildings()
 				}
 				else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber || b.type == BWAPI::UnitTypes::Zerg_Hydralisk_Den)
 				{
-					const std::vector<BWAPI::TilePosition>  tempTiles = MapTools::Instance().getClosestTilesTo(ourRampPosition);
+					const std::vector<BWAPI::TilePosition>  tempTiles = MapTools::Instance().getClosestTilesTo(BWAPI::Position(createdHatcheriesVector[1]));
+					//BWAPI::Broodwar->printf("%d %d VS %d %d\n", createdHatcheriesVector[1].x, createdHatcheriesVector[1].y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y);
 					for (auto myTile : tempTiles)
 					{
 						if (buildable2(myTile.x, myTile.y, myTile))
@@ -748,9 +825,70 @@ void BuildingManager::constructAssignedBuildings()
 				}
 
 
-			
+
 				b.builderUnit->build(b.type, b.finalPosition);
 				createdBuilding.insert(b.finalPosition);
+				/*
+				if (sentBuildingCommandFrame.find(b.builderUnit) == sentBuildingCommandFrame.end())
+				{
+					sentBuildingCommandFrame[b.builderUnit] = BWAPI::Broodwar->getFrameCount() + 1000;
+					sentBuildingCommandBuilding[b.builderUnit] = MetaType(b.type);
+				}
+				*/
+
+				if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+				{
+					if (expectedBuildingNumber.find(b.type) != expectedBuildingNumber.end())
+					{
+						if (expectedBuildingNumber[b.type] <= 1)
+						{
+							expectedBuildingNumber[b.type] += 1;
+						}
+						
+					}
+
+					else
+					{
+						if (expectedBuildingNumber[b.type] <= 1)
+						{
+							expectedBuildingNumber[b.type] = UnitUtil::GetAllUnitCount(b.type) + 1;
+						}
+						
+					}
+					expectedBuildingCheck[b.type] = BWAPI::Broodwar->getFrameCount() + 600;
+
+				}
+
+
+				else if (b.type == BWAPI::UnitTypes::Zerg_Hydralisk_Den)
+				{
+					expectedBuildingNumber[b.type] = 1;
+					expectedBuildingCheck[b.type] = BWAPI::Broodwar->getFrameCount() + 600;
+				}
+			
+
+				if (b.type == BWAPI::UnitTypes::Zerg_Extractor)
+				{
+					if (expectedBuildingNumber.find(b.type) != expectedBuildingNumber.end())
+					{
+						if (expectedBuildingNumber[b.type] <= baseCount)
+						{
+							expectedBuildingNumber[b.type] += 1;
+						}
+
+					}
+
+					else
+					{
+						if (expectedBuildingNumber[b.type] <= baseCount)
+						{
+							expectedBuildingNumber[b.type] = UnitUtil::GetAllUnitCount(b.type) + 1;
+						}
+
+					}
+					expectedBuildingCheck[b.type] = BWAPI::Broodwar->getFrameCount() + 600;
+
+				}
 
 
 				// set the flag to true
@@ -809,7 +947,7 @@ void BuildingManager::checkForStartedConstruction()
 					// if this was the gas steal unit then it's the scout worker so give it back to the scout manager
 					if (b.isGasSteal)
 					{
-						ScoutManager::Instance().setWorkerScout(b.builderUnit);
+						//ScoutManager::Instance().setWorkerScout(b.builderUnit);
 					}
 					// otherwise tell the worker manager we're finished with this unit
 					else
@@ -852,7 +990,7 @@ void BuildingManager::checkForCompletedBuildings()
 		// if the unit has completed
 		if (b.buildingUnit->isCompleted())
 		{
-			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony && canSunken)
+			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
 			{
 				int myID = b.buildingUnit->getID();
 
@@ -861,10 +999,32 @@ void BuildingManager::checkForCompletedBuildings()
 					continue;
 				}
 
+				if (createdCreeps.find(b.buildingUnit) == createdCreeps.end())
+				{
+					createdCreeps[b.buildingUnit] = BWAPI::Broodwar->getFrameCount() + BWAPI::UnitTypes::Zerg_Sunken_Colony.buildTime() + 25;
+				}
+
+				sentSunkenCommand.insert(myID);
 				MetaType type(BWAPI::UnitTypes::Zerg_Sunken_Colony);
 				ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
-				canSunken = false;
-				sentSunkenCommand.insert(myID);
+				
+
+			}
+
+			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hydralisk_Den)
+			{
+				if (hydraCompleted.find(b.buildingUnit) == hydraCompleted.end())
+				{
+					hydraCompleted.insert(b.buildingUnit);
+					if (upgradeHydra.find(BWAPI::UpgradeTypes::Muscular_Augments) == upgradeHydra.end())
+					{
+
+						MetaType type(BWAPI::UpgradeTypes::Muscular_Augments);
+						upgradeHydra.insert(BWAPI::UpgradeTypes::Muscular_Augments);
+						ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
+					}
+				}
+
 
 			}
 
@@ -872,7 +1032,25 @@ void BuildingManager::checkForCompletedBuildings()
 			{
 				if (evoCompleted.find(b.buildingUnit) == evoCompleted.end())
 				{
+					if (evoCompleted.size() == 0)
+					{
+						firstEvoChamber = b.buildingUnit->getID();
+					}
+
 					evoCompleted.insert(b.buildingUnit);
+					if (upgradeEvo.find(BWAPI::UpgradeTypes::Zerg_Missile_Attacks) == upgradeEvo.end())
+					{
+						
+						MetaType type(BWAPI::UpgradeTypes::Zerg_Missile_Attacks);
+						upgradeEvo.insert(BWAPI::UpgradeTypes::Zerg_Missile_Attacks);
+						ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
+					}
+					else if (upgradeEvo.find(BWAPI::UpgradeTypes::Zerg_Carapace) == upgradeEvo.end())
+					{
+						MetaType type(BWAPI::UpgradeTypes::Zerg_Carapace);
+						upgradeEvo.insert(BWAPI::UpgradeTypes::Zerg_Carapace);
+						ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
+					}
 				}
 			}
 
@@ -909,7 +1087,7 @@ void BuildingManager::checkForCompletedBuildings()
 			{
 				if (b.isGasSteal)
 				{
-					ScoutManager::Instance().setWorkerScout(b.builderUnit);
+					//ScoutManager::Instance().setWorkerScout(b.builderUnit);
 				}
 				// otherwise tell the worker manager we're finished with this unit
 				else
@@ -921,10 +1099,7 @@ void BuildingManager::checkForCompletedBuildings()
 			// remove this unit from the under construction vector
 			toRemove.push_back(b);
 		}
-		else if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony && b.buildingUnit->getHitPoints() < 400 && b.buildingUnit->getHitPoints() >= 1)
-		{
-			canSunken = true;
-		}
+
 		/*
 		else if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Evolution_Chamber && b.buildingUnit->getHitPoints() >= 1 && notEvoChecked)
 		{
@@ -955,6 +1130,21 @@ bool BuildingManager::isEvolvedBuilding(BWAPI::UnitType type)
 // add a new building to be constructed
 void BuildingManager::addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal)
 {
+
+	if (type == BWAPI::UnitTypes::Zerg_Evolution_Chamber && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Evolution_Chamber) >= 2)
+	{
+		return;
+	}
+
+	else if (type == BWAPI::UnitTypes::Zerg_Hydralisk_Den && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk_Den) >= 1)
+	{
+		return;
+	}
+	
+	else if (type == BWAPI::UnitTypes::Zerg_Extractor && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor) >= baseCount + 1)
+	{
+		return;
+	}
 	_reservedMinerals += type.mineralPrice();
 	_reservedGas += type.gasPrice();
 
@@ -1178,10 +1368,10 @@ bool BuildingManager::buildable(int x, int y, BWAPI::TilePosition mySunkPosition
 	return true;
 }
 
-bool BuildingManager::buildable2(int x, int y, BWAPI::TilePosition mySunkPosition) const
+bool BuildingManager::buildable2(int x, int y, BWAPI::TilePosition myEvoPosition) const
 {
 	//returns true if this tile is currently buildable, takes into account units on tile
-	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(mySunkPosition) != createdBuilding.end() || BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), mySunkPosition) >= mainToRampDistance)  // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
+	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(myEvoPosition) != createdBuilding.end() || BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), myEvoPosition) >= mainToRampDistance)  // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
 	{
 
 		return false;

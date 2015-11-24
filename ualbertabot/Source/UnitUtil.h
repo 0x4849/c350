@@ -20,7 +20,7 @@ namespace UnitUtil
     int GetAttackRange(BWAPI::UnitType attacker, BWAPI::UnitType target);
     int GetTransportSize(BWAPI::UnitType type);
 
-    size_t GetAllUnitCount(BWAPI::UnitType type);
+    size_t GetAllUnitCount(BWAPI::UnitType type,BWAPI::Player player = BWAPI::Broodwar->self());
 
     
     BWAPI::Unit GetClosestUnitTypeToTarget(BWAPI::UnitType type, BWAPI::Position target);

@@ -284,7 +284,7 @@ bool WorkerData::depotIsFull(BWAPI::Unit depot)
 	int assignedWorkers = getNumAssignedWorkers(depot);
 	int mineralsNearDepot = getMineralsNearDepot(depot);
 
-	
+
 	if (BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 	{
 		int assignedWorkers2 = getNumAssignedWorkers(BuildingManager::Instance().hatcheryUnit);
@@ -299,7 +299,7 @@ bool WorkerData::depotIsFull(BWAPI::Unit depot)
 			N = 3;
 		}
 	}
-	
+
 	if (assignedWorkers >= mineralsNearDepot * N)
 	{
 		return true;
@@ -427,8 +427,8 @@ BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
 
 	return bestMineral;
 }
-/*
-BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
+
+BWAPI::Unit WorkerData::getMineralNearWorker(BWAPI::Unit worker)
 {
 	if (!worker) { return nullptr; }
 
@@ -439,7 +439,7 @@ BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
 
 	if (depot)
 	{
-		BOOST_FOREACH (BWAPI::Unit unit, BWAPI::Broodwar->getAllUnits())
+		for (BWAPI::Unit unit : BWAPI::Broodwar->getAllUnits())
 		{
 			if (unit->getType() == BWAPI::UnitTypes::Resource_Mineral_Field && unit->getResources() > 0)
 			{
@@ -455,7 +455,7 @@ BWAPI::Unit WorkerData::getMineralToMine(BWAPI::Unit worker)
 	}
 
 	return mineral;
-}*/
+}
 
 BWAPI::Unit WorkerData::getWorkerRepairUnit(BWAPI::Unit unit)
 {

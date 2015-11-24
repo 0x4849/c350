@@ -86,7 +86,7 @@ void WorkerManager::handleGasWorkers()
 			int numAssigned = workerData.getNumAssignedWorkers(unit);
 
 			// if it's less than we want it to be, fill 'er up
-			for (int i=0; i<(Config::Macro::WorkersPerRefinery-numAssigned); ++i)
+			for (int i = 0; i < (Config::Macro::WorkersPerRefinery - numAssigned); ++i)
 			{
 				BWAPI::Unit gasWorker = getGasWorker(unit);
 				if (gasWorker)
@@ -95,6 +95,22 @@ void WorkerManager::handleGasWorkers()
 				}
 			}
 		}
+	}
+
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstZergStrategyName && BWAPI::Broodwar->self()->gatheredGas() >= 100)
+	{
+		Config::Macro::WorkersPerRefinery = 0;
+		for (auto & worker : workerData.getWorkers())
+		{
+			UAB_ASSERT(worker != nullptr, "Unit was null");
+
+			if (worker->isCarryingGas() && worker->getDistance(workerData.getMineralNearWorker(worker)) >= 170)
+			{
+				setMineralWorker(worker);
+				if (Config::Debug::DrawBuildOrderSearchInfo)BWAPI::Broodwar->printf("%d",worker->getDistance(workerData.getMineralToMine(worker)));
+			}
+		}
+		
 	}
 }
 
@@ -132,23 +148,8 @@ void WorkerManager::handleIdleWorkers()
 		// if it is idle
 		if (workerData.getWorkerJob(worker) == WorkerData::Idle) 
 		{
-			//BWAPI::Position myPosition = worker->getPosition();
-			//int workerID = worker->getID();
-
-			//BWAPI::Position tempPosition;
-
-			//tempPosition.x = BuildingManager::Instance().firstHatcheryPosition.x + 3;
-			//tempPosition.y = BuildingManager::Instance().firstHatcheryPosition.y + 3;
 			// send it to the nearest mineral patch
-			//if (worker != BuildingManager::Instance().sunkenUnit)
-			//{	
-				setMineralWorker(worker);
-				
-			//}
-			
-			//setMineralWorker(worker);
-			//BWAPI::Broodwar->printf("Yes it does");
-			
+			setMineralWorker(worker);
 		}
 	}
 }
@@ -318,7 +319,7 @@ void WorkerManager::setMineralWorker(BWAPI::Unit unit)
 	}
 	else
 	{
-		// BWAPI::Broodwar->printf("No valid depot for mineral worker");
+		//BWAPI::Broodwar->printf("No valid depot for mineral worker");
 	}
 }
 
@@ -462,7 +463,7 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 			{
 				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
 			}
-		//	}
+			//	}
 			if (!closestMovingWorker || distance < closestMovingWorkerDistance)
 			{
 				closestMovingWorker = unit;

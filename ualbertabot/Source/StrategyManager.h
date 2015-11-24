@@ -49,6 +49,7 @@ class StrategyManager
     std::map<std::string, Strategy> _strategies;
     int                             _totalGamesPlayed;
     const BuildOrder                _emptyBuildOrder;
+	bool							_isLastBuildOrder;
 
 	        void	                writeResults();
 	const	int					    getScore(BWAPI::Player player) const;
@@ -71,5 +72,6 @@ public:
 	const	int				        defendWithWorkers();
 	const	MetaPairVector		    getBuildOrderGoal();
 	const	BuildOrder &            getOpeningBookBuildOrder() const;
+	const   BuildOrder &			getAdaptiveBuildOrder() const;
 };
 }

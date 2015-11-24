@@ -15,12 +15,12 @@ namespace Config
     namespace Modules
     {
         extern bool UsingGameCommander;			
-        extern bool UsingScoutManager;
+        extern bool UsingWorkerScout;
         extern bool UsingCombatCommander;
         extern bool UsingUnitCommandManager;
         extern bool UsingBuildOrderSearch;  
         extern bool UsingAutoObserver;
-        extern bool UsingStrategyIO;			
+        extern bool UsingStrategyIO;	
     }
     
     namespace BotInfo
@@ -33,6 +33,9 @@ namespace Config
     namespace Strategy
     {
         extern std::string StrategyName;
+		extern std::string AgainstProtossStrategyName;
+		extern std::string AgainstTerrenStrategyName;
+		extern std::string AgainstZergStrategyName;
         extern std::string ReadDir;
         extern std::string WriteDir;
         extern bool GasStealWithScout;

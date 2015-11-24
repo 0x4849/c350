@@ -7,15 +7,15 @@ namespace Config
     {
         bool ConfigFileFound                = false;
         bool ConfigFileParsed               = false;
-		std::string ConfigFileLocation = "E:/c350/UAlbertaBot/UAlbertaBot_Config.txt";
+        std::string ConfigFileLocation      = "E:/c350/UAlbertaBot/UAlbertaBot_Config.txt";
     }
 
     namespace Strategy
     {
-        std::string ProtossStrategyName     = "Protoss_ZealotRush";
-        std::string TerranStrategyName      = "Terran_MarineRush";
-        std::string ZergStrategyName        = "Zerg_3HatchMuta";
-        std::string StrategyName            = "Protoss_ZealotRush";
+        std::string AgainstProtossStrategyName     = "Zerg_9/10Hatch";
+        std::string AgainstTerrenStrategyName      = "Zerg_3HatchHydra";
+        std::string AgainstZergStrategyName        = "Zerg_9Pool";
+		std::string StrategyName			= "";
         std::string ReadDir                 = "bwapi-data/read/";
         std::string WriteDir                = "bwapi-data/write/";
         bool GasStealWithScout              = false;
@@ -28,7 +28,7 @@ namespace Config
     {
         // the default tournament bot modules
         bool UsingGameCommander             = true;     // toggle GameCommander, effectively UAlbertaBot
-        bool UsingScoutManager              = true;
+        bool UsingWorkerScout				= false;
         bool UsingCombatCommander           = true;
         bool UsingBuildOrderSearch          = true;     // toggle use of Build Order Search, currently no backup
         bool UsingAutoObserver              = false;
@@ -64,7 +64,7 @@ namespace Config
         bool DrawGameInfo                   = true;
         bool DrawUnitHealthBars             = true;
         bool DrawProductionInfo             = true;
-        bool DrawBuildOrderSearchInfo       = false;
+        bool DrawBuildOrderSearchInfo       = true;
         bool DrawScoutInfo                  = false;
         bool DrawResourceInfo               = false;
         bool DrawWorkerInfo                 = false;
