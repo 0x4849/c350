@@ -1,4 +1,18 @@
+<<<<<<< HEAD
 VisualStudio/Release
 VisualStudio/Debug
 bin/*
 source/*.o
+=======
+*.sdf
+*.suo
+*.opensdf
+*.user
+*.dll
+*.exe
+*.o
+UAlbertaBot/UAB_ErrorLog.txt
+UAlbertaBot/UAB_ErrorLog.txt
+*.pd_
+UAlbertaBot/UAB_ErrorLog.txt
+>>>>>>> 8b38165deb9cebc6800bda4a0fd1f171c1e0633b

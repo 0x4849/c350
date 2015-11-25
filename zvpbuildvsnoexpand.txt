@@ -1,0 +1,24 @@
+9 hatchery
+10/9 drone
+overlord
+pool
+3 drone
+creep when hatch is out
+drone
+drone
+6 lings(3x2)
+overlord
+2 drone
+20 hatch
+sunken
+2 drones
+hatchery
+sunken
+overlord
+4 lings (2x2)
+gas
+hydra den
+4 drones 
+3 overlord
+hydra speed
+all hydra
