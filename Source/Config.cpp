@@ -1,21 +1,21 @@
 #include "Config.h"
 #include "UABAssert.h"
 
-namespace Config // apparently this never needs to be edited
+namespace Config
 {
     namespace ConfigFile
     {
         bool ConfigFileFound                = false;
         bool ConfigFileParsed               = false;
-        std::string ConfigFileLocation      = "C:/Users/Soul/Documents/School/CMPUT/350/ualbertabot-master/ualbertabot-master/UAlbertaBot/UAlbertaBot_Config.txt";
+        std::string ConfigFileLocation      = "E:/c350/UAlbertaBot/UAlbertaBot_Config.txt";
     }
 
     namespace Strategy
     {
-        std::string ProtossStrategyName     = "Protoss_ZealotRush";
-        std::string TerranStrategyName      = "Terran_MarineRush";
-        std::string ZergStrategyName        = "Zerg_3HatchMuta";
-        std::string StrategyName            = "Zerg_3HatchMuta";
+        std::string AgainstProtossStrategyName     = "Zerg_9/10Hatch";
+        std::string AgainstTerrenStrategyName      = "Zerg_3HatchHydra";
+        std::string AgainstZergStrategyName        = "Zerg_9Pool";
+		std::string StrategyName			= "";
         std::string ReadDir                 = "bwapi-data/read/";
         std::string WriteDir                = "bwapi-data/write/";
         bool GasStealWithScout              = false;
@@ -28,7 +28,7 @@ namespace Config // apparently this never needs to be edited
     {
         // the default tournament bot modules
         bool UsingGameCommander             = true;     // toggle GameCommander, effectively UAlbertaBot
-        bool UsingScoutManager              = true;
+        bool UsingWorkerScout				= false;
         bool UsingCombatCommander           = true;
         bool UsingBuildOrderSearch          = true;     // toggle use of Build Order Search, currently no backup
         bool UsingAutoObserver              = false;
@@ -48,7 +48,7 @@ namespace Config // apparently this never needs to be edited
 
     namespace BWAPIOptions
     {
-        int SetLocalSpeed                   = 1000;
+        int SetLocalSpeed                   = 42;
         int SetFrameSkip                    = 0;
         bool EnableUserInput                = true;
         bool EnableCompleteMapInformation   = false;
@@ -64,7 +64,7 @@ namespace Config // apparently this never needs to be edited
         bool DrawGameInfo                   = true;
         bool DrawUnitHealthBars             = true;
         bool DrawProductionInfo             = true;
-        bool DrawBuildOrderSearchInfo       = false;
+        bool DrawBuildOrderSearchInfo       = true;
         bool DrawScoutInfo                  = false;
         bool DrawResourceInfo               = false;
         bool DrawWorkerInfo                 = false;
@@ -77,7 +77,7 @@ namespace Config // apparently this never needs to be edited
         bool DrawBWTAInfo                   = false;
         bool DrawMapGrid                    = false;
         bool DrawUnitTargetInfo             = false;
-        bool DrawSquadInfo                  = true;
+        bool DrawSquadInfo                  = false;
         bool DrawBOSSStateInfo              = false;
         bool PrintModuleTimeout             = false;	
 
@@ -97,7 +97,7 @@ namespace Config // apparently this never needs to be edited
         std::set<BWAPI::UnitType> KiteLongerRangedUnits;
         bool WorkersDefendRush              = false; 
 		int RetreatMeleeUnitShields         = 0;
-        int RetreatMeleeUnitHP              = 5;	// default 0; has been toggled to 5
+        int RetreatMeleeUnitHP              = 0;
         int CombatRadius                    = 1000;     // radius of combat to consider units for Micro Search
         int CombatRegroupRadius             = 300;      // radius of units around frontmost unit we consider in regroup calculation
         int UnitNearEnemyRadius             = 600;      // radius to consider a unit 'near' to an enemy unit

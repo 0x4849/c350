@@ -29,7 +29,7 @@ void UAlbertaBotModule::onStart()
 
     // Parse the bot's configuration file if it has one, change this file path to where your config file is
     // Any relative path name will be relative to Starcraft installation folder
-	ParseUtils::ParseConfigFile("C:/Users/Soul/Documents/School/CMPUT/350/ualbertabot-master/ualbertabot-master/UAlbertaBot/UAlbertaBot_Config.txt");
+    ParseUtils::ParseConfigFile(Config::ConfigFile::ConfigFileLocation);
 
     // Set our BWAPI options here    
 	BWAPI::Broodwar->setLocalSpeed(Config::BWAPIOptions::SetLocalSpeed);

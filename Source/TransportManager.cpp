@@ -68,7 +68,7 @@ void TransportManager::calculateMapEdgeVertices()
 	std::vector<BWAPI::Position> sortedVertices;
 	BWAPI::Position current = *unsortedVertices.begin();
 
-	_mapEdgeVertices.push_back(current);	// adds position 0,0
+	_mapEdgeVertices.push_back(current);
 	unsortedVertices.erase(current);
 
 	// while we still have unsorted vertices left, find the closest one remaining to current

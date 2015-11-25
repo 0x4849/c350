@@ -26,9 +26,6 @@ public:
 	bool                    buildCommandGiven;
 	bool                    underConstruction;
 
-	//NEW (initialized to false)
-	bool					isMacro;
-
 	Building() 
 		: desiredPosition   (0,0)
         , finalPosition     (BWAPI::TilePositions::None)
@@ -41,7 +38,6 @@ public:
         , buildCommandGiven (false)
         , underConstruction (false) 
         , isGasSteal        (false)
-		, isMacro			(false)
     {} 
 
 	// constructor we use most often
@@ -57,7 +53,6 @@ public:
         , buildCommandGiven (false)
         , underConstruction (false) 
         , isGasSteal        (false)
-		, isMacro			(false)
     {}
 
 	// equals operator
@@ -68,7 +63,7 @@ public:
 	}
 };
 
-class BuildingData // not actually used in UAlbertaBot; used in BOSS. BuildingManager manages a separate vector of Buildings
+class BuildingData 
 {
     std::vector<Building>                   _buildings;
 

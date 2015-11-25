@@ -5,7 +5,7 @@
 
 namespace UAlbertaBot
 {
-struct UnitInfo // generally accessed through InformationManager
+struct UnitInfo
 {
     // we need to store all of this data because if the unit is not visible, we
     // can't reference it from the unit pointer
@@ -48,7 +48,7 @@ struct UnitInfo // generally accessed through InformationManager
 };
 
 typedef std::vector<UnitInfo> UnitInfoVector;
-typedef std::map<BWAPI::Unit,UnitInfo> UIMap;	// when working with UIMap, always access data from UnitInfo
+typedef std::map<BWAPI::Unit,UnitInfo> UIMap;
 
 class UnitData
 {

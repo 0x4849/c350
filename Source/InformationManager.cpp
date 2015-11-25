@@ -6,6 +6,7 @@ using namespace UAlbertaBot;
 InformationManager::InformationManager()
     : _self(BWAPI::Broodwar->self())
     , _enemy(BWAPI::Broodwar->enemy())
+	, _enemyExpand(false)
 {
 	initializeRegionInformation();
 }
@@ -20,8 +21,6 @@ void InformationManager::update()
 {
 	updateUnitInfo();
 	updateBaseLocationInfo();
-	//NEW
-	updateEnemyProductionEstimate();
 }
 
 void InformationManager::updateUnitInfo() 
@@ -113,6 +112,8 @@ void InformationManager::updateBaseLocationInfo()
 	}
 
 	// for each enemy unit we know about
+	size_t enemyBaseCount = 0;
+	size_t enemySunkenCount = 0;
 	for (const auto & kv : _unitData[_enemy].getUnits())
 	{
 		const UnitInfo & ui(kv.second);
@@ -124,7 +125,25 @@ void InformationManager::updateBaseLocationInfo()
 			// update the enemy occupied regions
 			updateOccupiedRegions(BWTA::getRegion(BWAPI::TilePosition(ui.lastPosition)), BWAPI::Broodwar->enemy());
 		}
+		
+		if (type.isResourceDepot())
+		{
+			++enemyBaseCount;
+		}
+
+		if (type == BWAPI::UnitTypes::Zerg_Sunken_Colony){
+			++enemySunkenCount;
+		}
+
 	}
+	
+	if (enemyBaseCount > 1){
+		_enemyExpand = true;
+	}
+
+	if (enemySunkenCount > 1){
+		Config::Micro::UseSparcraftSimulation = true;
+	} 
 
 	// for each of our units
 	for (const auto & kv : _unitData[_self].getUnits())
@@ -583,60 +602,6 @@ bool InformationManager::enemyHasCloakedUnits()
 	return false;
 }
 
-//NEW
-void InformationManager::updateEnemyProductionEstimate()
-{
-	if (_enemyProductionEstimate.empty())
-	{
-		return;
-	}
-
-	int currentTime = BWAPI::Broodwar->getFrameCount() - _firstProdBuildingTime;
-	int numGateways = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumUnits(BWAPI::UnitTypes::Protoss_Gateway);
-	int numBarracks = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumUnits(BWAPI::UnitTypes::Terran_Barracks);
-	int possibleZealots = 0;
-	int possibleMarines = 0;
-	if (numGateways > 0)
-	{
-		double zealotBuildTime = BWAPI::UnitTypes::Protoss_Zealot.buildTime() / numGateways;
-		int possibleZealots = currentTime / zealotBuildTime;
-	}
-	if (numBarracks > 0)
-	{
-		double marineBuildTime = BWAPI::UnitTypes::Terran_Marine.buildTime() / numBarracks;
-		int possibleMarines = currentTime / marineBuildTime;
-	}
-	int deadZealots = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumDeadUnits(BWAPI::UnitTypes::Protoss_Zealot);
-	int deadMarines = InformationManager::Instance().getUnitData(BWAPI::Broodwar->enemy()).getNumDeadUnits(BWAPI::UnitTypes::Terran_Marine);
-
-	_enemyProductionEstimate[BWAPI::UnitTypes::Protoss_Gateway] = possibleZealots - deadZealots;
-	_enemyProductionEstimate[BWAPI::UnitTypes::Terran_Barracks] = possibleMarines - deadMarines;
-}
-
-std::map<BWAPI::UnitType, int> InformationManager::getEnemyProductionEstimate()
-{
-	return _enemyProductionEstimate;
-}
-
-//NEW
-void InformationManager::onUnitShow(BWAPI::Unit unit)
-{
-	updateUnit(unit);
-	if ((_enemyProductionEstimate.empty()) && ((unit->getType() == BWAPI::UnitTypes::Terran_Barracks) ||
-		//(unit->getType() == BWAPI::UnitTypes::Terran_Factory) ||
-		//(unit->getType() == BWAPI::UnitTypes::Protoss_Stargate) ||
-		(unit->getType() == BWAPI::UnitTypes::Protoss_Gateway)))
-	{
-		BWAPI::Broodwar->printf("Omg a gateway/barracks");
-		_firstProdBuildingTime = BWAPI::Broodwar->getFrameCount();
-		UIMap enemies = getUnitInfo(BWAPI::Broodwar->enemy());
-		_enemyProductionEstimate[unit->getType()] = 0;
-		for (auto it = enemies.begin(); it != enemies.end(); it++)
-		{
-			if (UnitUtil::IsCombatUnit(it->second.unit))
-			{
-				_enemyProductionEstimate[unit->getType()]++;
-			}
-		}
-	}
+bool InformationManager::isEnemyExpand(){
+	return _enemyExpand;
 }

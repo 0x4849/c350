@@ -56,12 +56,12 @@ public:
 	WorkerData();
 
 	void					workerDestroyed(BWAPI::Unit unit);
-	void					addDepot(BWAPI::Unit unit);		//modified
+	void					addDepot(BWAPI::Unit unit);
 	void					removeDepot(BWAPI::Unit unit);
-	void					addWorker(BWAPI::Unit unit);		// don't use add worker; use setworkerjob
+	void					addWorker(BWAPI::Unit unit);
 	void					addWorker(BWAPI::Unit unit, WorkerJob job, BWAPI::Unit jobUnit);
 	void					addWorker(BWAPI::Unit unit, WorkerJob job, BWAPI::UnitType jobUnitType);
-	void					setWorkerJob(BWAPI::Unit unit, WorkerJob job, BWAPI::Unit jobUnit);	// modified
+	void					setWorkerJob(BWAPI::Unit unit, WorkerJob job, BWAPI::Unit jobUnit);
 	void					setWorkerJob(BWAPI::Unit unit, WorkerJob job, WorkerMoveData wmd);
 	void					setWorkerJob(BWAPI::Unit unit, WorkerJob job, BWAPI::UnitType jobUnitType);
 
@@ -80,7 +80,8 @@ public:
 	int						getMineralsNearDepot(BWAPI::Unit depot);
 
 	int						getNumAssignedWorkers(BWAPI::Unit unit);
-	BWAPI::Unit   getMineralToMine(BWAPI::Unit worker);
+	BWAPI::Unit				getMineralToMine(BWAPI::Unit worker);
+	BWAPI::Unit				getMineralNearWorker(BWAPI::Unit worker);
 
 	enum WorkerJob			getWorkerJob(BWAPI::Unit unit);
 	BWAPI::Unit   getWorkerResource(BWAPI::Unit unit);
@@ -95,10 +96,5 @@ public:
 
 	const BWAPI::Unitset & getWorkers() const { return workers; }
 
-	//NEW
-	bool					depotIsSemiFull(BWAPI::Unit depot);	// functions similar to depotIsFull but tries to optimize at 1 mineral per worker if possible
-	BWAPI::Unitset			getDepots();
-	bool					isMacroHatch(BWAPI::Unit depot); // don't want workers working at macro hatcheries. can determine
-															// if a hatch is a macro hatch by seeing if it has minerals nearby or not
 };
 }

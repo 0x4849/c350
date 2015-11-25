@@ -29,9 +29,6 @@ void WorkerManager::update()
 	workerData.drawDepotDebugInfo();
 
     handleRepairWorkers();
-
-	//NEW
-	rebalanceWorkers();
 }
 
 void WorkerManager::updateWorkerStatus() 
@@ -89,7 +86,7 @@ void WorkerManager::handleGasWorkers()
 			int numAssigned = workerData.getNumAssignedWorkers(unit);
 
 			// if it's less than we want it to be, fill 'er up
-			for (int i=0; i<(Config::Macro::WorkersPerRefinery-numAssigned); ++i)
+			for (int i = 0; i < (Config::Macro::WorkersPerRefinery - numAssigned); ++i)
 			{
 				BWAPI::Unit gasWorker = getGasWorker(unit);
 				if (gasWorker)
@@ -100,6 +97,21 @@ void WorkerManager::handleGasWorkers()
 		}
 	}
 
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstZergStrategyName && BWAPI::Broodwar->self()->gatheredGas() >= 100)
+	{
+		Config::Macro::WorkersPerRefinery = 0;
+		for (auto & worker : workerData.getWorkers())
+		{
+			UAB_ASSERT(worker != nullptr, "Unit was null");
+
+			if (worker->isCarryingGas() && worker->getDistance(workerData.getMineralNearWorker(worker)) >= 170)
+			{
+				setMineralWorker(worker);
+				if (Config::Debug::DrawBuildOrderSearchInfo)BWAPI::Broodwar->printf("%d",worker->getDistance(workerData.getMineralToMine(worker)));
+			}
+		}
+		
+	}
 }
 
 bool WorkerManager::isGasStealRefinery(BWAPI::Unit unit)
@@ -300,14 +312,14 @@ void WorkerManager::setMineralWorker(BWAPI::Unit unit)
 	BWAPI::Unit depot = getClosestDepot(unit);
 
 	// if there is a valid mineral
-	if ((depot) && (!workerData.isMacroHatch(depot)))
+	if (depot)
 	{
 		// update workerData with the new job
 		workerData.setWorkerJob(unit, WorkerData::Minerals, depot);
 	}
 	else
 	{
-		 BWAPI::Broodwar->printf("No valid depot for mineral worker");
+		//BWAPI::Broodwar->printf("No valid depot for mineral worker");
 	}
 }
 
@@ -321,11 +333,8 @@ BWAPI::Unit WorkerManager::getClosestDepot(BWAPI::Unit worker)
 	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 	{
         UAB_ASSERT(unit != nullptr, "Unit was null");
-		//NEW
-		if ((unit->getType().isResourceDepot()) 
-			&& (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair)
-			&& (!workerData.depotIsFull(unit))
-			&& (!workerData.isMacroHatch(unit)))
+
+		if (unit->getType().isResourceDepot() && (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair) && !workerData.depotIsFull(unit))
 		{
 			double distance = unit->getDistance(worker);
 			if (!closestDepot || distance < closestDistance)
@@ -413,8 +422,22 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		// mining worker check
 		if (unit->isCompleted() && (workerData.getWorkerJob(unit) == WorkerData::Minerals))
 		{
+			double distance;
 			// if it is a new closest distance, set the pointer
-			double distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			{
+				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			}
+			else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+			{
+				distance = unit->getDistance(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+			}
+			else
+			{
+				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			}
+
 			if (!closestMiningWorker || distance < closestMiningWorkerDistance)
 			{
 				closestMiningWorker = unit;
@@ -425,8 +448,22 @@ BWAPI::Unit WorkerManager::getBuilder(Building & b, bool setJobAsBuilder)
 		// moving worker check
 		if (unit->isCompleted() && (workerData.getWorkerJob(unit) == WorkerData::Move))
 		{
+			double distance;
 			// if it is a new closest distance, set the pointer
-			double distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony &&  BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
+			{
+				distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+				//distance = unit->getDistance(BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
+			}
+			else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
+			{
+				distance = unit->getDistance(BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()));
+			}
+			else
+			{
+				distance = unit->getDistance(BWAPI::Position(b.finalPosition));
+			}
+			//	}
 			if (!closestMovingWorker || distance < closestMovingWorkerDistance)
 			{
 				closestMovingWorker = unit;
@@ -613,32 +650,10 @@ void WorkerManager::rebalanceWorkers()
 
 		BWAPI::Unit depot = workerData.getWorkerDepot(worker);
 
-		//NEW
-		if ((depot && workerData.depotIsFull(depot)) || (workerData.isMacroHatch(depot)))
+		if (depot && workerData.depotIsFull(depot))
 		{
-			for (auto &newDepot : workerData.getDepots())
-			{
-				if (!workerData.depotIsFull(newDepot))
-				{
-					BWAPI::Broodwar->printf("Depot is full; moving to different one");
-					workerData.setWorkerJob(worker, WorkerData::Minerals, newDepot);
-				}
-			}
+			workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);
 		}
-
-		//NEW
-		else if (depot && workerData.depotIsSemiFull(depot))
-		{
-			for (auto &goodDepot : workerData.getDepots())
-			{
-				if ((!workerData.depotIsSemiFull(goodDepot)) && (!workerData.depotIsFull(goodDepot)))
-				{
-					BWAPI::Broodwar->printf("Depot is semifull; moving to optimal one");
-					workerData.setWorkerJob(worker, WorkerData::Minerals, goodDepot);
-				}
-			}
-		}
-
 		else if (!depot)
 		{
 			workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);

@@ -117,7 +117,6 @@ void ParseUtils::ParseConfigFile(const std::string & filename)
         const rapidjson::Value & module = doc["Modules"];
 
         JSONTools::ReadBool("UseGameCommander", module, Config::Modules::UsingGameCommander);
-        JSONTools::ReadBool("UseScoutManager", module, Config::Modules::UsingScoutManager);
         JSONTools::ReadBool("UseCombatCommander", module, Config::Modules::UsingCombatCommander);
         JSONTools::ReadBool("UseBuildOrderSearch", module, Config::Modules::UsingBuildOrderSearch);
         JSONTools::ReadBool("UseStrategyIO", module, Config::Modules::UsingStrategyIO);
@@ -281,7 +280,6 @@ void ParseUtils::ParseTextCommand(const std::string & commandString)
 
         // Module Options
         else if (variableName == "usegamecommander") { Config::Modules::UsingGameCommander = GetBoolFromString(val); }
-        else if (variableName == "usescoutmanager") { Config::Modules::UsingScoutManager = GetBoolFromString(val); }
         else if (variableName == "usecombatcommander") { Config::Modules::UsingCombatCommander = GetBoolFromString(val); }
         else if (variableName == "usebuildordersearch") { Config::Modules::UsingBuildOrderSearch = GetBoolFromString(val); }
         else if (variableName == "useautoobserver") { Config::Modules::UsingAutoObserver = GetBoolFromString(val); }

@@ -9,51 +9,46 @@ namespace UAlbertaBot
 {
 
 
-class BuildingPlacer // in general seems to build buildings at random locations. ProductionManager only passes in startLocation
-					 // as the target location for every building, so most buildings are made in the main base
+class BuildingPlacer
 {
     BuildingPlacer();
 
-    std::vector< std::vector<bool> > _reserveMap; // covers the whole map to reserve building space
+    std::vector< std::vector<bool> > _reserveMap;
 
-    int     _boxTop;  // marks the mineral area, but seemingly only for the main base
+    int     _boxTop;
     int	    _boxBottom;
     int	    _boxLeft;
     int	    _boxRight;
 
-    void    computeBuildableTileDistance(BWAPI::TilePosition tp); // unused
+    void    computeBuildableTileDistance(BWAPI::TilePosition tp);
 
 public:
 
     static BuildingPlacer & Instance();
 
     // queries for various BuildingPlacer data
-    bool					buildable(const Building & b,int x,int y) const; // called by canBuildHereWithSpace()
-    bool					isReserved(int x,int y) const; // unused
-    bool					isInResourceBox(int x,int y) const; // called by canBuildHereWithSpace()
-    bool					tileOverlapsBaseLocation(BWAPI::TilePosition tile,BWAPI::UnitType type) const; // called by canBuildHere()
+    bool					buildable(const Building & b,int x,int y) const;
+    bool					isReserved(int x,int y) const;
+    bool					isInResourceBox(int x,int y) const;
+    bool					tileOverlapsBaseLocation(BWAPI::TilePosition tile,BWAPI::UnitType type) const;
     bool                    tileBlocksAddon(BWAPI::TilePosition position) const;
 
-    BWAPI::TilePosition		GetBuildLocation(const Building & b,int padding) const; // unused
+    BWAPI::TilePosition		GetBuildLocation(const Building & b,int padding) const;
 
     // determines whether we can build at a given location
     bool					canBuildHere(BWAPI::TilePosition position,const Building & b) const;
-	// canBuildHereWithSpace is the main one; it calls canBuildHere() and is called by getBuildLocationNear()
     bool					canBuildHereWithSpace(BWAPI::TilePosition position,const Building & b,int buildDist,bool horizontalOnly = false) const;
 
     // returns a build location near a building's desired location
-	// uses MapTools.getClosestTilesTo to find tiles near b.desiredPosition
-	// searches tiles for one where you canBuildHereWithSpace()
-	// BuildingManager.getBuildingLocation() calls this and uses the distance padding in Config
     BWAPI::TilePosition		getBuildLocationNear(const Building & b,int buildDist,bool horizontalOnly = false) const;
 
     void					reserveTiles(BWAPI::TilePosition position,int width,int height);
     void					freeTiles(BWAPI::TilePosition position,int width,int height);
 
     void					drawReservedTiles();
-    void					computeResourceBox(); // called in constructor. sets _box ints
+    void					computeResourceBox();
 
-    BWAPI::TilePosition		getRefineryPosition(); // gets the closest geyser to the main base. called by BuildingManager.getBuildingLocation()
+    BWAPI::TilePosition		getRefineryPosition();
 
 };
 }

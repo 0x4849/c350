@@ -6,7 +6,7 @@ namespace UAlbertaBot
 {
 namespace ParseUtils
 {
-    void ParseConfigFile(const std::string & filename); // parses Config file, in particular it sends strategies to StrategyManager
+    void ParseConfigFile(const std::string & filename);
     void ParseTextCommand(const std::string & commandLine);
     BWAPI::Race GetRace(const std::string & raceName);
 

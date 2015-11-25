@@ -14,7 +14,7 @@ class MapTools
 {
     
     std::map<BWAPI::Position,
-             DistanceMap>       _allMaps;    // a cache of already computed distance maps. get distance from a position to anywhere
+             DistanceMap>       _allMaps;    // a cache of already computed distance maps
     std::vector<bool>           _map;        // the map stored at TilePosition resolution, values are 0/1 for walkable or not walkable
     std::vector<bool>           _units;      // map that stores whether a unit is on this position
     std::vector<int>            _fringe;     // the fringe vector which is used as a sort of 'open list'
@@ -37,17 +37,16 @@ public:
 
     void                    parseMap();
     void                    search(DistanceMap & dmap,const int sR,const int sC);
-    void                    fill(const int index,const int region); // unused
-    int                     getGroundDistance(BWAPI::Position from,BWAPI::Position to); // useful: ground distance between two positions
-    int	                    getEnemyBaseDistance(BWAPI::Position p); // unused. why??? this could be useful
-    int	                    getMyBaseDistance(BWAPI::Position p); // unused. why??? this could be useful
-    BWAPI::Position         getEnemyBaseMoveTo(BWAPI::Position p); // unused. why??? this could be useful
-    BWAPI::TilePosition     getNextExpansion(); // calls below for self()
-    BWAPI::TilePosition     getNextExpansion(BWAPI::Player player); // useful: returns position of closest gas-containing base
+    void                    fill(const int index,const int region);
+    int                     getGroundDistance(BWAPI::Position from,BWAPI::Position to);
+    int	                    getEnemyBaseDistance(BWAPI::Position p);
+    int	                    getMyBaseDistance(BWAPI::Position p);
+    BWAPI::Position         getEnemyBaseMoveTo(BWAPI::Position p);
+    BWAPI::TilePosition     getNextExpansion();
+    BWAPI::TilePosition     getNextExpansion(BWAPI::Player player);
     void                    drawHomeDistanceMap();
 
-    const std::vector<BWAPI::TilePosition> & getClosestTilesTo(BWAPI::Position pos); // useful: returns a vector of all tiles on the
-																					 // map sorted by the closest tiles to the position
+    const std::vector<BWAPI::TilePosition> & getClosestTilesTo(BWAPI::Position pos);
 
 };
 
