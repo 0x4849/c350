@@ -133,16 +133,9 @@ void ProductionManager::update()
 	// play gas trick for 9/10Hatch strategy
 	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
 	{
-		size_t count = 0;
-		for (const auto & unit : BWAPI::Broodwar->self()->getUnits())
-		{
-			if (unit->getType() == BWAPI::UnitTypes::Zerg_Drone)
-			{
-				count++;
-			}
-		}
-		if (count == 9){
-			ProductionManager::Instance().performCommand(BWAPI::UnitCommandTypes::Cancel_Construction);
+		if (BWAPI::Broodwar->getFrameCount() == _gasTrickTimer) ProductionManager::Instance().performCommand(BWAPI::UnitCommandTypes::Cancel_Construction);
+		if (!_gasTrickTimer && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Drone) == 9 && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor) == 1){
+			_gasTrickTimer = BWAPI::Broodwar->getFrameCount() + 1;
 		}
 	}
 }

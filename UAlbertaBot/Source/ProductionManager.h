@@ -22,6 +22,7 @@ namespace UAlbertaBot
 		bool                _haveLocationForThisBuilding;
 		int					_overlordTimer;
 		bool				_isLastBuildOrder;
+		int					_gasTrickTimer;
 
 		BWAPI::Unit         getClosestUnitToPosition(const BWAPI::Unitset & units, BWAPI::Position closestTo);
 		BWAPI::Unit         selectUnitOfType(BWAPI::UnitType type, BWAPI::Position closestTo = BWAPI::Position(0, 0));
