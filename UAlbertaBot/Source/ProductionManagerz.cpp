@@ -77,18 +77,6 @@ void ProductionManager::update()
 		{
 			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
 		}
-		
-		if (BWAPI::Broodwar->self()->supplyUsed() >= 40)
-		{
-			BWAPI::Broodwar->printf("Queuing one extra overlord");
-			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
-		}
-		if (BWAPI::Broodwar->self()->supplyUsed() >= 100)
-		{
-			BWAPI::Broodwar->printf("Queuing two extra overlord");
-			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
-		}
-
 		_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
 
@@ -169,6 +157,7 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit unit)
 	}
 }
 
+
 void ProductionManager::manageBuildOrderQueue()
 {
 	// if there is nothing in the _queue, oh well
@@ -185,24 +174,15 @@ void ProductionManager::manageBuildOrderQueue()
 	while (!_queue.isEmpty())
 	{
 
-
 		BWAPI::Unit producer;
 		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 		{
-			producer = getProducer(currentItem.metaType);
+			producer = getProducer(currentItem.metaType, BWAPI::Position(BuildingManager::Instance().createdHatcheriesVector[0]));
 		}
 
 		else
 		{
-			/*
-			if (currentItem.metaType.whatBuilds().isBuilding() && !canProduce(currentItem.metaType.whatBuilds()))
-			{
-			_queue.queueAsHighestPriority(currentItem.metaType.whatBuilds(), false);
-
-			}
-			*/
 			producer = getProducer(currentItem.metaType);
-			/*
 			if (currentItem.metaType.isUpgrade())
 			{
 				if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace)
@@ -210,7 +190,7 @@ void ProductionManager::manageBuildOrderQueue()
 					BWAPI::Broodwar->printf("First evo chamber is %d, chosen Evo chamber is %d\n", BuildingManager::Instance().firstEvoChamber, producer->getID());
 				}
 			}
-			*/
+
 		}
 
 		// check to see if we can make it right now
@@ -293,7 +273,7 @@ BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo
 		UAB_ASSERT(unit != nullptr, "Unit was null");
 
 		// reasons a unit can not train the desired type
-		if (unit->isUpgrading())                    { continue; }
+		if (unit->isUpgrading())								{ continue; }
 		if (unit->getType() != producerType)                    { continue; }
 		if (!unit->isCompleted())                               { continue; }
 		if (unit->isTraining())                                 { continue; }
@@ -375,6 +355,8 @@ BWAPI::Unit ProductionManager::getProducer(MetaType t, BWAPI::Position closestTo
 
 BWAPI::Unit ProductionManager::getClosestUnitToPosition(const BWAPI::Unitset & units, BWAPI::Position closestTo)
 {
+
+
 	if (units.size() == 0)
 	{
 		return nullptr;
@@ -389,8 +371,70 @@ BWAPI::Unit ProductionManager::getClosestUnitToPosition(const BWAPI::Unitset & u
 	BWAPI::Unit closestUnit = nullptr;
 	double minDist(1000000);
 
+	/*
+	bool makeFirstSunken = false;
+	if (!BuildingManager::Instance().isCreepStarted())
+	{
+
+	BWAPI::TilePosition myHatchPos = BuildingManager::Instance().createdHatcheriesVector[0];
+	if (closestTo == BWAPI::Position(myHatchPos))
+	{
+	makeFirstSunken = true;
+	BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+
+	for (auto & unit : myUnits)
+	{
+	if (unit->getID() == BuildingManager::Instance().sunkenID)
+	{
+	return unit;
+	}
+	}
+
+	//return BWAPI::Unit(BuildingManager::Instance().sunkenID);
+	}
+
+
+	}
+	/*
+	std::vector<BWAPI::TilePosition> myUnitsTile;
+	std::vector<BWAPI::Position> myUnitsPosition;
+
+	std::vector<BWAPI::TilePosition> myUnitsTile2;
+	std::vector<BWAPI::Position> myUnitsPosition2;
 	for (auto & unit : units)
 	{
+	myUnitsTile.push_back(unit->getTilePosition());
+	myUnitsPosition.push_back(unit->getPosition());
+	}
+	BWAPI::Unitset myUnits = BWAPI::Broodwar->self()->getUnits();
+	for (BWAPI::Unit p : myUnits)
+	{
+	if (p->getType().isWorker())
+	{
+	myUnitsTile2.push_back(p->getTilePosition());
+	myUnitsPosition2.push_back(p->getPosition());
+	}
+	}
+	*/
+	for (auto & unit : units)
+	{
+
+		/**
+		if (makeFirstSunken)
+		{
+		BWAPI::TilePosition myHatchPos = BuildingManager::Instance().createdHatcheriesVector[0];
+		BWAPI::TilePosition tempPosition;
+		tempPosition.x = myHatchPos.x+2;
+		tempPosition.y = myHatchPos.y+2;
+
+		if (tempPosition == unit->getTilePosition())
+		{
+		return unit;
+		}
+
+		}
+		*/
+
 		UAB_ASSERT(unit != nullptr, "Unit was null");
 
 		double distance = unit->getDistance(closestTo);
@@ -400,6 +444,8 @@ BWAPI::Unit ProductionManager::getClosestUnitToPosition(const BWAPI::Unitset & u
 			minDist = distance;
 		}
 	}
+	//BWAPI::TilePosition myHatchPos = BuildingManager::Instance().createdHatcheriesVector[0];
+	//BWAPI::TilePosition finalTilePos = closestUnit->getTilePosition();
 
 	return closestUnit;
 }
@@ -436,12 +482,12 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
 		// if the race is zerg, morph the unit
 		if (t.getUnitType().getRace() == BWAPI::Races::Zerg)
 		{
-			producer->morph(t.getUnitType());
 			if (t.getUnitType() == BWAPI::UnitTypes::Zerg_Overlord)
 			{
-				_overlordTimer = BWAPI::Broodwar->getFrameCount() + t.getUnitType().buildTime() + 35;
+				overlordBuildTimer = BWAPI::Broodwar->getFrameCount() + t.getUnitType().buildTime();
+				//canOverlord = true;
 			}
-
+			producer->morph(t.getUnitType());
 			// if not, train the unit
 		}
 		else
@@ -456,13 +502,14 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
 	}
 	else if (t.isUpgrade())
 	{
-		//Logger::Instance().log("Produce Upgrade: " + t.getName() + "\n");
-		
 		if (t.getUpgradeType() == BWAPI::UpgradeTypes::Muscular_Augments)
 		{
 			muscBuildTimer = BWAPI::Broodwar->getFrameCount() + t.getUpgradeType().upgradeTime();
 			muscBuild = true;
 		}
+
+
+		//Logger::Instance().log("Produce Upgrade: " + t.getName() + "\n");
 		producer->upgrade(t.getUpgradeType());
 	}
 	else
@@ -470,6 +517,7 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
 
 	}
 }
+
 
 bool ProductionManager::canMakeNow(BWAPI::Unit producer, MetaType t)
 {
