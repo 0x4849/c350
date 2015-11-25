@@ -78,11 +78,11 @@ void ProductionManager::update()
 			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
 		}
 		
-		if (BWAPI::Broodwar->self()->supplyTotal() >= 40)
+		if (BWAPI::Broodwar->self()->supplyUsed() >= 40)
 		{
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 		}
-		if (BWAPI::Broodwar->self()->supplyTotal() >= 100)
+		if (BWAPI::Broodwar->self()->supplyUsed() >= 100)
 		{
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 		}

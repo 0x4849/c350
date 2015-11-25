@@ -1062,6 +1062,7 @@ void BuildingManager::checkForCompletedBuildings()
 				sunkenBuildTimer = BWAPI::Broodwar->getFrameCount() + 8 * 25;
 				std::set<BWTA::Chokepoint *> chokePoints = BWTA::getChokepoints();
 				double lowestDistance = 999999.0;
+				double lowestDistance2 = 999999.0;
 				BWAPI::Position ourRampPosition;
 
 				for (auto x : chokePoints)
@@ -1079,7 +1080,30 @@ void BuildingManager::checkForCompletedBuildings()
 					}
 
 				}
+
+				for (auto x : chokePoints)
+				{
+
+					double distance1 = BWTA::getGroundDistance(createdHatcheriesVector[0], BWAPI::TilePosition(x->getCenter()));
+
+					double sum = distance1;
+
+					if (sum < lowestDistance && x->getCenter() != ourRampPosition)
+					{
+						lowestDistance = sum;
+						ourChokePointPosition = x->getCenter();
+						expansionToChokeDistance = distance1;
+					}
+				}
 	
+			}
+
+			for (auto x : BWAPI::Broodwar->self()->getUnits())
+			{
+				if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+				{
+					x->move(ourChokePointPosition);
+				}
 			}
 
 			// if we are terran, give the worker back to worker manager

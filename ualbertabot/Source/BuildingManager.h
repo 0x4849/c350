@@ -60,7 +60,10 @@ namespace UAlbertaBot
 		bool				canSunken = false;
 		bool				canBuildTrigger = true;
 		double				mainToRampDistance;
+		double				expansionToChokeDistance;
 		BWAPI::Position		ourRampPosition;
+		BWAPI::Position		ourChokePointPosition;
+
 		BWAPI::Unit			naturalGas;
 		BWAPI::Position		firstHatcheryPosition;
 		BWAPI::Unit			hatcheryUnit;
