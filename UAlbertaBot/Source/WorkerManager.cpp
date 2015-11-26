@@ -1,6 +1,7 @@
 #include "Common.h"
 #include "WorkerManager.h"
 #include "Micro.h"
+#include "StrategyManager.h"
 
 using namespace UAlbertaBot;
 
@@ -76,21 +77,31 @@ void WorkerManager::stopRepairing(BWAPI::Unit worker)
 
 void WorkerManager::handleGasWorkers() 
 {
+	//BWAPI::Broodwar->printf("calling handle gas workers\n");
+
 	// for each unit we have
 	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 	{
+		//BWAPI::Broodwar->printf("calling handle gas workers2\n");
 		// if that unit is a refinery
 		if (unit->getType().isRefinery() && unit->isCompleted() && !isGasStealRefinery(unit))
 		{
+			
 			// get the number of workers currently assigned to it
 			int numAssigned = workerData.getNumAssignedWorkers(unit);
-
+			if (numAssigned == 0)
+			{
+				//BWAPI::Broodwar->printf("NUMASSIGNED IS 0\n");
+			}
+			//BWAPI::Broodwar->printf("calling handle gas workers3 NUM ASSIGNED IS %d\n", numAssigned);
 			// if it's less than we want it to be, fill 'er up
 			for (int i = 0; i < (Config::Macro::WorkersPerRefinery - numAssigned); ++i)
 			{
+				//BWAPI::Broodwar->printf("calling handle gas workers4\n");
 				BWAPI::Unit gasWorker = getGasWorker(unit);
 				if (gasWorker)
 				{
+					//BWAPI::Broodwar->printf("calling handle gas workers5\n");
 					workerData.setWorkerJob(gasWorker, WorkerData::Gas, unit);
 				}
 			}
@@ -104,7 +115,7 @@ void WorkerManager::handleGasWorkers()
 		{
 			UAB_ASSERT(worker != nullptr, "Unit was null");
 
-			if (worker->isCarryingGas() && worker->getDistance(workerData.getMineralNearWorker(worker)) >= 170)
+			if (worker->isCarryingGas() && worker->getDistance(workerData.getMineralNearWorker(worker)) >= 100)
 			{
 				setMineralWorker(worker);
 				if (Config::Debug::DrawBuildOrderSearchInfo)BWAPI::Broodwar->printf("%d",worker->getDistance(workerData.getMineralToMine(worker)));
@@ -112,6 +123,28 @@ void WorkerManager::handleGasWorkers()
 		}
 		
 	}
+	/*
+	else if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName && BWAPI::Broodwar->self()->gatheredGas() >= 100 && StrategyManager::Instance().timeToAttack)
+	{
+		Config::Macro::WorkersPerRefinery = 0;
+		for (auto & worker : workerData.getWorkers())
+		{
+			UAB_ASSERT(worker != nullptr, "Unit was null");
+
+			if (worker->isCarryingGas() && worker->getDistance(workerData.getMineralNearWorker(worker)) >= 170)
+			{
+				setMineralWorker(worker);
+				if (Config::Debug::DrawBuildOrderSearchInfo)BWAPI::Broodwar->printf("%d", worker->getDistance(workerData.getMineralToMine(worker)));
+			}
+		}
+
+	}
+
+	else if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName && !StrategyManager::Instance().timeToAttack)
+	{
+		Config::Macro::WorkersPerRefinery = 3;
+	}
+	*/
 }
 
 bool WorkerManager::isGasStealRefinery(BWAPI::Unit unit)

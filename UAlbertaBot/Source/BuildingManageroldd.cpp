@@ -1,10 +1,12 @@
+
+
 #include "Common.h"
 #include "BuildingManager.h"
 #include "Micro.h"
 #include "ScoutManager.h"
 #include "ProductionManager.h"
-#include <algorithm>
-#include "UnitUtil.h"
+
+
 using namespace UAlbertaBot;
 
 BuildingManager::BuildingManager()
@@ -15,69 +17,15 @@ BuildingManager::BuildingManager()
 
 }
 
-BWAPI::TilePosition BuildingManager::getExtractorPosition(BWAPI::TilePosition desiredPosition)
-{
-	if (createdBuilding.find(desiredPosition) != createdBuilding.end() && baseCount == 2)
-	{
-		return naturalGas->getTilePosition();
-	}
-	else if (createdBuilding.find(desiredPosition) != createdBuilding.end() && baseCount >= 3 && createdHatcheriesSet.size() >= 3)
-	{
-		BWAPI::TilePosition hatchPosition = createdBaseVector[createdBaseVector.size() - 1];
-		BWAPI::TilePosition gasPosition;
-		const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-		BWTA::BaseLocation *myLocation;
-
-		for (BWTA::BaseLocation *p : locations) {
-			BWAPI::TilePosition z = p->getTilePosition();
-			if (z == hatchPosition){
-				// This is the BWTA::Location of the first hatchery.
-				myLocation = p;
-
-			}
-		}
-
-		const BWAPI::Unitset gasSet = myLocation->getGeysers();
-		for (BWAPI::Unit p : gasSet)
-		{
-			gasPosition = p->getTilePosition();
-			break;
-		}
-
-		return gasPosition;
-	}
-
-	else
-	{
-		return desiredPosition;
-	}
-}
 // Get a sunken position depending on whether or not we have an expansion.
-BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
+BWAPI::TilePosition BuildingManager::getSunkenPosition()
 {
-	
+
 	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
 	// Always make sunkens at natural expansion if you can.
 	if (createdHatcheriesSet.size() >= 1)
 	{
 		BWAPI::TilePosition hatchPosition = createdHatcheriesVector[0];
-		
-		/*
-		if (sentCreepColonyCommand.find(myBuilder->getID()) != sentCreepColonyCommand.end())
-		{
-			int builderID = myBuilder->getID();
-			int builderX = sentCreepColonyCommand[builderID].x;
-			int builderY = sentCreepColonyCommand[builderID].y;
-			
-			if (buildable(builderX, builderY, sentCreepColonyCommand[builderID]))
-			{
-				return sentCreepColonyCommand[builderID];
-			}
-
-		}
-		*/
-		
-		/*
 		BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(hatchPosition), BWAPI::Filter::IsResourceDepot);
 		BWAPI::Unitset myUnits = pExpansion->getUnitsInRadius(200);
 		BWAPI::UnitType larva = BWAPI::UnitTypes::Zerg_Larva;
@@ -91,7 +39,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				stuffBlocking.insert(p->getTilePosition());
 			}
 		}
-		*/
+
 		while (buildableSunkenTilePositions.size() >= 1)
 		{
 			std::set<BWAPI::TilePosition>::iterator it = buildableSunkenTilePositions.begin();
@@ -100,7 +48,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 			BWAPI::TilePosition mySunkPosition = *it;
 			Building z(sunk, mySunkPosition);
 
-			if (buildable(mySunkPosition.x, mySunkPosition.y, mySunkPosition))
+			if (BWAPI::Broodwar->hasCreep(mySunkPosition) && BuildingPlacer::Instance().canBuildHere(mySunkPosition, z) && createdBuilding.find(mySunkPosition) == createdBuilding.end() && stuffBlocking.find(mySunkPosition) == stuffBlocking.end())
 			{
 				return *it;			}
 
@@ -150,7 +98,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 		const BWAPI::Unitset gasSet = myLocation->getGeysers();
 		for (BWAPI::Unit p : gasSet)
 		{
-			naturalGas = p;
 			// Calculate the difference between Geyser.x- ExpansionHatchery.x and store it in gasX
 			gasX = p->getTilePosition().x - hatchPosition.x;
 			// Calculate the difference between Geyser.y- ExpansionHatchery.y and store it in gasY
@@ -209,7 +156,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 		// Gas differences is probably more reliable than mineral differences.
 		if (useGasX && useMinX)
 		{
-			BWAPI::Broodwar->printf("Use MinY and Gasx!\n");
 			useMinX = false;
 			useMinY = true;
 		}
@@ -217,7 +163,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 		// Gas differences is probably more reliable than mineral differences.
 		if (useGasY && useMinY)
 		{
-			BWAPI::Broodwar->printf("Use MinX and Gasy!\n");
 			useMinY = false;
 			useMinX = true;
 		}
@@ -240,7 +185,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				Go NORTHEAST **Test**
 				*/
 				incrementDecrement = { true, false, true, true, false, false, true, false };
-				//BWAPI::Broodwar->printf("Minerals North -- Geyser Left\n");
 
 			}
 
@@ -257,7 +201,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				GO SOUTHEAST --> Test
 				*/
 				incrementDecrement = { false, true, true, false, true, false, false, true };
-				//BWAPI::Broodwar->printf("Minerals South -- Geyser Left\n");
 			}
 
 			// If the difference between LeftMostMineral.y - Hatchery.y is negative : It means the mierals are North of the hatchery
@@ -273,7 +216,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				Go Northwest
 				*/
 				incrementDecrement = { true, false, false, true, false, true, true, false };
-				//BWAPI::Broodwar->printf("Minerals North -- Geyser Right\n");
 
 			}
 
@@ -289,7 +231,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				Go Southwest
 				*/
 				incrementDecrement = { false, true, false, false, true, true, false, true };
-				//BWAPI::Broodwar->printf("Minerals South -- Geyser Right\n");
 
 			}
 		}
@@ -307,7 +248,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				Decrease X, Decrease Y(Go North West)
 				I think can try SouthEast ? */
 				incrementDecrement = { false, false, false, true, true, true, true, false };
-				//BWAPI::Broodwar->printf("Minerals East -- Geyser North\n");
 
 			}
 
@@ -322,7 +262,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				I think can try NOrthEast?
 				*/
 				incrementDecrement = { false, false, false, true, true, true, false, true };
-				//BWAPI::Broodwar->printf("Minerals East -- Geyser South\n");
 
 			}
 
@@ -335,21 +274,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				Increase X, Increase Y(Go South East)
 				Increase X, Decrease Y(Go North East)
 				I think maybe Southwest is okay?.. Even NW might be okay */
-				
-				//BWAPI::Broodwar->printf("%s\n", BWAPI::Broodwar->mapName().c_str());
-				std::string circuit = "Circuit";
-				if (BWAPI::Broodwar->mapName().find(circuit) != std::string::npos)
-				{
-					//Buggy
-					incrementDecrement = { false, true, true, false, false, false, false, false };
-				}
-
-				else
-				{
-					incrementDecrement = { true, true, true, false, false, false, true, false };
-				}
-				
-				//BWAPI::Broodwar->printf("Minerals West -- Geyser North\n");
+				incrementDecrement = { true, true, true, false, false, false, true, false };
 			}
 
 			// If the difference between LeftMostMineral.x - Hatchery.x is negative : It means the minerals are West of the hatchery
@@ -363,7 +288,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 				Increase X, Increase Y(Go South East)
 				Increase X, Decrease Y(Go North East)
 				I think maybe Northwest is okay? */
-				//BWAPI::Broodwar->printf("Minerals West -- Geyser South\n");
+
 			}
 		}
 
@@ -430,12 +355,11 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 
 		}
 
-		int N = 20;
 
-		for (int i = 0; i < N; i++)
-			for (int j = 0; j < N; j++)
-				for (int k = 0; k < N; k++)
-					for (int l = 0; l < N; l++)
+		for (int i = 0; i < 30; i++)
+			for (int j = 0; j < 30; j++)
+				for (int k = 0; k < 30; k++)
+					for (int l = 0; l < 30; l++)
 					{
 						int xChange = beginX;
 						int yChange = beginY;
@@ -456,7 +380,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 
 						Building b(sunk, sunkPosition);
 
-						if (buildable(xChange, yChange, sunkPosition))
+						if (BWAPI::Broodwar->hasCreep(sunkPosition) && BuildingPlacer::Instance().canBuildHere(sunkPosition, b) && stuffBlocking.find(sunkPosition) == stuffBlocking.end() && createdBuilding.find(sunkPosition) == createdBuilding.end())
 						{
 							buildableSunkenTilePositions.insert(sunkPosition);
 						}
@@ -487,173 +411,14 @@ Is the counter <= 7 --> Makes sure not to go out of bounds for the incrementDecr
 // Since counter == 8, it means we tried all 8 directions and couldnt find a sunken position, so return None(sunken will be made in main base)
 
 
-void BuildingManager::checkSunkenUpgrade()
-{
-	std::vector<BWAPI::Unit> toRemove;
-	int currentFrameNumber = BWAPI::Broodwar->getFrameCount();
-	if (createdCreeps.size() >= 1)
-	{
-		for (auto x : createdCreeps)
-		{
-			if (currentFrameNumber >= x.second && x.first->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
-			{
-				ProductionManager::Instance()._queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Sunken_Colony), true);
-				toRemove.push_back(x.first);
-			}
-
-		}
-	}
-
-	if (toRemove.size() >= 1)
-	{
-		for (auto x : toRemove)
-		{
-			createdCreeps.erase(x);
-		}
-	}
-}
-
-void BuildingManager::checkForBuildingProblems()
-{
-
-	std::vector<BWAPI::Unit> toRemove;
-	std::vector<BWAPI::UnitType> toRemove2;
-
-	int currentFrameNumber = BWAPI::Broodwar->getFrameCount();
-	if (expectedBuildingCheck.size() >= 1)
-	{
-		for (auto x : expectedBuildingNumber)
-		{
-
-			if (currentFrameNumber >= expectedBuildingCheck[x.first])
-			{
 
 
-				
-				if (UnitUtil::GetAllUnitCount(x.first) < x.second)
-				{
-					toRemove2.push_back(x.first);
-					if (x.first == BWAPI::UnitTypes::Zerg_Hydralisk_Den && UnitUtil::GetAllUnitCount(x.first) == 1)
-					{
-						BWAPI::Broodwar->printf("Hydraden did build. BaseCount is %d. unit count x.first is %d\n", baseCount, UnitUtil::GetAllUnitCount(x.first));
-						continue;
-					}
-					else if (x.first == BWAPI::UnitTypes::Zerg_Extractor && UnitUtil::GetAllUnitCount(x.first) == baseCount + 1)
-					{
-						BWAPI::Broodwar->printf("Extractor did build. BaseCount is %d. unit count x.first is %d\n", baseCount, UnitUtil::GetAllUnitCount(x.first));
-						continue;
-					}
-					else if (x.first == BWAPI::UnitTypes::Zerg_Evolution_Chamber && UnitUtil::GetAllUnitCount(x.first) == 2)
-					{
-						BWAPI::Broodwar->printf("Evo did build. BaseCount is %d. unit count x.first is %d\n", baseCount, UnitUtil::GetAllUnitCount(x.first));
-						continue;
-					}
-					//BWAPI::Broodwar->printf("PUSHING BUILDING");
-					expectedBuildingCheck[x.first] = BWAPI::Broodwar->getFrameCount() + 500;
-					
-					ProductionManager::Instance()._queue.queueAsHighestPriority(MetaType(x.first), true);
-					
 
-				}
-
-			}
-		}
-	}
-
-	if (toRemove2.size() >= 1)
-	{
-		for (auto y : toRemove2)
-		{
-			expectedBuildingCheck.erase(y);
-			expectedBuildingNumber.erase(y);
-		}
-	}
-			
-	/*
-		for (auto x : sentBuildingCommandFrame)
-		{
-			if (x.first->getType() != BWAPI::UnitTypes::Zerg_Drone)
-			{
-				//BWAPI::Broodwar->printf("Does not equal drone.\n");
-				toRemove.push_back(x.first);
-			}
-			//BWAPI::Broodwar->printf("%d\n", x.first->getID());
-			if (x.first->getType() == BWAPI::UnitTypes::Zerg_Drone && currentFrameNumber > x.second)
-			{
-				ProductionManager::Instance()._queue.queueAsHighestPriority(sentBuildingCommandBuilding[x.first], true);
-				toRemove.push_back(x.first);
-			}
-		}
-
-		if (toRemove.size() >= 1)
-		{
-			for (auto y : toRemove)
-			{
-				sentBuildingCommandFrame.erase(y);
-				sentBuildingCommandBuilding.erase(y);
-			}
-		}
-	}
-	*/
-	//for (a)
-}
 
 
 // gets called every frasme from GameCommander
 void BuildingManager::update()
 {
-	/**
-	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hatchery) >= 2)
-	{
-		BWAPI::Broodwar->printf("WE HAVE HATCH\n");
-	}
-	*/
-	if (BWAPI::Broodwar->getFrameCount() % 24 == 0)
-	{
-
-			checkForBuildingProblems();
-
-
-		checkSunkenUpgrade();
-	}
-	/*
-	std::set<BWAPI::Unit> CreepSet;
-	std::set<BWAPI::TilePosition> CreepSet2;
-	BWAPI::Unit testUnit;
-	for (BWAPI::Unit p : BWAPI::Broodwar->self()->getUnits())
-	{
-		if (p->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
-		{
-			CreepSet2.insert(p->getTilePosition());
-			CreepSet.insert(p);
-			testUnit = p;
-			//BWAPI::Broodwar->printf("Creep Position %d %d\n", p->getTilePosition().x, p->getTilePosition().y;)x
-		}
-	}
-	
-	for (auto x : CreepSet2)
-	{
-		BWAPI::Broodwar->printf("Creep Position %d %d Distance is : %f\n", x.x, x.y, x.getDistance(testUnit->getTilePosition()));
-	
-		//BWAPI::Broodwar->printf->("The distance is %d\n", x.getDistance(testUnit->getTilePosition()));
-	}
-
-		//double tempDist = Euclidean_Distance(x->getTilePosition().x, testUnit->getTilePosition().x, x->getTilePosition().y, testUnit->getTilePosition().y);
-
-		//BWAPI::Broodwar->printf("Creep Position %d %d Distance is : %d\n", x->getTilePosition().x, x->getTilePosition().y,tempDist);
-	
-	*/
-	
-	//BWTA::getNearestChokepoint(BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition());
-
-
-	//BWTA::getStartLocation(BWAPI::Broodwar->self())->getNearestChokePoint();
-
-	//BWTA::BaseLocation = BWTA::getStartLocation(BWAPI::Broodwar->self());
-
-	//BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y);
-	//BWAPI::Broodwar->printf("My ChokePoint is %d %d", baseChoke.x, baseChoke.y, 
-
 	if (canBuild && BWAPI::Broodwar->getFrameCount() > sunkenBuildTimer)
 	{
 		MetaType type(BWAPI::UnitTypes::Zerg_Creep_Colony);
@@ -789,154 +554,34 @@ void BuildingManager::constructAssignedBuildings()
 			else
 			{
 				// issue the build order!
-				if (b.type == BWAPI::UnitTypes::Zerg_Hatchery)
+				if (b.type == 131)
 				{
-					if (isBaseLocation(b.finalPosition))
-					{
-						baseCount++;
-						createdBaseVector.push_back(b.finalPosition);
-					}
-					if (std::find(createdHatcheriesVector.begin(), createdHatcheriesVector.end(), b.finalPosition) == createdHatcheriesVector.end())
-					{
-						createdHatcheriesSet.insert(b.finalPosition);
-						createdHatcheriesVector.push_back(b.finalPosition);
-					}
-
-					//firstHatcheryPosition = BWAPI::Position(b.finalPosition);
+					createdHatcheriesSet.insert(b.finalPosition);
+					createdHatcheriesVector.push_back(b.finalPosition);
+					firstHatcheryPosition = BWAPI::Position(b.finalPosition);
 				}
-
-
-				
-				else if (b.type == BWAPI::UnitTypes::Zerg_Extractor && BWAPI::Broodwar->getFrameCount() >= didGasTrickFrames && completedBuilding.find(firstExtractorPosition) == completedBuilding.end()) //Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName && createdBuilding.find(firstExtractorPosition) == createdBuilding.end())
-
-				{
-					//BWAPI::Broodwar->printf("inside\n");
-					b.finalPosition = firstExtractorPosition;
-
-					//didGasTrick = false;
-					
-					for (auto x : BWAPI::Broodwar->self()->getUnits())
-					{
-						if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
-						{
-							x->move(BWAPI::Position(firstExtractorPosition));
-						}
-					}
-					//BWAPI::Broodwar->printf("EX WIDTH AND HEGIHT %d %d\n", b.type.tileWidth(), b.type.tileHeight());
-					//b.finalPosition = getExtractorPosition(b.finalPosition);
-				}
-				
 
 				//|| b.type == 146 is sunken
-				else if (b.type == BWAPI::UnitTypes::Zerg_Creep_Colony)
+				else if (b.type == 143)
 				{
 
-					BWAPI::TilePosition sunkPos = getSunkenPosition(b.builderUnit);
+					BWAPI::TilePosition sunkPos = getSunkenPosition();
 					//b.finalPosition = sunkPos;
 					if (sunkPos != BWAPI::TilePositions::None)
 					{
 						b.finalPosition = sunkPos;
 						buildableSunkenTilePositions.erase(sunkPos);
-						createdSunkenSet.insert(b.finalPosition);
-						createdSunkenVector.push_back(b.finalPosition);
-
-						//sentCreepColonyCommand[b.builderUnit->getID()] = b.finalPosition;
 					}
 
+					createdSunkenSet.insert(b.finalPosition);
+					createdSunkenVector.push_back(b.finalPosition);
 
-					else
-					{
-						BWAPI::Broodwar->printf("Could not find a suitable location. Using %d %d\n", b.finalPosition.x, b.finalPosition.y);
-					}
-
-
-
-				}
-				else if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber || b.type == BWAPI::UnitTypes::Zerg_Hydralisk_Den)
-				{
-					const std::vector<BWAPI::TilePosition>  tempTiles = MapTools::Instance().getClosestTilesTo(BWAPI::Position(createdHatcheriesVector[1]));
-					//BWAPI::Broodwar->printf("%d %d VS %d %d\n", createdHatcheriesVector[1].x, createdHatcheriesVector[1].y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y);
-					for (auto myTile : tempTiles)
-					{
-						if (buildable2(myTile.x, myTile.y, myTile))
-						{
-							b.finalPosition = myTile;
-							break;
-						}
-					}
 				}
 
 
 
 				b.builderUnit->build(b.type, b.finalPosition);
-				if (!(BWAPI::Broodwar->self()->supplyUsed() < 22 && Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName))
-				{
-					//BWAPI::Broodwar->printf("Adding Building\n");
-					createdBuilding.insert(b.finalPosition);
-				}
-		
-				/*
-				if (sentBuildingCommandFrame.find(b.builderUnit) == sentBuildingCommandFrame.end())
-				{
-					sentBuildingCommandFrame[b.builderUnit] = BWAPI::Broodwar->getFrameCount() + 1000;
-					sentBuildingCommandBuilding[b.builderUnit] = MetaType(b.type);
-				}
-				*/
-
-				if (b.type == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
-				{
-					if (expectedBuildingNumber.find(b.type) != expectedBuildingNumber.end())
-					{
-						if (expectedBuildingNumber[b.type] <= 1)
-						{
-							expectedBuildingNumber[b.type] += 1;
-						}
-						
-					}
-
-					else
-					{
-						if (expectedBuildingNumber[b.type] <= 1)
-						{
-							expectedBuildingNumber[b.type] = UnitUtil::GetAllUnitCount(b.type) + 1;
-						}
-						
-					}
-					expectedBuildingCheck[b.type] = BWAPI::Broodwar->getFrameCount() + 600;
-
-				}
-
-
-				else if (b.type == BWAPI::UnitTypes::Zerg_Hydralisk_Den)
-				{
-					expectedBuildingNumber[b.type] = 1;
-					expectedBuildingCheck[b.type] = BWAPI::Broodwar->getFrameCount() + 600;
-				}
-			
-
-				if (b.type == BWAPI::UnitTypes::Zerg_Extractor && canBuild)
-				{
-					//BWAPI::Broodwar->printf("I am triggered.\n");
-					expectedBuildingCheck[b.type] = BWAPI::Broodwar->getFrameCount() + 600;
-					if (expectedBuildingNumber.find(b.type) != expectedBuildingNumber.end())
-					{
-						if (expectedBuildingNumber[b.type] <= baseCount)
-						{
-							expectedBuildingNumber[b.type] += 1;
-						}
-
-					}
-
-					else
-					{
-						if (expectedBuildingNumber[b.type] <= baseCount)
-						{
-							expectedBuildingNumber[b.type] = UnitUtil::GetAllUnitCount(b.type) + 1;
-						}
-
-					}
-
-				}
+				createdBuilding.insert(b.finalPosition);
 
 
 				// set the flag to true
@@ -995,7 +640,7 @@ void BuildingManager::checkForStartedConstruction()
 					// if this was the gas steal unit then it's the scout worker so give it back to the scout manager
 					if (b.isGasSteal)
 					{
-						//ScoutManager::Instance().setWorkerScout(b.builderUnit);
+						ScoutManager::Instance().setWorkerScout(b.builderUnit);
 					}
 					// otherwise tell the worker manager we're finished with this unit
 					else
@@ -1040,128 +685,14 @@ void BuildingManager::checkForCompletedBuildings()
 		{
 			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
 			{
-				int myID = b.buildingUnit->getID();
-
-				if (sentSunkenCommand.find(myID) != sentSunkenCommand.end())
-				{
-					continue;
-				}
-
-				if (createdCreeps.find(b.buildingUnit) == createdCreeps.end())
-				{
-					createdCreeps[b.buildingUnit] = BWAPI::Broodwar->getFrameCount() + BWAPI::UnitTypes::Zerg_Sunken_Colony.buildTime() + 25;
-				}
-
-				sentSunkenCommand.insert(myID);
 				MetaType type(BWAPI::UnitTypes::Zerg_Sunken_Colony);
 				ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
-				
-
-			}
-			
-			if (b.type == BWAPI::UnitTypes::Zerg_Hydralisk_Den)
-			{
-				BWAPI::Broodwar->printf("Inside hydraden1\n");
-				if (hydraCompleted.find(b.buildingUnit) == hydraCompleted.end())
-				{
-					BWAPI::Broodwar->printf("Inside hydraden2\n");
-					//hydraCompleted.insert(b.buildingUnit);
-					if (upgradeHydra.find(BWAPI::UpgradeTypes::Muscular_Augments) == upgradeHydra.end())
-					{
-						
-						//BWAPI::Broodwar->printf("I QUEUED MUSCULAR AUGMENTS\n");
-						//MetaType type(BWAPI::UpgradeTypes::Muscular_Augments);
-						//upgradeHydra.insert(BWAPI::UpgradeTypes::Muscular_Augments);
-						//ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
-						
-					}
-				}
-
-
 			}
 
-
-			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Extractor)
+			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.finalPosition == createdHatcheriesVector[0])
 			{
-				completedBuilding.insert(b.finalPosition);
-			}
-
-			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
-			{
-				if (evoCompleted.find(b.buildingUnit) == evoCompleted.end())
-				{
-					if (evoCompleted.size() == 0)
-					{
-						firstEvoChamber = b.buildingUnit->getID();
-					}
-
-					evoCompleted.insert(b.buildingUnit);
-					if (upgradeEvo.find(BWAPI::UpgradeTypes::Zerg_Missile_Attacks) == upgradeEvo.end())
-					{
-						
-						MetaType type(BWAPI::UpgradeTypes::Zerg_Missile_Attacks);
-						upgradeEvo.insert(BWAPI::UpgradeTypes::Zerg_Missile_Attacks);
-						ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
-					}
-					else if (upgradeEvo.find(BWAPI::UpgradeTypes::Zerg_Carapace) == upgradeEvo.end())
-					{
-						MetaType type(BWAPI::UpgradeTypes::Zerg_Carapace);
-						upgradeEvo.insert(BWAPI::UpgradeTypes::Zerg_Carapace);
-						ProductionManager::Instance()._queue.queueAsHighestPriority(type, true);
-					}
-				}
-			}
-
-			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.finalPosition == createdHatcheriesVector[0] && canBuildTrigger)
-			{
-				hatcheryUnit = b.buildingUnit;
 				canBuild = true;
-				canBuildTrigger = false;
 				sunkenBuildTimer = BWAPI::Broodwar->getFrameCount() + 8 * 25;
-				std::set<BWTA::Chokepoint *> chokePoints = BWTA::getChokepoints();
-				double lowestDistance = 999999.0;
-				double lowestDistance2 = 999999.0;
-				BWAPI::Position ourRampPosition;
-
-				for (auto x : chokePoints)
-				{
-
-					double distance1 = BWTA::getGroundDistance(createdHatcheriesVector[0], BWAPI::TilePosition(x->getCenter()));
-					double distance2 = BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), BWAPI::TilePosition(x->getCenter()));
-					double sum = distance1 + distance2;
-
-					if (sum < lowestDistance)
-					{
-						lowestDistance = sum;
-						ourRampPosition = x->getCenter();
-						mainToRampDistance = distance2;
-					}
-
-				}
-
-				for (auto x : chokePoints)
-				{
-
-					double distance1 = BWTA::getGroundDistance(createdHatcheriesVector[0], BWAPI::TilePosition(x->getCenter()));
-
-					double sum = distance1;
-
-					if (sum < lowestDistance && x->getCenter() != ourRampPosition)
-					{
-						lowestDistance = sum;
-						ourChokePointPosition = x->getCenter();
-						expansionToChokeDistance = distance1;
-					}
-				}
-	
-			}
-
-			for (auto x : BWAPI::Broodwar->self()->getUnits())
-			{
-				if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
-				{
-					x->move(ourChokePointPosition);
-				}
 			}
 
 			// if we are terran, give the worker back to worker manager
@@ -1169,7 +700,7 @@ void BuildingManager::checkForCompletedBuildings()
 			{
 				if (b.isGasSteal)
 				{
-					//ScoutManager::Instance().setWorkerScout(b.builderUnit);
+					ScoutManager::Instance().setWorkerScout(b.builderUnit);
 				}
 				// otherwise tell the worker manager we're finished with this unit
 				else
@@ -1181,14 +712,6 @@ void BuildingManager::checkForCompletedBuildings()
 			// remove this unit from the under construction vector
 			toRemove.push_back(b);
 		}
-
-		/*
-		else if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Evolution_Chamber && b.buildingUnit->getHitPoints() >= 1 && notEvoChecked)
-		{
-			evoTimer = BWAPI::Broodwar->getFrameCount() + 100;
-			notEvoChecked = false;
-		}
-		*/
 	}
 
 	removeBuildings(toRemove);
@@ -1212,23 +735,6 @@ bool BuildingManager::isEvolvedBuilding(BWAPI::UnitType type)
 // add a new building to be constructed
 void BuildingManager::addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal)
 {
-	
-	/*
-	if (type == BWAPI::UnitTypes::Zerg_Evolution_Chamber && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Evolution_Chamber) >= 2)
-	{
-		return;
-	}
-
-	else if (type == BWAPI::UnitTypes::Zerg_Hydralisk_Den && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk_Den) >= 1)
-	{
-		return;
-	}
-	
-	else if (type == BWAPI::UnitTypes::Zerg_Extractor && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor) >= baseCount + 1)
-	{
-		return;
-	}
-	*/
 	_reservedMinerals += type.mineralPrice();
 	_reservedGas += type.gasPrice();
 
@@ -1359,7 +865,6 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 		}
 	}
 
-
 	if (b.type.requiresPsi() && numPylons == 0)
 	{
 		return BWAPI::TilePositions::None;
@@ -1370,7 +875,7 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 		return BuildingPlacer::Instance().getRefineryPosition();
 	}
 
-	if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()))
+	if (b.type.isResourceDepot())
 	{
 		// get the location
 		BWAPI::TilePosition tile = MapTools::Instance().getNextExpansion();
@@ -1390,7 +895,6 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 	{
 		return BuildingPlacer::Instance().getBuildLocationNear(b, 0, false);
 	}
-
 	return BuildingPlacer::Instance().getBuildLocationNear(b, distance, false);
 }
 
@@ -1407,106 +911,13 @@ void BuildingManager::removeBuildings(const std::vector<Building> & toRemove)
 	}
 }
 
-bool BuildingManager::sunkenIntersection(BWAPI::TilePosition mySunkPosition) const
-{
-	/*
-	std::set<BWAPI::Unit> sunkens;
-	for (BWAPI::Unit p : BWAPI::Broodwar->self()->getUnits())
-	{
-		if (p->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
-		{
-			sunkens.insert(p);
-		}
-	
-	}
-	*/
-
-	for (auto x : createdSunkenSet)
-	{
-		if ((int) x.getDistance(mySunkPosition) < (int) 2)
-		{
-			return true;
-		}
-	}
-	return false;
-	/*
-	for (auto x : sunkens)
-	{
-		if (x->getDistance(BWAPI::Position(mySunkPosition)) < 16)
-		{
-			return true;
-		}
-
-	}
-	return false;
-	*/
-}
-
 bool BuildingManager::buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const
 {
 	//returns true if this tile is currently buildable, takes into account units on tile
-	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(mySunkPosition) != createdBuilding.end() || BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), mySunkPosition) < mainToRampDistance || expansionToChokeDistance < BWTA::getGroundDistance(BWAPI::TilePosition(ourChokePointPosition), mySunkPosition)) // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
+	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(mySunkPosition) != createdBuilding.end()) // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
 	{
 		
 		return false;
 	}
 	return true;
-}
-
-bool BuildingManager::buildable2(int x, int y, BWAPI::TilePosition myEvoPosition) const
-{
-	//returns true if this tile is currently buildable, takes into account units on tile
-	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(myEvoPosition) != createdBuilding.end() || BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), myEvoPosition) >= mainToRampDistance)  // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
-	{
-
-		return false;
-	}
-	return true;
-}
-
-bool BuildingManager::isBaseLocation(BWAPI::TilePosition myPosition)
-{
-	const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-	for (auto x : locations)
-	{
-		if (x->getTilePosition() == myPosition)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-/*
-//BWAPI::Broodwar->printf("Creep Position %d %d Distance is : %f\n", x->getTilePosition().x, x->getTilePosition().y, tempDist);
-double BuildingManager::Euclidean_Distance(int x1, int x2, int y1, int y2)
-{
-	BWAPI::Broodwar->printf("Received request for x1 : %d x2 : %d y1 : %dy2 : %d\n", x1, x2, y1, y1);
-	double testValue = sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
-
-	BWAPI::Broodwar->printf("Returning Euc distance of %f\n", testValue);
-	return  testValue;
-		
-
-}
-*/
-
-void BuildingManager::removeBuildingExternal(BWAPI::TilePosition cancelPosition)
-{
-	std::vector<Building> toRemove;
-
-	// for each of our buildings under construction
-	for (auto & b : _buildings)
-	{
-		if (b.type == BWAPI::UnitTypes::Zerg_Extractor)
-		{
-			toRemove.push_back(b);
-			break;
-		}
-	}
-
-	if (toRemove.size() >= 1)
-	{
-		BWAPI::Broodwar->printf("Calling removeBuildings for extractor\n");
-		removeBuildings(toRemove);
-	}
 }
