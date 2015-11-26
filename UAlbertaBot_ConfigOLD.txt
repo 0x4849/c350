@@ -50,7 +50,7 @@
         "DrawResourceInfo"          : true,
         "DrawCombatSimInfo"         : false,
         "DrawUnitTargetInfo"        : false,
-        "DrawBWTAInfo"              : false,
+        "DrawBWTAInfo"              : true,
         "DrawMapGrid"               : false,
         "DrawSquadInfo"             : true,
         "DrawWorkerInfo"            : false,
