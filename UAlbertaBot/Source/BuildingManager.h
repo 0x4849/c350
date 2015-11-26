@@ -98,14 +98,9 @@ namespace UAlbertaBot
 
 		std::map<BWAPI::Unit, int> createdCreeps;
 
-		void removeBuildingExternal(BWAPI::TilePosition);
 
-		BWAPI::TilePosition firstExtractorPosition = BWAPI::TilePositions::None;
 
-		int didGasTrickFrames = 9999999;
-		std::set<BWAPI::TilePosition> completedBuilding;
 
-		bool shouldIExpand = false;
 		
 	};
 }
