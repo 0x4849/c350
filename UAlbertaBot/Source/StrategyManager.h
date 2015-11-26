@@ -54,7 +54,7 @@ class StrategyManager
 	        void	                writeResults();
 	const	int					    getScore(BWAPI::Player player) const;
 	const	double				    getUCBValue(const size_t & strategy) const;
-	const	bool				    shouldExpandNow() const;
+	
     const	MetaPairVector		    getProtossBuildOrderGoal() const;
 	const	MetaPairVector		    getTerranBuildOrderGoal() const;
 	const	MetaPairVector		    getZergBuildOrderGoal() const;
@@ -73,5 +73,8 @@ public:
 	const	MetaPairVector		    getBuildOrderGoal();
 	const	BuildOrder &            getOpeningBookBuildOrder() const;
 	const   BuildOrder &			getAdaptiveBuildOrder() const;
+	bool							timeToAttack = true;
+	const  bool						shouldExpandNow() const;
+	const  bool						isSpireBuilding() const;
 };
 }

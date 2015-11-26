@@ -67,7 +67,7 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 {
 	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
 	{
-		if (InformationManager::Instance().isEnemyExpand())
+		if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
 		{
 			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ep")->second._buildOrder;
 		}
@@ -77,7 +77,7 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 		}
 	}
 
-	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName && BWAPI::Broodwar->self()->supplyUsed() < 80)
 	{
 		if (InformationManager::Instance().isEnemyExpand())
 		{
@@ -92,8 +92,20 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 	return _emptyBuildOrder;
 }
 
+const bool StrategyManager::isSpireBuilding() const
+{
+	for (auto x : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (x->getType() == BWAPI::UnitTypes::Zerg_Spire && x->getHitPoints() < 600)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 const bool StrategyManager::shouldExpandNow() const
 {
+
 	// if there is no place to expand to, we can't expand
 	if (MapTools::Instance().getNextExpansion() == BWAPI::TilePositions::None)
 	{
@@ -109,17 +121,19 @@ const bool StrategyManager::shouldExpandNow() const
 	int frame           = BWAPI::Broodwar->getFrameCount();
     int minute          = frame / (24*60);
 
+	// if we have a ridiculous stockpile of minerals, expand
+	if (BWAPI::Broodwar->self()->minerals() > 600 && !isSpireBuilding())
+	{
+		//BuildingManager::Instance().shouldIExpand = true;
+		return true;
+	}
 	// if we have a ton of idle workers then we need a new expansion
 	if (WorkerManager::Instance().getNumIdleWorkers() > 10)
 	{
+		//BuildingManager::Instance().shouldIExpand = true;
 		return true;
 	}
 
-    // if we have a ridiculous stockpile of minerals, expand
-    if (BWAPI::Broodwar->self()->minerals() > 3000)
-    {
-        return true;
-    }
 
     // we will make expansion N after array[N] minutes have passed
     std::vector<int> expansionTimes = {5, 10, 20, 30, 40 , 50};
@@ -128,6 +142,7 @@ const bool StrategyManager::shouldExpandNow() const
     {
         if (numDepots < (i+2) && minute > expansionTimes[i])
         {
+			//BuildingManager::Instance().shouldIExpand = true;
             return true;
         }
     }
@@ -324,9 +339,17 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	int numHydras       = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk);
     int numScourge      = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Scourge);
     int numGuardians    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Guardian);
+	
 
 	int mutasWanted = numMutas + 6;
 	int hydrasWanted = numHydras + 6;
+
+	if (shouldExpandNow())
+	{
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 10));
+
+	}
 
     if (Config::Strategy::StrategyName == "Zerg_9Pool")
     {
@@ -357,16 +380,20 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
 	}
-	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch" || Config::Strategy::StrategyName == "Zerg_3HatchHydra"){
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 12));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
+	else if (Config::Strategy::StrategyName == "Zerg_3HatchHydra")
+	{
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 12));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 12));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 8));
+	}
+	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch"){
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Muscular_Augments, 1));
+		
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 10));
+
 	}
 
-    if (shouldExpandNow())
-    {
-        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
-        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 10));
-    }
+
 
 	return goal;
 }
