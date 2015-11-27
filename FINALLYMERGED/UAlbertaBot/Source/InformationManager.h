@@ -25,10 +25,14 @@ class InformationManager
     std::map<BWAPI::Player, std::set<BWTA::Region *> >  _occupiedRegions;
 	bool					_enemyExpand;
 
-	//NEW
+	//TOMMY
 	bool					_enemyMovedOut;
 	std::map<BWAPI::UnitType, int>						_enemyProductionEstimate;
 	int													_firstProdBuildingTime;
+	int						_frameCounter;
+	std::map<BWAPI::TilePosition, bool>					_movedOutMap;
+	double					_distToEnemyChoke;
+	double					_distToFarthestBase;
 
     int                     getIndex(BWAPI::Player player) const;
 

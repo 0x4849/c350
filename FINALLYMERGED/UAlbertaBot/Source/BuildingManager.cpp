@@ -803,7 +803,24 @@ void BuildingManager::constructAssignedBuildings()
 					//firstHatcheryPosition = BWAPI::Position(b.finalPosition);
 				}
 
+				else if (b.type == BWAPI::UnitTypes::Zerg_Extractor && BWAPI::Broodwar->getFrameCount() >= didGasTrickFrames && completedBuilding.find(firstExtractorPosition) == completedBuilding.end()) //Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName && createdBuilding.find(firstExtractorPosition) == createdBuilding.end())
 
+				{
+					//BWAPI::Broodwar->printf("inside\n");
+					b.finalPosition = firstExtractorPosition;
+
+					//didGasTrick = false;
+
+					for (auto x : BWAPI::Broodwar->self()->getUnits())
+					{
+						if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+						{
+							x->move(BWAPI::Position(firstExtractorPosition));
+						}
+					}
+					//BWAPI::Broodwar->printf("EX WIDTH AND HEGIHT %d %d\n", b.type.tileWidth(), b.type.tileHeight());
+					//b.finalPosition = getExtractorPosition(b.finalPosition);
+				}
 				/*
 				else if (b.type == BWAPI::UnitTypes::Zerg_Extractor)
 				{
@@ -852,8 +869,13 @@ void BuildingManager::constructAssignedBuildings()
 
 
 
+				//b.builderUnit->build(b.type, b.finalPosition);
 				b.builderUnit->build(b.type, b.finalPosition);
-				createdBuilding.insert(b.finalPosition);
+				if (!(BWAPI::Broodwar->self()->supplyUsed() < 22 && Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName))
+				{
+					//BWAPI::Broodwar->printf("Adding Building\n");
+					createdBuilding.insert(b.finalPosition);
+				}
 				/*
 				if (sentBuildingCommandFrame.find(b.builderUnit) == sentBuildingCommandFrame.end())
 				{
@@ -1054,7 +1076,10 @@ void BuildingManager::checkForCompletedBuildings()
 
 
 			}
-
+			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Extractor)
+			{
+				completedBuilding.insert(b.finalPosition);
+			}	
 			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Evolution_Chamber)
 			{
 				if (evoCompleted.find(b.buildingUnit) == evoCompleted.end())
@@ -1340,7 +1365,8 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 	}
 
 	//TOMMY
-	if ((b.type.isResourceDepot()) && (createdHatcheriesVector.size() == 0) && (!b.isMacro))
+	if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()))
+	//if ((b.type.isResourceDepot()) && (createdHatcheriesVector.size() == 0) && (!b.isMacro))
 	{
 		// get the location
 		BWAPI::TilePosition tile = MapTools::Instance().getNextExpansion();
@@ -1412,12 +1438,13 @@ bool BuildingManager::sunkenIntersection(BWAPI::TilePosition mySunkPosition) con
 	*/
 }
 
+
 bool BuildingManager::buildable(int x, int y, BWAPI::TilePosition mySunkPosition) const
 {
 	//returns true if this tile is currently buildable, takes into account units on tile
-	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(mySunkPosition) != createdBuilding.end() || BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), mySunkPosition) < mainToRampDistance)  // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
+	if (!BWAPI::Broodwar->isBuildable(x, y) || !BWAPI::Broodwar->hasCreep(x, y) || createdBuilding.find(mySunkPosition) != createdBuilding.end() || BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), mySunkPosition) < mainToRampDistance || expansionToChokeDistance < BWTA::getGroundDistance(BWAPI::TilePosition(ourChokePointPosition), mySunkPosition)) // &&|| b.type == BWAPI::UnitTypes::Zerg_Hatchery
 	{
-		
+
 		return false;
 	}
 	return true;
@@ -1459,3 +1486,24 @@ double BuildingManager::Euclidean_Distance(int x1, int x2, int y1, int y2)
 
 }
 */
+
+void BuildingManager::removeBuildingExternal(BWAPI::TilePosition cancelPosition)
+{
+	std::vector<Building> toRemove;
+
+	// for each of our buildings under construction
+	for (auto & b : _buildings)
+	{
+		if (b.type == BWAPI::UnitTypes::Zerg_Extractor)
+		{
+			toRemove.push_back(b);
+			break;
+		}
+	}
+
+	if (toRemove.size() >= 1)
+	{
+		BWAPI::Broodwar->printf("Calling removeBuildings for extractor\n");
+		removeBuildings(toRemove);
+	}
+}

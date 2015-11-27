@@ -100,7 +100,7 @@ void CombatCommander::updateHarassSquad()
 void CombatCommander::updateDistractSquad()
 {
 	// code to turn off kiting
-	//return;
+	return;
 
 	// only use if fighting protoss
 	if (!(BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))

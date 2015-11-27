@@ -298,7 +298,7 @@ void CombatSimulation::generateCurrentSituation()
 	int ourCombatUnits = 0;
 	for (auto &unit : BWAPI::Broodwar->self()->getUnits())
 	{
-		if ((UnitUtil::IsCombatUnit(unit)) || (unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony))	// will this code add our sunkens to the sim? (I think so)
+		if (((UnitUtil::IsCombatUnit(unit)) || (unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony)) && (SparCraft::System::isSupportedUnitType(unit->getType())))	// will this code add our sunkens to the sim? (I think so)
 		{
 			sparUnit = getSparCraftUnit(unit->getType(), 1, xPos, yPos);
 			addToState(sparUnit);
@@ -328,9 +328,22 @@ void CombatSimulation::generateCurrentSituation()
 	for (auto &unit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
 	{
 		// consider enemy combat units and not static defenses
-		if ((UnitUtil::IsCombatUnit(unit.second.unit)) && (!unit.second.type.isBuilding()))
+		if ((UnitUtil::IsCombatUnit(unit.second.unit)) && (!unit.second.type.isBuilding()) && (SparCraft::System::isSupportedUnitType(unit.second.type)))
 		{
 			sparUnit = getSparCraftUnit(unit.second.type, 2, xPos, yPos);
+			addToState(sparUnit);
+			xPos += 16;
+			if (xPos >= 129)
+			{
+				xPos = 17;
+				yPos += 32;
+			}
+			theirCombatUnits++;
+		}
+		//medics
+		else if (unit.second.type == BWAPI::UnitTypes::Terran_Medic)
+		{
+			sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Terran_Marine, 2, xPos, yPos);
 			addToState(sparUnit);
 			xPos += 16;
 			if (xPos >= 129)

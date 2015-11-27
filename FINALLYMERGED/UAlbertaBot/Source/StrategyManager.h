@@ -54,7 +54,7 @@ class StrategyManager
 	        void	                writeResults();
 	const	int					    getScore(BWAPI::Player player) const;
 	const	double				    getUCBValue(const size_t & strategy) const;
-	const	bool				    shouldExpandNow() const;
+	//const	bool				    shouldExpandNow() const;
     const	MetaPairVector		    getProtossBuildOrderGoal() const;
 	const	MetaPairVector		    getTerranBuildOrderGoal() const;
 	const	MetaPairVector		    getZergBuildOrderGoal() const;
@@ -86,5 +86,9 @@ public:
 	// when testing, try each version and see which works better
 	std::map<BWAPI::UnitType, int>	shouldBuildSunkens() const;
 	std::map<BWAPI::UnitType, int>	shouldBuildSunkens2() const;
+
+	bool							timeToAttack = true;
+	const  bool						shouldExpandNow() const;
+	const  bool						isSpireBuilding() const;
 };
 }

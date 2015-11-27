@@ -337,7 +337,9 @@ BWAPI::Unit WorkerManager::getClosestDepot(BWAPI::Unit worker)
 	{
         UAB_ASSERT(unit != nullptr, "Unit was null");
 
+		//if (unit->getType().isResourceDepot() && (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair) && !workerData.depotIsFull(unit))
 		//TOMMY
+		
 		if (unit->getType().isResourceDepot() && (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair) && !workerData.depotIsFull(unit) && (!workerData.isMacroHatch(unit)))
 		{
 			double distance = unit->getDistance(worker);
@@ -654,9 +656,10 @@ void WorkerManager::rebalanceWorkers()
 
 		BWAPI::Unit depot = workerData.getWorkerDepot(worker);
 
+		//if (depot && workerData.depotIsFull(depot))
 		//TOMMY
 		if ((depot && workerData.depotIsFull(depot)) || (workerData.isMacroHatch(depot)))
-		{
+		{//workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);
 			for (auto &newDepot : workerData.getDepots())
 			{
 				if (!workerData.depotIsFull(newDepot))

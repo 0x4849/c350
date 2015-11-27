@@ -69,11 +69,11 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 {
 	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
 	{
-		if (InformationManager::Instance().isEnemyExpand())
+		if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
 		{
 			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ep")->second._buildOrder;
 		}
-		else
+		else if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
 		{
 			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ne")->second._buildOrder;
 		}
@@ -81,11 +81,11 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 
 	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
 	{
-		if (InformationManager::Instance().isEnemyExpand())
+		if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
 		{
 			return _strategies.find(Config::Strategy::AgainstTerrenStrategyName + "_ep")->second._buildOrder;
 		}
-		else
+		else if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
 		{
 			return _strategies.find(Config::Strategy::AgainstTerrenStrategyName + "_ne")->second._buildOrder;
 		}
@@ -94,6 +94,17 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 	return _emptyBuildOrder;
 }
 
+const bool StrategyManager::isSpireBuilding() const
+{
+	for (auto x : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (x->getType() == BWAPI::UnitTypes::Zerg_Spire && x->getHitPoints() < 600)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 const bool StrategyManager::shouldExpandNow() const
 {
 	// if there is no place to expand to, we can't expand
@@ -118,12 +129,12 @@ const bool StrategyManager::shouldExpandNow() const
 		return true;
 	}
 
-    // if we have a ridiculous stockpile of minerals, expand
-	// TOMMY
-    if (BWAPI::Broodwar->self()->minerals() > 600)
-    {
-        return true;
-    }
+	// if we have a ridiculous stockpile of minerals, expand
+	if (BWAPI::Broodwar->self()->minerals() > 600 && !isSpireBuilding())
+	{
+		//BuildingManager::Instance().shouldIExpand = true;
+		return true;
+	}
 
     // we will make expansion N after array[N] minutes have passed
     std::vector<int> expansionTimes = {5, 10, 20, 30, 40 , 50};
@@ -332,6 +343,13 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	int mutasWanted = numMutas + 6;
 	int hydrasWanted = numHydras + 6;
 
+	if (shouldExpandNow())
+	{
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 10));
+
+	}
+
     if (Config::Strategy::StrategyName == "Zerg_9Pool")
     {
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 6));
@@ -361,17 +379,17 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
 	}
-	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch" || Config::Strategy::StrategyName == "Zerg_3HatchHydra"){
+	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch"){
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 12));
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
 	}
 
-    if (shouldExpandNow())
-    {
-		BWAPI::Broodwar->printf("Should expand now");
-        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
-        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 10));
-    }
+	else if (Config::Strategy::StrategyName == "Zerg_3HatchHydra")
+	{
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 12));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 12));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 8));
+	}
 
 	//TOMMY
 	if (shouldMakeMacroHatchery())
@@ -723,7 +741,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
 //NEW
 const bool StrategyManager::shouldMakeMacroHatchery() const
 {
-	if (BWAPI::Broodwar->self()->minerals() > 1000)
+	if (BWAPI::Broodwar->self()->minerals() > 800)
 	{
 		return true;
 	}
