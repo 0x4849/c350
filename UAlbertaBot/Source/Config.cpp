@@ -7,7 +7,7 @@ namespace Config
     {
         bool ConfigFileFound                = false;
         bool ConfigFileParsed               = false;
-		std::string ConfigFileLocation = "E:/c350/UAlbertaBot/UAlbertaBot_Config.txt";
+		std::string ConfigFileLocation = "C:/Users/Soul/Documents/School/CMPUT/350/DingkaiV3/c350-Dingkai/UAlbertaBot/UAlbertaBot_Config.txt";
     }
 
     namespace Strategy
@@ -28,7 +28,7 @@ namespace Config
     {
         // the default tournament bot modules
         bool UsingGameCommander             = true;     // toggle GameCommander, effectively UAlbertaBot
-        bool UsingWorkerScout				= false;
+		bool UsingWorkerScout				= true;
         bool UsingCombatCommander           = true;
         bool UsingBuildOrderSearch          = true;     // toggle use of Build Order Search, currently no backup
         bool UsingAutoObserver              = false;

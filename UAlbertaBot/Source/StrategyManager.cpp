@@ -741,7 +741,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
 //NEW
 const bool StrategyManager::shouldMakeMacroHatchery() const
 {
-	if (BWAPI::Broodwar->self()->minerals() > 1000)
+	if (BWAPI::Broodwar->self()->minerals() > 800)
 	{
 		return true;
 	}

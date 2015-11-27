@@ -104,16 +104,18 @@ void ProductionManager::update()
 		BuildingManager::Instance().shouldIExpand = false;
 	}
 
+	/*
 	if (BWAPI::Broodwar->getFrameCount() % 240 == 0 && BWAPI::Broodwar->self()->minerals() > 600)
 	{
 		BWAPI::Broodwar->printf("Entering hatchery loop\n");
 		int totalMinerals = BWAPI::Broodwar->self()->minerals();
 		while (totalMinerals > 300)
 		{
-			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Overlord), true);
+			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
 			totalMinerals -= 300;
 		}
 	}
+	*/
 
 	//TOMMY
 	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && (checkDefenses()))
@@ -125,10 +127,10 @@ void ProductionManager::update()
 			//BWAPI::Broodwar->printf("checking shouldBuildSunkens");
 			defenses = StrategyManager::Instance().shouldBuildSunkens();
 		}
-		if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Terran)
+		if ((BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Terran) && (InformationManager::Instance().isEnemyMovedOut()))
 		{
-			//BWAPI::Broodwar->printf("checking shouldBuildSunkens2");
-			defenses = StrategyManager::Instance().shouldBuildSunkens2();
+			//BWAPI::Broodwar->printf("checking shouldBuildSunkens");
+			defenses = StrategyManager::Instance().shouldBuildSunkens();
 		}
 		if (!defenses.empty())
 		{
