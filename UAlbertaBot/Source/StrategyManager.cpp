@@ -2,8 +2,6 @@
 #include "StrategyManager.h"
 #include "UnitUtil.h"
 #include "ProductionManager.h"
-//TOMMY
-#include "CombatSimulation.h"
 
 using namespace UAlbertaBot;
 
@@ -73,19 +71,19 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 		{
 			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ep")->second._buildOrder;
 		}
-		else if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
+		else
 		{
 			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ne")->second._buildOrder;
 		}
 	}
 
-	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName && BWAPI::Broodwar->self()->supplyUsed() < 80)
 	{
-		if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
+		if (InformationManager::Instance().isEnemyExpand())
 		{
 			return _strategies.find(Config::Strategy::AgainstTerrenStrategyName + "_ep")->second._buildOrder;
 		}
-		else if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
+		else
 		{
 			return _strategies.find(Config::Strategy::AgainstTerrenStrategyName + "_ne")->second._buildOrder;
 		}
@@ -107,6 +105,7 @@ const bool StrategyManager::isSpireBuilding() const
 }
 const bool StrategyManager::shouldExpandNow() const
 {
+
 	// if there is no place to expand to, we can't expand
 	if (MapTools::Instance().getNextExpansion() == BWAPI::TilePositions::None)
 	{
@@ -122,19 +121,19 @@ const bool StrategyManager::shouldExpandNow() const
 	int frame           = BWAPI::Broodwar->getFrameCount();
     int minute          = frame / (24*60);
 
-	// if we have a ton of idle workers then we need a new expansion
-	// TOMMY
-	if (WorkerManager::Instance().getNumIdleWorkers() > 6)
-	{
-		return true;
-	}
-
 	// if we have a ridiculous stockpile of minerals, expand
 	if (BWAPI::Broodwar->self()->minerals() > 600 && !isSpireBuilding())
 	{
 		//BuildingManager::Instance().shouldIExpand = true;
 		return true;
 	}
+	// if we have a ton of idle workers then we need a new expansion
+	if (WorkerManager::Instance().getNumIdleWorkers() > 10)
+	{
+		//BuildingManager::Instance().shouldIExpand = true;
+		return true;
+	}
+
 
     // we will make expansion N after array[N] minutes have passed
     std::vector<int> expansionTimes = {5, 10, 20, 30, 40 , 50};
@@ -143,6 +142,7 @@ const bool StrategyManager::shouldExpandNow() const
     {
         if (numDepots < (i+2) && minute > expansionTimes[i])
         {
+			//BuildingManager::Instance().shouldIExpand = true;
             return true;
         }
     }
@@ -339,6 +339,7 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	int numHydras       = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk);
     int numScourge      = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Scourge);
     int numGuardians    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Guardian);
+	
 
 	int mutasWanted = numMutas + 6;
 	int hydrasWanted = numHydras + 6;
@@ -379,25 +380,21 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
 	}
-	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch"){
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 12));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
-	}
-
 	else if (Config::Strategy::StrategyName == "Zerg_3HatchHydra")
 	{
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 12));
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 12));
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 8));
 	}
+	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch"){
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Muscular_Augments, 1));
+		
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 10));
 
-	//TOMMY
-	if (shouldMakeMacroHatchery())
-	{
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 1));
-		macroHatchCount++;
 	}
+
+
+
 	return goal;
 }
 
@@ -559,205 +556,4 @@ void StrategyManager::setLearnedStrategy()
     }
 
     Config::Strategy::StrategyName = bestUCBStrategy;
-}
-
-//PAST THIS POINT IS TOMMY
-std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
-{
-	std::map<BWAPI::UnitType, int> defenses;
-
-	SparCraft::ScoreType score = 0;
-	CombatSimulation sim;
-	//sim.generateMap(); THIS IS NOT WORKING LOL
-
-	sim.generateCurrentSituation();
-
-	CombatSimulation test(sim);
-
-	test.finishMoving();
-	score = test.simulateCombat();
-
-	if (score >= 0)
-	{
-		//BWAPI::Broodwar->printf("Don't need defenses");
-		return defenses;
-	}
-
-	if (score < 0)
-	{
-		BWAPI::Broodwar->printf("Defenses required");
-	}
-
-	int newSunkens = 0;
-	int newLings = 0;
-	// if we lose, add one sunken and resimulate
-	if (score < 0)
-	{
-		sim.addAllySunken();
-		newSunkens++;
-
-		CombatSimulation test(sim);
-		test.finishMoving();
-		score = test.simulateCombat();
-	}
-	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
-	while ((score < 0) && (newLings < 6))
-	{
-		sim.addAllyZergling();
-		newLings++;
-
-		CombatSimulation test(sim);
-		test.finishMoving();
-		score = test.simulateCombat();
-	}
-	// if we still lose, keep adding sunkens until we win
-	while ((score < 0) && (newSunkens < 4))
-	{
-		sim.addAllySunken();
-		newSunkens++;
-
-		CombatSimulation test(sim);
-		test.finishMoving();
-		score = test.simulateCombat();
-	}
-	// possibly may need to cap the number of sunkens (3-6)
-
-	// build 1 sunken at a time. actually, this code may be useless
-	/*if (score < 0)
-	{
-	for (auto &unit : BWAPI::Broodwar->enemy()->getUnits())
-	{
-	if ( ( (unit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony) && (unit->isBeingConstructed()) ) ||
-	((unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony) && (unit->isMorphing())) )
-	{
-	BWAPI::Broodwar->printf("Already making a sunken");
-	return false;
-	}
-	}
-	}*/
-
-	// return a list of units to be made. production manager should queue these at highest priority
-	defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony] = newSunkens;
-	defenses[BWAPI::UnitTypes::Zerg_Zergling] = newLings;
-	BWAPI::Broodwar->printf("Sunkens for defense: %d\n", newSunkens);
-	BWAPI::Broodwar->printf("Zerglings for defense: %d\n", newLings);
-	return defenses;
-}
-
-std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
-{
-	std::map<BWAPI::UnitType, int> defenses;
-
-	SparCraft::ScoreType score = 0;
-	CombatSimulation sim;
-	//sim.generateMap(); THIS IS NOT WORKING LOL
-
-	sim.generateCurrentSituation2();
-
-	CombatSimulation test(sim);
-
-	test.finishMoving();
-	score = test.simulateCombat();
-
-	if (score >= 0)
-	{
-		BWAPI::Broodwar->printf("Don't need defenses");
-		return defenses;
-	}
-
-	if (score < 0)
-	{
-		BWAPI::Broodwar->printf("Defenses required");
-	}
-
-	int newSunkens = 0;
-	int newLings = 0;
-	// if we lose, add one sunken and resimulate
-	if (score < 0)
-	{
-		sim.addAllySunken();
-		newSunkens++;
-
-		CombatSimulation test(sim);
-		test.finishMoving();
-		score = test.simulateCombat();
-	}
-	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
-	while ((score < 0) && (newLings < 6))
-	{
-		sim.addAllyZergling();
-		newLings++;
-
-		CombatSimulation test(sim);
-		test.finishMoving();
-		score = test.simulateCombat();
-	}
-	// if we still lose, keep adding sunkens until we win
-	while ((score < 0) && (newSunkens < 4))
-	{
-		sim.addAllySunken();
-		newSunkens++;
-
-		CombatSimulation test(sim);
-		test.finishMoving();
-		score = test.simulateCombat();
-	}
-	// possibly may need to cap the number of sunkens (3-6)
-
-	// build 1 sunken at a time. actually, this code may be useless
-	/*if (score < 0)
-	{
-	for (auto &unit : BWAPI::Broodwar->enemy()->getUnits())
-	{
-	if ( ( (unit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony) && (unit->isBeingConstructed()) ) ||
-	((unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony) && (unit->isMorphing())) )
-	{
-	BWAPI::Broodwar->printf("Already making a sunken");
-	return false;
-	}
-	}
-	}*/
-
-	for (auto &unit : InformationManager::Instance().getEnemyProductionEstimate())
-	{
-		if (unit.first == BWAPI::UnitTypes::Terran_Barracks)
-		{
-			//BWAPI::Broodwar->printf("Estimated marines: %d\n", unit.second);
-		}
-		if (unit.first == BWAPI::UnitTypes::Protoss_Gateway)
-		{
-			//BWAPI::Broodwar->printf("Estimated zealots: %d\n", unit.second);
-		}
-	}
-
-	// return a list of units to be made. production manager should queue these at highest priority
-	defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony] = newSunkens;
-	defenses[BWAPI::UnitTypes::Zerg_Zergling] = newLings;
-	BWAPI::Broodwar->printf("Sunkens for defense: %d\n", newSunkens);
-	BWAPI::Broodwar->printf("Zerglings for defense: %d\n", newLings);
-	return defenses;
-}
-
-//NEW
-const bool StrategyManager::shouldMakeMacroHatchery() const
-{
-	if (BWAPI::Broodwar->self()->minerals() > 1000)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-int StrategyManager::getMacroHatchCount()
-{
-	return macroHatchCount;
-}
-
-void StrategyManager::removeMacroHatch()
-{
-	macroHatchCount--;
-	BWAPI::Broodwar->printf("Minerals > 600; building macro hatchery");
 }

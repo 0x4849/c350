@@ -44,8 +44,7 @@ namespace UAlbertaBot
 		void                update();
 		void                onUnitMorph(BWAPI::Unit unit);
 		void                onUnitDestroy(BWAPI::Unit unit);
-		//TOMMY
-		void                addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal, bool isMacro);
+		void                addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal);
 		void                drawBuildingInformation(int x, int y);
 		BWAPI::TilePosition getBuildingLocation(const Building & b);
 
@@ -98,9 +97,6 @@ namespace UAlbertaBot
 		std::set<BWAPI::Unit> hydraCompleted;
 
 		std::map<BWAPI::Unit, int> createdCreeps;
-
-
-
 
 		void removeBuildingExternal(BWAPI::TilePosition);
 

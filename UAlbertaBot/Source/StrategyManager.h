@@ -54,14 +54,10 @@ class StrategyManager
 	        void	                writeResults();
 	const	int					    getScore(BWAPI::Player player) const;
 	const	double				    getUCBValue(const size_t & strategy) const;
-	//const	bool				    shouldExpandNow() const;
+	
     const	MetaPairVector		    getProtossBuildOrderGoal() const;
 	const	MetaPairVector		    getTerranBuildOrderGoal() const;
 	const	MetaPairVector		    getZergBuildOrderGoal() const;
-
-	//TOMMY
-	mutable int						macroHatchCount;
-	const	bool					shouldMakeMacroHatchery() const;
 
 public:
     
@@ -77,16 +73,6 @@ public:
 	const	MetaPairVector		    getBuildOrderGoal();
 	const	BuildOrder &            getOpeningBookBuildOrder() const;
 	const   BuildOrder &			getAdaptiveBuildOrder() const;
-
-	//TOMMY
-	int								getMacroHatchCount();
-	void							removeMacroHatch();
-	// returns map corresponding to units that need to be made and how many
-	// current control: in prod manager, if creep colonies or sunkens are currently in the queue, don't call this
-	// when testing, try each version and see which works better
-	std::map<BWAPI::UnitType, int>	shouldBuildSunkens() const;
-	std::map<BWAPI::UnitType, int>	shouldBuildSunkens2() const;
-
 	bool							timeToAttack = true;
 	const  bool						shouldExpandNow() const;
 	const  bool						isSpireBuilding() const;

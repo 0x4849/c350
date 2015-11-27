@@ -19,6 +19,7 @@ void ProductionManager::setBuildOrder(const BuildOrder & buildOrder)
 
 	for (size_t i(0); i<buildOrder.size(); ++i)
 	{
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Muscular_Augments, 1));
 		_queue.queueAsLowestPriority(buildOrder[i], true);
 	}
 }
@@ -78,7 +79,7 @@ void ProductionManager::update()
 		{
 			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
 		}
-		
+
 		if (BWAPI::Broodwar->self()->supplyUsed() >= 40)
 		{
 			BWAPI::Broodwar->printf("Queuing one extra overlord");
@@ -92,7 +93,6 @@ void ProductionManager::update()
 
 		_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 	}
-
 
 	if (!BuildingManager::Instance().shouldIExpand && BWAPI::Broodwar->getFrameCount() % 24 == 0 && StrategyManager::Instance().shouldExpandNow())
 	{
@@ -115,46 +115,6 @@ void ProductionManager::update()
 		}
 	}
 
-	//TOMMY
-	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && (checkDefenses()))
-	{
-		std::map<BWAPI::UnitType, int> defenses;
-		// edit this and see which works better: shouldBuildSunkens or shouldBuildSunkens2
-		if ((BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss) && (InformationManager::Instance().isEnemyMovedOut()))
-		{
-			//BWAPI::Broodwar->printf("checking shouldBuildSunkens");
-			defenses = StrategyManager::Instance().shouldBuildSunkens();
-		}
-		if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Terran)
-		{
-			//BWAPI::Broodwar->printf("checking shouldBuildSunkens2");
-			defenses = StrategyManager::Instance().shouldBuildSunkens2();
-		}
-		if (!defenses.empty())
-		{
-			if (Config::Debug::DrawBuildOrderSearchInfo)
-			{
-				BWAPI::Broodwar->printf("Need defenses");
-			}
-			for (int i = 0; i < defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony]; i++)
-			{
-				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Creep_Colony), true);
-				// EVERY TIME WE MAKE A SUNKEN, SHOULD WE MAKE A DRONE TO REPLACE IT???? and at what priority? and block or no?
-				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Drone), true);
-			}
-			for (int j = 0; j < defenses[BWAPI::UnitTypes::Zerg_Zergling]; j++)
-			{
-				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Zergling), true);
-			}
-		}
-	}
-	else
-	{
-		if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && (!BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Zerg))
-		{
-			//BWAPI::Broodwar->printf("enemy race not determined yet");
-		}
-	}
 
 	// if they have cloaked units get a new goal asap
 	if (!_enemyCloakedDetected && InformationManager::Instance().enemyHasCloakedUnits())
@@ -227,25 +187,30 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit unit)
 }
 
 void ProductionManager::manageBuildOrderQueue()
+{
+	// if there is nothing in the _queue, oh well
+	if (_queue.isEmpty())
 	{
-		// if there is nothing in the _queue, oh well
-		if (_queue.isEmpty())
+		return;
+	}
+
+	// the current item to be used
+	BuildOrderItem & currentItem = _queue.getHighestPriorityItem();
+
+
+	// while there is still something left in the _queue
+	while (!_queue.isEmpty())
+	{
+
+
+		BWAPI::Unit producer;
+		if (currentItem.metaType.getUnitType() == 143 && BuildingManager::Instance().createdHatcheriesVector.size() >= 1)
 		{
-			return;
+			producer = getProducer(currentItem.metaType);
 		}
 
-		// the current item to be used
-		BuildOrderItem & currentItem = _queue.getHighestPriorityItem();
-
-
-		// while there is still something left in the _queue
-		while (!_queue.isEmpty())
+		else
 		{
-
-
-			BWAPI::Unit producer;
-
-
 			/*
 			if (currentItem.metaType.whatBuilds().isBuilding() && !canProduce(currentItem.metaType.whatBuilds()))
 			{
@@ -263,69 +228,52 @@ void ProductionManager::manageBuildOrderQueue()
 				}
 			}
 			*/
+		}
+
+		// check to see if we can make it right now
+		bool canMake = canMakeNow(producer, currentItem.metaType);
+
+		// if we try to build too many refineries manually remove it
+		if (currentItem.metaType.isRefinery() && (BWAPI::Broodwar->self()->allUnitCount(BWAPI::Broodwar->self()->getRace().getRefinery() >= 3)))
+		{
+			_queue.removeCurrentHighestPriorityItem();
+			break;
+		}
+
+		// if the next item in the list is a building and we can't yet make it
+		if (currentItem.metaType.isBuilding() && !(producer && canMake) && currentItem.metaType.whatBuilds().isWorker())
+		{
+			// construct a temporary building object
+			if (currentItem.metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+			{
+				Building b(currentItem.metaType.getUnitType(), BuildingManager::Instance().createdHatcheriesVector[0]);
+				b.isGasSteal = currentItem.isGasSteal;
+				// set the producer as the closest worker, but do not set its job yet
+				producer = WorkerManager::Instance().getBuilder(b, false);
+
+				// predict the worker movement to that building location
+				predictWorkerMovement(b);
+			}
+			else
+			{
+				Building b(currentItem.metaType.getUnitType(), BWAPI::Broodwar->self()->getStartLocation());
+				b.isGasSteal = currentItem.isGasSteal;
+				// set the producer as the closest worker, but do not set its job yet
+				producer = WorkerManager::Instance().getBuilder(b, false);
+
+				// predict the worker movement to that building location
+				predictWorkerMovement(b);
+			}
+			
 			
 
-			// check to see if we can make it right now
-			bool canMake = canMakeNow(producer, currentItem.metaType);
 
-			// if we try to build too many refineries manually remove it
-			if (currentItem.metaType.isRefinery() && (BWAPI::Broodwar->self()->allUnitCount(BWAPI::Broodwar->self()->getRace().getRefinery() >= 3)))
-			{
-				_queue.removeCurrentHighestPriorityItem();
-				break;
-			}
+		}
 
-			// if the next item in the list is a building and we can't yet make it
-			if (currentItem.metaType.isBuilding() && !(producer && canMake) && currentItem.metaType.whatBuilds().isWorker())
-			{
-				// construct a temporary building object
-				// construct a temporary building object
-				if (currentItem.metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
-				{
-					Building b(currentItem.metaType.getUnitType(), BuildingManager::Instance().createdHatcheriesVector[0]);
-					b.isGasSteal = currentItem.isGasSteal;
-					b.isMacro = false;
-					// set the producer as the closest worker, but do not set its job yet
-					producer = WorkerManager::Instance().getBuilder(b, false);
-
-					// predict the worker movement to that building location
-					predictWorkerMovement(b);
-				}
-				else
-				{
-
-
-					Building b(currentItem.metaType.getUnitType(), BWAPI::Broodwar->self()->getStartLocation());
-					b.isGasSteal = currentItem.isGasSteal;
-
-					//TOMMY
-					if ((StrategyManager::Instance().getMacroHatchCount() > 0) && (currentItem.metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Hatchery))
-					{
-						b.isMacro = true;
-						StrategyManager::Instance().removeMacroHatch();
-					}
-
-					// set the producer as the closest worker, but do not set its job yet
-					producer = WorkerManager::Instance().getBuilder(b, false);
-
-					// predict the worker movement to that building location
-					predictWorkerMovement(b);
-				}
-
-			}
 		// if we can make the current item
 		if (producer && canMake)
 		{
 			// create it
-
-			//TOMMY
-			if ((StrategyManager::Instance().getMacroHatchCount() > 0) &&
-				(currentItem.metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Hatchery))
-			{
-				currentItem.isMacro = true;
-				StrategyManager::Instance().removeMacroHatch();
-			}
-
 			create(producer, currentItem);
 			_assignedWorkerForThisBuilding = false;
 			_haveLocationForThisBuilding = false;
@@ -508,8 +456,7 @@ void ProductionManager::create(BWAPI::Unit producer, BuildOrderItem & item)
 		&& !t.getUnitType().isAddon())
 	{
 		// send the building task to the building manager
-		//TOMMY
-		BuildingManager::Instance().addBuildingTask(t.getUnitType(), BWAPI::Broodwar->self()->getStartLocation(), item.isGasSteal, item.isMacro);
+		BuildingManager::Instance().addBuildingTask(t.getUnitType(), BWAPI::Broodwar->self()->getStartLocation(), item.isGasSteal);
 	}
 	else if (t.getUnitType().isAddon())
 	{
@@ -697,12 +644,11 @@ void ProductionManager::performCommand(BWAPI::UnitCommandType t)
 			}
 		}
 
-
 		if (extractor)
 		{
 			BuildingManager::Instance().firstExtractorPosition = extractor->getTilePosition();
 			extractor->cancelMorph();
-			//BWAPI::Broodwar->printf("Freeing tiles\n");
+			BWAPI::Broodwar->printf("Freeing tiles\n");
 			BuildingManager::Instance().removeBuildingExternal(extractor->getTilePosition());
 			BuildingPlacer::Instance().freeTiles(extractor->getTilePosition(), 4, 2);
 			BuildingManager::Instance().didGasTrickFrames = BWAPI::Broodwar->getFrameCount();
@@ -864,37 +810,6 @@ bool ProductionManager::canPlanBuildOrderNow() const
 		BWAPI::UnitType trainType = unit->getLastCommand().getUnitType();
 
 		if (unit->getRemainingTrainTime() == trainType.buildTime())
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-//TOMMY
-bool ProductionManager::checkDefenses()
-{
-	if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Zerg)
-	{
-		BWAPI::Broodwar->printf("fighting Zerg; don't check defenses");
-		return false;
-	}
-
-	std::deque< BuildOrderItem > items = _queue.getQueue();
-
-	for (auto it = items.begin(); it != items.end(); it++)
-	{
-		if (it->metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
-		{
-			return false;
-		}
-	}
-
-
-	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
-	{
-		if (unit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
 		{
 			return false;
 		}

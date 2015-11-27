@@ -55,11 +55,6 @@ void WorkerData::addDepot(BWAPI::Unit unit)
 	if (!unit) { return; }
 
 	assert(depots.find(unit) == depots.end());
-	//TOMMY
-	if (isMacroHatch(unit))
-	{
-		return;
-	}
 	depots.insert(unit);
 	depotWorkerCount[unit] = 0;
 }
@@ -592,42 +587,4 @@ void WorkerData::drawDepotDebugInfo()
             }
         }
 	}
-}
-
-//PAST THIS POINT IS TOMMY
-bool WorkerData::depotIsSemiFull(BWAPI::Unit depot)
-{
-	if (!depot) { return false; }
-
-	int assignedWorkers = getNumAssignedWorkers(depot);
-	int mineralsNearDepot = getMineralsNearDepot(depot);
-
-	if (assignedWorkers > mineralsNearDepot * 1)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-BWAPI::Unitset	WorkerData::getDepots()
-{
-	return depots;
-}
-
-bool WorkerData::isMacroHatch(BWAPI::Unit depot)
-{
-	int radius = 300;
-
-	for (auto & unit : BWAPI::Broodwar->getAllUnits())
-	{
-		if ((unit->getType() == BWAPI::UnitTypes::Resource_Mineral_Field) && unit->getDistance(depot) < radius)
-		{
-			return false;
-		}
-	}
-
-	return true;
 }

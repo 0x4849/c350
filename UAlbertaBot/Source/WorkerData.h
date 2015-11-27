@@ -96,9 +96,5 @@ public:
 
 	const BWAPI::Unitset & getWorkers() const { return workers; }
 
-	//TOMMY
-	bool					depotIsSemiFull(BWAPI::Unit depot);	
-	BWAPI::Unitset			getDepots();
-	bool					isMacroHatch(BWAPI::Unit depot);
 };
 }

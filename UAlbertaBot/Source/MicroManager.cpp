@@ -33,10 +33,7 @@ BWAPI::Position MicroManager::calcCenter() const
 void MicroManager::execute(const SquadOrder & inputOrder)
 {
 	// Nothing to do if we have no units
-	//TOMMY
-	if (_units.empty() || !(inputOrder.getType() == SquadOrderTypes::Attack ||
-		inputOrder.getType() == SquadOrderTypes::Defend ||
-		inputOrder.getType() == SquadOrderTypes::Confuse))
+	if (_units.empty() || !(inputOrder.getType() == SquadOrderTypes::Attack || inputOrder.getType() == SquadOrderTypes::Defend))
 	{
 		return;
 	}
@@ -53,8 +50,7 @@ void MicroManager::execute(const SquadOrder & inputOrder)
 		MapGrid::Instance().GetUnits(nearbyEnemies, order.getPosition(), order.getRadius(), false, true);
 	
 	} // otherwise we want to see everything on the way
-	//TOMMY
-	else if (order.getType() == SquadOrderTypes::Attack || order.getType() == SquadOrderTypes::Confuse)
+	else if (order.getType() == SquadOrderTypes::Attack) 
 	{
 		MapGrid::Instance().GetUnits(nearbyEnemies, order.getPosition(), order.getRadius(), false, true);
 		for (auto & unit : _units) 
@@ -114,61 +110,6 @@ void MicroManager::execute(const SquadOrder & inputOrder)
             }
         }
 	}	
-
-	//TOMMY
-	// getFrameCount is used issue 1 command every 1.3s
-	if ((order.getType() == SquadOrderTypes::Confuse))//&&
-		//(BWAPI::Broodwar->getFrameCount() % 20 == 0) )
-	{
-		// if this is a worker defense force
-		if (_units.size() == 1 && (*_units.begin())->getType().isWorker())
-		{
-			executeMicro(nearbyEnemies);
-		}
-		// otherwise it is a normal attack force
-		else
-		{
-			// if this is a defense squad then we care about all units in the area
-			if (order.getType() == SquadOrderTypes::Defend)
-			{
-				executeMicro(nearbyEnemies);
-			}
-			// otherwise we only care about workers if they are in their own region
-			else
-			{
-				// if this is the an attack squad
-				BWAPI::Unitset workersRemoved;
-
-				for (auto & enemyUnit : nearbyEnemies)
-				{
-					// if its not a worker add it to the targets
-					if (!enemyUnit->getType().isWorker())
-					{
-						workersRemoved.insert(enemyUnit);
-					}
-					// if it is a worker
-					else
-					{
-						for (BWTA::Region * enemyRegion : InformationManager::Instance().getOccupiedRegions(BWAPI::Broodwar->enemy()))
-						{
-							// only add it if it's in their region
-							if (BWTA::getRegion(BWAPI::TilePosition(enemyUnit->getPosition())) == enemyRegion)
-							{
-								workersRemoved.insert(enemyUnit);
-							}
-						}
-					}
-				}
-
-				// Allow micromanager to handle enemies
-				executeMicro(workersRemoved);
-			}
-		}
-	}
-	//if (order.getType() == SquadOrderTypes::Confuse)
-	//{
-	//	executeMicro(nearbyEnemies);
-	//}
 }
 
 const BWAPI::Unitset & MicroManager::getUnits() const 
@@ -238,28 +179,6 @@ bool MicroManager::checkPositionWalkable(BWAPI::Position pos)
 				return false;
 		}
 	}
-
-	// otherwise it's okay
-	return true;
-}
-
-//TOMMY
-bool MicroManager::checkPositionWalkable2(BWAPI::Position pos)
-{
-	// get x and y from the position
-	int x(pos.x), y(pos.y);
-
-	// walkable tiles exist every 8 pixels
-	bool good = BWAPI::Broodwar->isWalkable(x / 8, y / 8);
-
-	// if it's not walkable throw it out
-	if (!good) return false;
-
-	// for each of those units, if it's a building or an attacking enemy unit we don't want to go there
-	bool alsoGood = (BWAPI::Broodwar->getUnitsOnTile(x / 32, y / 32)).empty();
-
-	// if it's not walkable throw it out
-	if (!alsoGood) return false;
 
 	// otherwise it's okay
 	return true;
