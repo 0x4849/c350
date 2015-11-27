@@ -34,7 +34,6 @@ bool ScoutManager::setScout(BWAPI::Unit unit)
 	return true;
 }
 
-<<<<<<< HEAD
 void ScoutManager::setWorkerScout(BWAPI::Unit unit)
 {
 	// if we have a previous worker scout, release it back to the worker manager
@@ -45,18 +44,6 @@ void ScoutManager::setWorkerScout(BWAPI::Unit unit)
 
 	_workerScout = unit;
 	WorkerManager::Instance().setScoutWorker(_workerScout);
-=======
-void ScoutManager::setWorkerScout(BWAPI::Unit unit)
-{
-	// if we have a previous worker scout, release it back to the worker manager
-	if (_workerScout)
-	{
-		WorkerManager::Instance().finishedWithWorker(_workerScout);
-	}
-
-	_workerScout = unit;
-	WorkerManager::Instance().setScoutWorker(_workerScout);
->>>>>>> origin/Dingkai
 }
 
 void ScoutManager::moveScouts()
@@ -75,11 +62,7 @@ void ScoutManager::moveScouts()
 	if (enemyBaseLocation)
 	{
 		if (_overlordScout) {
-<<<<<<< HEAD
 			if (_enemyRamp == BWAPI::Position(0, 0)) _enemyRamp = getEnemyRamp();
-=======
-			if (_enemyRamp == BWAPI::Position(0,0)) _enemyRamp = getEnemyRamp();
->>>>>>> origin/Dingkai
 			Micro::SmartMove(_overlordScout, _enemyRamp);
 		}
 		if (_scouter1) Micro::SmartMove(_scouter1, BWAPI::Position(enemyBaseLocation->getTilePosition()));
@@ -104,16 +87,11 @@ void ScoutManager::moveScouts()
 
 void ScoutManager::buildNinjaBase()
 {
-<<<<<<< HEAD
 	if (_ninjaBaseLocation == BWAPI::TilePosition(0, 0)) _ninjaBaseLocation = getFarthestPoint();
-=======
-	if(_ninjaBaseLocation == BWAPI::TilePosition(0,0)) _ninjaBaseLocation =  getFarthestPoint();
->>>>>>> origin/Dingkai
 	if (BWAPI::Broodwar->self()->minerals() >= 300 && _workerScout->getDistance(BWAPI::Position(_ninjaBaseLocation)) <= 100) _workerScout->build(BWAPI::UnitTypes::Zerg_Hatchery, _ninjaBaseLocation);
 	else Micro::SmartMove(_workerScout, BWAPI::Position(_ninjaBaseLocation));
 }
 
-<<<<<<< HEAD
 BWAPI::TilePosition ScoutManager::getFarthestPoint()
 {
 	double distance = 1;
@@ -180,72 +158,4 @@ BWAPI::Position ScoutManager::getEnemyRamp(){
 		}
 	}
 	return rampPosition;
-=======
-BWAPI::TilePosition ScoutManager::getFarthestPoint()
-{
-	double distance = 1;
-	double expDist = 999999.0;
-	BWTA::BaseLocation * farthestLocation;
-	BWTA::BaseLocation * myExpansion;
-	BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
-	const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-
-	for (auto x : locations)
-	{
-		double myDist = BWTA::getGroundDistance(BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition(), x->getTilePosition());
-		if (myDist >= 1 && myDist < expDist && !x->isMineralOnly() && x != BWTA::getStartLocation(BWAPI::Broodwar->self()))
-		{
-			myExpansion = x;
-			expDist = myDist;
-
-		}
-	}
-
-	for (auto x : locations)
-	{
-		double myDist = BWTA::getGroundDistance(enemyBaseLocation->getTilePosition(), x->getTilePosition());
-		if (myDist >= 1 && !x->isMineralOnly() && x != enemyBaseLocation && x != BWTA::getStartLocation(BWAPI::Broodwar->self()) && x != myExpansion && myDist > distance)
-		{
-			distance = myDist;
-			farthestLocation = x;
-
-		}
-	}
-	BuildingManager::Instance().createdHatcheriesVector[1] = farthestLocation->getTilePosition();
-	return farthestLocation->getTilePosition();
-}
-
-BWAPI::Position ScoutManager::getEnemyRamp(){
-	std::set<BWTA::Chokepoint *> chokePoints = BWTA::getChokepoints();
-	double lowestDistance = 999999.0;
-	double lowestDistance2 = 999999.0;
-	double expDist = 999999.0;
-	BWAPI::Position rampPosition;
-	BWTA::BaseLocation * expansion;
-	BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
-	const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-	for (auto x : locations)
-	{
-		double myDist = BWTA::getGroundDistance(enemyBaseLocation->getTilePosition(), x->getTilePosition());
-		if (myDist >= 1 && myDist < expDist && !x->isMineralOnly() && x != enemyBaseLocation)
-		{
-			expansion = x;
-			expDist = myDist;
-		}
-	}
-
-	for (auto x : chokePoints)
-	{
-		double distance1 = BWTA::getGroundDistance(expansion->getTilePosition(), BWAPI::TilePosition(x->getCenter()));
-		double distance2 = BWTA::getGroundDistance(enemyBaseLocation->getTilePosition(), BWAPI::TilePosition(x->getCenter()));
-		double sum = distance1 + distance2;
-
-		if (sum < lowestDistance)
-		{
-			lowestDistance = sum;
-			rampPosition = x->getCenter();
-		}
-	}
-	return rampPosition;
->>>>>>> origin/Dingkai
 }

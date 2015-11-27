@@ -161,10 +161,7 @@ void InformationManager::updateBaseLocationInfo()
 		}
 
 	}
-<<<<<<< HEAD
 	
-=======
->>>>>>> origin/Dingkai
 	if (_mainBaseLocations[_enemy]){
 		if (BWAPI::Broodwar->isExplored(_mainBaseLocations[_enemy]->getTilePosition()) && !_scoutTimer) _scoutTimer = BWAPI::Broodwar->getFrameCount() + 100;
 	}
