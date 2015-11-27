@@ -11,6 +11,9 @@ class ScoutManager
 	BWAPI::Unit						_scouter1;
 	BWAPI::Unit						_scouter2;
 	BWAPI::Unit						_overlordScout;
+	BWAPI::Unit						_workerScout;
+	BWAPI::TilePosition				_ninjaBaseLocation;
+	BWAPI::Position					_enemyRamp;
   
 	void                            moveScouts();
 
@@ -23,6 +26,10 @@ public:
 	void update();
 
     bool setScout(BWAPI::Unit unit);
+	void setWorkerScout(BWAPI::Unit worker);
+	void buildNinjaBase();
+	BWAPI::TilePosition ScoutManager::getFarthestPoint();
+	BWAPI::Position getEnemyRamp();
 
 	void onSendText(std::string text);
 	void onUnitShow(BWAPI::Unit unit);

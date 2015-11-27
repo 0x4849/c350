@@ -144,11 +144,11 @@ void GameCommander::setScoutUnits()
     if (_scoutUnits.size()<2 && !_initialScoutSet)
     {
         BWAPI::Unit supplyProvider = getFirstSupplyProvider();
-
 		// if it exists
 		if (supplyProvider)
 		{
 			// grab the Zergling to the supply provider to send to scout
+
 			BWAPI::UnitInterface * scout = nullptr;
 			for (auto unit : BWAPI::Broodwar->self()->getUnits())
 			{
@@ -162,7 +162,23 @@ void GameCommander::setScoutUnits()
 			if (scout)
 			{
 				if (ScoutManager::Instance().setScout(scout)) assignUnit(scout, _scoutUnits);
-				if (_scoutUnits.size() == 2) _initialScoutSet = true;
+				if (_scoutUnits.size() == 2)
+				{
+					if (Config::Modules::UsingWorkerScout)
+					{
+						// grab the closest worker to the supply provider to send to scout
+						BWAPI::Unit workerScout = getClosestWorkerToTarget(supplyProvider->getPosition());
+
+						// if we find a worker (which we should) add it to the scout units
+						if (workerScout)
+						{
+							ScoutManager::Instance().setWorkerScout(workerScout);
+							assignUnit(workerScout, _scoutUnits);
+							_initialScoutSet = true;
+						}
+					}
+					_initialScoutSet = true; 
+				}
 			}
 		}
     }

@@ -24,6 +24,7 @@ class InformationManager
     std::map<BWAPI::Player, BWTA::BaseLocation *>       _mainBaseLocations;
     std::map<BWAPI::Player, std::set<BWTA::Region *> >  _occupiedRegions;
 	bool					_enemyExpand;
+	int						_scoutTimer = 0;
 
 	//NEW
 	bool					_enemyMovedOut;
