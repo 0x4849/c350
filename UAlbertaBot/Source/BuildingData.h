@@ -25,6 +25,8 @@ public:
     bool                    isGasSteal;
 	bool                    buildCommandGiven;
 	bool                    underConstruction;
+	//TOMMY
+	bool					isMacro;
 
 	Building() 
 		: desiredPosition   (0,0)
@@ -38,6 +40,8 @@ public:
         , buildCommandGiven (false)
         , underConstruction (false) 
         , isGasSteal        (false)
+		//TOMMY
+		, isMacro(false)
     {} 
 
 	// constructor we use most often
@@ -53,6 +57,8 @@ public:
         , buildCommandGiven (false)
         , underConstruction (false) 
         , isGasSteal        (false)
+		//TOMMY
+		, isMacro(false)
     {}
 
 	// equals operator

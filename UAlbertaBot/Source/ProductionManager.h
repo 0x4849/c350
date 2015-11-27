@@ -43,6 +43,9 @@ namespace UAlbertaBot
 		int                 getFreeGas();
 		bool                canPlanBuildOrderNow() const;
 
+		//TOMMY
+		bool				checkDefenses();
+
 	public:
 
 		static ProductionManager &	Instance();

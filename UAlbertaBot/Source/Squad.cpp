@@ -43,7 +43,8 @@ void Squad::update()
 	}
 
 	// if we do need to regroup, do it
-	if (needToRegroup)
+	//TOMMY
+	if (needToRegroup && (_order.getType() != SquadOrderTypes::Confuse))
 	{
 		BWAPI::Position regroupPosition = calcRegroupPosition();
 

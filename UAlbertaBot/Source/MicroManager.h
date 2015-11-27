@@ -23,9 +23,11 @@ struct GroundThreat
 
 class MicroManager
 {
-	BWAPI::Unitset  _units;
 
 protected:
+
+	//TOMMY
+	BWAPI::Unitset  _units;
 	
 	SquadOrder			order;
 
@@ -36,6 +38,8 @@ protected:
 	bool                unitNearChokepoint(BWAPI::Unit unit) const;
 	void                trainSubUnits(BWAPI::Unit unit) const;
     
+	//TOMMY
+	bool                checkPositionWalkable2(BWAPI::Position pos);
 
 public:
 						MicroManager();
@@ -48,5 +52,7 @@ public:
 	void				execute(const SquadOrder & order);
 	void				regroup(const BWAPI::Position & regroupPosition) const;
 
+	//TOMMY
+	bool				inStorm(BWAPI::Unit unit); // TO BE IMPLEMENTED. return true if unit is in a psi storm
 };
 }
