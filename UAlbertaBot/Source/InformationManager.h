@@ -25,7 +25,12 @@ class InformationManager
     std::map<BWAPI::Player, std::set<BWTA::Region *> >  _occupiedRegions;
 	bool					_enemyExpand;
 	int						_scoutTimer = 0;
+<<<<<<< HEAD
 	//TOMMY
+=======
+
+	//NEW
+>>>>>>> origin/Dingkai
 	bool					_enemyMovedOut;
 	std::map<BWAPI::UnitType, int>						_enemyProductionEstimate;
 	int													_firstProdBuildingTime;

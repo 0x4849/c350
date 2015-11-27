@@ -140,10 +140,17 @@ void GameCommander::setValidUnits()
 
 void GameCommander::setScoutUnits()
 {
+<<<<<<< HEAD
 	// if we haven't set a scout unit, do it
 	if (_scoutUnits.size()<2 && !_initialScoutSet)
 	{
 		BWAPI::Unit supplyProvider = getFirstSupplyProvider();
+=======
+    // if we haven't set a scout unit, do it
+    if (_scoutUnits.size()<2 && !_initialScoutSet)
+    {
+        BWAPI::Unit supplyProvider = getFirstSupplyProvider();
+>>>>>>> origin/Dingkai
 		// if it exists
 		if (supplyProvider)
 		{
@@ -166,6 +173,7 @@ void GameCommander::setScoutUnits()
 				{
 					if (Config::Modules::UsingWorkerScout)
 					{
+<<<<<<< HEAD
 						// grab the closest worker to the supply provider to send to scout
 						BWAPI::Unit workerScout = getClosestWorkerToTarget(supplyProvider->getPosition());
 
@@ -178,6 +186,20 @@ void GameCommander::setScoutUnits()
 						}
 					}
 					_initialScoutSet = true;
+=======
+						// grab the closest worker to the supply provider to send to scout
+						BWAPI::Unit workerScout = getClosestWorkerToTarget(supplyProvider->getPosition());
+
+						// if we find a worker (which we should) add it to the scout units
+						if (workerScout)
+						{
+							ScoutManager::Instance().setWorkerScout(workerScout);
+							assignUnit(workerScout, _scoutUnits);
+							_initialScoutSet = true;
+						}
+					}
+					_initialScoutSet = true; 
+>>>>>>> origin/Dingkai
 				}
 			}
 		}
