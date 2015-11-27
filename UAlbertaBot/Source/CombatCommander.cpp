@@ -3,11 +3,15 @@
 
 using namespace UAlbertaBot;
 
+//TOMMY
 const size_t IdlePriority = 0;
 const size_t AttackPriority = 1;
-const size_t BaseDefensePriority = 2;
-const size_t ScoutDefensePriority = 3;
-const size_t DropPriority = 4;
+const size_t DistractPriority = 2;
+const size_t StandbyPriority = 3;
+const size_t BaseDefensePriority = 4;
+const size_t ScoutDefensePriority = 5;
+const size_t DropPriority = 6;
+const size_t HarassPriority = 7;
 
 CombatCommander::CombatCommander() 
     : _initialized(false)
@@ -37,6 +41,10 @@ void CombatCommander::initializeSquads()
         _squadData.addSquad("Drop", Squad("Drop", zealotDrop, DropPriority));
     }
 
+	//TOMMY
+	SquadOrder confuseOrder(SquadOrderTypes::Confuse, getMainAttackLocation(), 1000, "Distract Zealots");
+	_squadData.addSquad("Distract", Squad("Distract", confuseOrder, DistractPriority));
+
     _initialized = true;
 }
 
@@ -62,14 +70,98 @@ void CombatCommander::update(const BWAPI::Unitset & combatUnits)
 
 	if (isSquadUpdateFrame())
 	{
-        updateIdleSquad();
-        updateDropSquads();
-        updateScoutDefenseSquad();
+		//TOMMY
+		updateHarassSquad();
+		updateDropSquads();
+		updateScoutDefenseSquad();
 		updateDefenseSquads();
+		updateStandbySquad();
+		updateDistractSquad();
 		updateAttackSquads();
+		updateIdleSquad();
 	}
 
 	_squadData.update();
+}
+
+//TOMMY
+void CombatCommander::updateStandbySquad()
+{
+
+}
+
+//TOMMY
+void CombatCommander::updateHarassSquad()
+{
+
+}
+
+//TOMMY
+void CombatCommander::updateDistractSquad()
+{
+	// code to turn off kiting
+	//return;
+
+	// only use if fighting protoss
+	if (!(BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))
+	{
+		//BWAPI::Broodwar->printf("not fighting Protoss; no kiting");
+		return;
+	}
+	if (!_squadData.squadExists("Distract"))
+	{
+		return;
+	}
+	Squad &distractSquad = _squadData.getSquad("Distract");
+	// disable once a non-zealot combat unit is seen
+	bool keepDistracting = true;
+	for (auto &item : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
+	{
+		if ((UnitUtil::IsCombatUnit(item.second.unit)) &&
+			(item.second.unit->getType() != BWAPI::UnitTypes::Protoss_Zealot) &&
+			(item.second.unit->getType() != BWAPI::UnitTypes::Unknown) &&
+			(!item.second.unit->getType().isBuilding()))
+		{
+			BWAPI::Broodwar->printf("Not just zealots; stop distracting saw a %d\n", item.second.unit->getType());
+			keepDistracting = false;
+		}
+	}
+	// for all our hatchries/lairs/hives, get their position and region. for all these regions, get all units inside
+	// if a zealot is inside, disable kiting
+	/*BWAPI::Unitset nearbyEnemies;
+	for (auto &unit : BWAPI::Broodwar->self()->getUnits())
+	{
+	if (unit->getType() == BWAPI::UnitTypes::Zerg_Hatchery ||
+	unit->getType() == BWAPI::UnitTypes::Zerg_Lair ||
+	unit->getType() == BWAPI::UnitTypes::Zerg_Hive)
+	{
+	// could also use BWAPI::Broodwar->getUnitsInRadius()
+	MapGrid::Instance().GetUnits(nearbyEnemies, unit->getPosition(), 1000, false, true);
+	}
+	}
+	if (!nearbyEnemies.empty())
+	{
+	keepDistracting = false;
+	}*/
+
+	if (!keepDistracting) // free all units
+	{
+		_squadData.getSquad("Distract").clear();
+	}
+	else // add all available zerglings
+	{
+		for (auto & unit : _combatUnits)
+		{
+			if ((unit->getType() == BWAPI::UnitTypes::Zerg_Zergling) &&
+				(_squadData.canAssignUnitToSquad(unit, distractSquad)) &&
+				(!_squadData.unitIsInSquad(unit)))
+			{
+				_squadData.assignUnitToSquad(unit, distractSquad);
+			}
+		}
+		SquadOrder confuseOrder(SquadOrderTypes::Confuse, getMainAttackLocation(), 1000, "Distract Zealots");
+		distractSquad.setSquadOrder(confuseOrder);
+	}
 }
 
 void CombatCommander::updateIdleSquad()

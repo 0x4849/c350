@@ -4,6 +4,7 @@
 #include "BWTA.h"
 
 #include "UnitData.h"
+#include "UnitUtil.h"
 
 #include "..\..\SparCraft\source\SparCraft.h"
 
@@ -24,6 +25,11 @@ class InformationManager
     std::map<BWAPI::Player, std::set<BWTA::Region *> >  _occupiedRegions;
 	bool					_enemyExpand;
 
+	//NEW
+	bool					_enemyMovedOut;
+	std::map<BWAPI::UnitType, int>						_enemyProductionEstimate;
+	int													_firstProdBuildingTime;
+
     int                     getIndex(BWAPI::Player player) const;
 
     void                    updateUnit(BWAPI::Unit unit);
@@ -43,7 +49,7 @@ public:
     void                    update();
 
     // event driven stuff
-    void					onUnitShow(BWAPI::Unit unit)        { updateUnit(unit); }
+	void					onUnitShow(BWAPI::Unit unit);
     void					onUnitHide(BWAPI::Unit unit)        { updateUnit(unit); }
     void					onUnitCreate(BWAPI::Unit unit)		{ updateUnit(unit); }
     void					onUnitComplete(BWAPI::Unit unit)    { updateUnit(unit); }
@@ -72,5 +78,11 @@ public:
     const UnitData &        getUnitData(BWAPI::Player player) const;
 
 	bool					isEnemyExpand();
+	
+	//TOMMY
+	bool					isEnemyMovedOut();
+	void					checkEnemyMovedOut();
+	void					updateEnemyProductionEstimate();
+	std::map<BWAPI::UnitType, int>		getEnemyProductionEstimate();
 };
 }

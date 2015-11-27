@@ -11,7 +11,8 @@ bool UnitUtil::IsCombatUnit(BWAPI::Unit unit)
     }
 
     // no workers or buildings allowed
-    if (unit && unit->getType().isWorker() || unit->getType().isBuilding())
+	//TOMMY
+    if (unit && (unit->getType().isWorker() || unit->getType().isBuilding() || unit->getType() == BWAPI::UnitTypes::Zerg_Overlord))
     {
         return false;
     }

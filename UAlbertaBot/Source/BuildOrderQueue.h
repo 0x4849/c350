@@ -13,11 +13,16 @@ struct BuildOrderItem
     bool				blocking;	// whether or not we block further items
     bool                isGasSteal;
 
-    BuildOrderItem(MetaType m,int p,bool b,bool gasSteal = false)
+	//TOMMY
+	bool				isMacro;
+
+	//TOMMY
+	BuildOrderItem(MetaType m, int p, bool b, bool gasSteal = false, bool macro = false)
         : metaType(m)
         , priority(p)
         , blocking(b)
         , isGasSteal(gasSteal) 
+		, isMacro(macro)
     {
     }
 
@@ -67,5 +72,8 @@ public:
 
     // overload the bracket operator for ease of use
     BuildOrderItem operator [] (int i);
+
+	//TOMMY
+	std::deque< BuildOrderItem > getQueue();
 };
 }

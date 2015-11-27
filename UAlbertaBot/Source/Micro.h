@@ -21,5 +21,14 @@ namespace Micro
     void Normalize(double &x, double &y);
 
     void drawAPM(int x, int y);
+
+	//TOMMY
+	void StormDodge(BWAPI::Unit unit); // TO BE IMPLEMENTED. the given unit moves away from the nearest templar. move away for 2 seconds and come back as the storm ends
+
+	BWAPI::Position GetNearbyPos(BWAPI::Position pos); //TO BE IMPLEMENTED. helper function in the case that you move to an unwalkable tile
+	int CalcDistance(BWAPI::Unit unit, int time); // TO BE IMPLEMENTED. helper function that gets a distance a unit will travel
+	// in the given time
+	BWAPI::Position GetFleeVector(BWAPI::Unit unit, BWAPI::Unit enemy); // TO BE IMPLEMENTED. helper function that gets the direction
+	// of movement to flee directly away a given enemy
 };
 }
