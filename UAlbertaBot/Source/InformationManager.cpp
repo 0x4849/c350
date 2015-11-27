@@ -621,6 +621,10 @@ bool InformationManager::isEnemyMovedOut(){
 
 void InformationManager::checkEnemyMovedOut(){
 	BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
+	if (enemyBaseLocation == nullptr)
+	{
+		return;
+	}
 	BWAPI::Position choke = BWTA::getNearestChokepoint(enemyBaseLocation->getPosition())->getCenter();
 	BWAPI::Unitset units = BWAPI::Broodwar->getUnitsInRadius(choke, 250);
 	for (auto &unit : units)
