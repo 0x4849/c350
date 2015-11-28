@@ -162,9 +162,13 @@ void InformationManager::updateBaseLocationInfo()
 
 	}
 	
-	if (enemyBaseCount > 1){
+	if (_mainBaseLocations[_enemy]){
+		if (BWAPI::Broodwar->isExplored(_mainBaseLocations[_enemy]->getTilePosition()) && !_scoutTimer) _scoutTimer = BWAPI::Broodwar->getFrameCount() + 100;
+	}
+	if (enemyBaseCount > 1 && BWAPI::Broodwar->getFrameCount() < _scoutTimer){
 		_enemyExpand = true;
 	}
+
 
 	if (enemySunkenCount > 1){
 		Config::Micro::UseSparcraftSimulation = true;
