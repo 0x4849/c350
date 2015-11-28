@@ -71,25 +71,31 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 	{
 		if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
 		{
+			BWAPI::Broodwar->printf("USING PROTOSS EP BUILD");
 			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ep")->second._buildOrder;
 		}
-		else if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
+		else
 		{
+			BWAPI::Broodwar->printf("USING PROTOSS NE BUILD");
 			return _strategies.find(Config::Strategy::AgainstProtossStrategyName + "_ne")->second._buildOrder;
 		}
 	}
 
-	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName && BWAPI::Broodwar->self()->supplyUsed() < 80)
 	{
-		if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
+		if (InformationManager::Instance().isEnemyExpand())
 		{
+			BWAPI::Broodwar->printf("USING TERRAN EP BUILD");
 			return _strategies.find(Config::Strategy::AgainstTerrenStrategyName + "_ep")->second._buildOrder;
 		}
-		else if (InformationManager::Instance().isEnemyExpand() && BWAPI::Broodwar->self()->supplyUsed() < 80)
+		else
 		{
+			BWAPI::Broodwar->printf("USING TERRAN NE BUILD");
 			return _strategies.find(Config::Strategy::AgainstTerrenStrategyName + "_ne")->second._buildOrder;
 		}
 	}
+
+	BWAPI::Broodwar->printf("Could not find adaptive build order!!! QQ");
 
 	return _emptyBuildOrder;
 }
@@ -591,7 +597,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 	int newSunkens = 0;
 	int newLings = 0;
 	// if we lose, add one sunken and resimulate
-	if (score < 0)
+	if ((score < 0) && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllySunken();
 		newSunkens++;
@@ -599,6 +605,10 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		CombatSimulation test(sim);
 		test.finishMoving();
 		score = test.simulateCombat();
+	}
+	else if (!(BuildingManager::Instance().canBuild))
+	{
+		BWAPI::Broodwar->printf("Only making lings; expansion not ready yet!");
 	}
 	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
 	while ((score < 0) && (newLings < 6))
@@ -611,7 +621,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		score = test.simulateCombat();
 	}
 	// if we still lose, keep adding sunkens until we win
-	while ((score < 0) && (newSunkens < 4))
+	while ((score < 0) && (newSunkens < 4) && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllySunken();
 		newSunkens++;
@@ -673,7 +683,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
 	int newSunkens = 0;
 	int newLings = 0;
 	// if we lose, add one sunken and resimulate
-	if (score < 0)
+	if ((score < 0) && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllySunken();
 		newSunkens++;
@@ -682,8 +692,12 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
 		test.finishMoving();
 		score = test.simulateCombat();
 	}
+	else if (!(BuildingManager::Instance().canBuild))
+	{
+		BWAPI::Broodwar->printf("Only making lings; expansion not ready!");
+	}
 	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
-	while ((score < 0) && (newLings < 6))
+	while ((score < 0) && (newLings < 6) && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllyZergling();
 		newLings++;
@@ -759,5 +773,5 @@ int StrategyManager::getMacroHatchCount()
 void StrategyManager::removeMacroHatch()
 {
 	macroHatchCount--;
-	BWAPI::Broodwar->printf("Minerals > 600; building macro hatchery");
+	BWAPI::Broodwar->printf("Minerals > 800; building macro hatchery");
 }

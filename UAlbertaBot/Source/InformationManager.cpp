@@ -671,7 +671,7 @@ void InformationManager::checkEnemyMovedOut(){
 				{
 					if (_movedOutMap[enemyPos] == true)
 					{
-						BWAPI::Broodwar->printf("Enemy has moved out!");
+						//BWAPI::Broodwar->printf("Enemy has moved out!");
 						_enemyMovedOut = true;
 						return;
 					}
@@ -681,7 +681,7 @@ void InformationManager::checkEnemyMovedOut(){
 					baseToUnit = BWTA::getGroundDistance(ourBase, BWAPI::TilePosition(unit.second.lastPosition));
 					if (baseToUnit < baseToBase)
 					{
-						BWAPI::Broodwar->printf("Enemy has moved out!");
+						//BWAPI::Broodwar->printf("Enemy has moved out!");
 						_enemyMovedOut = true;
 						_movedOutMap[enemyPos] = true;
 						return;
@@ -694,7 +694,7 @@ void InformationManager::checkEnemyMovedOut(){
 			}
 		}
 		_enemyMovedOut = false;
-		BWAPI::Broodwar->printf("Enemy in their base");
+		//BWAPI::Broodwar->printf("Enemy in their base");
 	}
 	else
 	{
@@ -714,7 +714,7 @@ void InformationManager::checkEnemyMovedOut(){
 				{
 					if (_movedOutMap[enemyPos] == true)
 					{
-						BWAPI::Broodwar->printf("Enemy has moved out!");
+						//BWAPI::Broodwar->printf("Enemy has moved out!");
 						_enemyMovedOut = true;
 						return;
 					}
@@ -724,7 +724,7 @@ void InformationManager::checkEnemyMovedOut(){
 					baseToUnit = BWTA::getGroundDistance(ourBase, enemyPos);
 					if (baseToUnit < baseToChoke)
 					{
-						BWAPI::Broodwar->printf("Enemy has moved out!");
+						//BWAPI::Broodwar->printf("Enemy has moved out!");
 						_enemyMovedOut = true;
 						_movedOutMap[enemyPos] = true;
 						return;
@@ -737,7 +737,7 @@ void InformationManager::checkEnemyMovedOut(){
 			}
 		}
 		_enemyMovedOut = false;
-		BWAPI::Broodwar->printf("Enemy in their base");
+		//BWAPI::Broodwar->printf("Enemy in their base");
 	}
 }
 
