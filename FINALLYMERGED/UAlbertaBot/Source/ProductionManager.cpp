@@ -63,7 +63,10 @@ void ProductionManager::update()
 		{
 			BWAPI::Broodwar->drawTextScreen(150, 10, "Nothing left to build, new search!");
 		}
-		if (_isLastBuildOrder) performBuildOrderSearch();
+		if (_isLastBuildOrder)
+		{
+			performBuildOrderSearch();
+		}
 		else
 		{
 			setBuildOrder(StrategyManager::Instance().getAdaptiveBuildOrder());
@@ -222,7 +225,8 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit unit)
 		{
 			if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone)
 			{
-				performBuildOrderSearch();
+				//performBuildOrderSearch();
+				_queue.queueAsLowestPriority(MetaType(unit->getType()), true);
 			}
 		}
 	}
