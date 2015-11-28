@@ -28,7 +28,7 @@ namespace Config
     {
         // the default tournament bot modules
         bool UsingGameCommander             = true;     // toggle GameCommander, effectively UAlbertaBot
-		bool UsingWorkerScout				= true;
+        bool UsingWorkerScout				= false;
         bool UsingCombatCommander           = true;
         bool UsingBuildOrderSearch          = true;     // toggle use of Build Order Search, currently no backup
         bool UsingAutoObserver              = false;
