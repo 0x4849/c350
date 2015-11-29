@@ -14,6 +14,7 @@ BuildingManager::BuildingManager()
 {
 
 }
+
 void BuildingManager::manageLarva()
 {
 	if (createdBaseUnit.size() >= 1)
@@ -28,8 +29,20 @@ void BuildingManager::manageLarva()
 			int mineralsNearDepot = workerData.getMineralsNearDepot(x->getTilePosition());
 			if (assignedWorkers < mineralsNearDepot || assignedWorkers2 < mineralsNearDepot2)
 			*/
+			if (!WorkerManager::Instance().isDepotSemiFull(pExpansion))
+			{
+				hatchSet.insert(pExpansion);
 
-			hatchSet.insert(pExpansion);
+			}
+			else
+			{
+				if (hatchSet.find(pExpansion) != hatchSet.end())
+				{
+					hatchSet.erase(pExpansion);
+				}
+				continue;
+			}
+			
 			BWAPI::Unitset myUnits = pExpansion->getUnitsInRadius(500);
 			BWAPI::UnitType larva = BWAPI::UnitTypes::Zerg_Larva;
 
@@ -212,321 +225,316 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 		//BWAPI::Position hatchPositionBWP = BWAPI::Position(hatchPosition);
 		BWAPI::TilePosition sunkPosition;
 
-		const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-		BWTA::BaseLocation *myLocation;
+		if (incrementDecrement.size() == 0)
+		{
+			const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
+			BWTA::BaseLocation *myLocation;
 
-		for (BWTA::BaseLocation *p : locations) {
-			BWAPI::TilePosition z = p->getTilePosition();
-			if (z == hatchPosition){
-				// This is the BWTA::Location of the first hatchery.
-				myLocation = p;
+			for (BWTA::BaseLocation *p : locations) {
+				BWAPI::TilePosition z = p->getTilePosition();
+				if (z == hatchPosition){
+					// This is the BWTA::Location of the first hatchery.
+					myLocation = p;
+
+				}
+			}
+			// Get the set of mineral patches closest to BWTA::Location of the hatchery(it will return like 8 mineral patches usually in the set)
+			const BWAPI::Unitset mineralSet = myLocation->getMinerals();
+			//const std::set<BWAPI::Unit*> mineralSet = myLocation->getMinerals();
+
+			int counter3 = 0;
+			int theX = 0;
+			int theY = 0;
+			for (BWAPI::Unit p : mineralSet)
+			{
+				// Calculate the difference between LeftMostMineralPatch.x - ExpansionHatchery.x and store it in theX
+				theX = p->getTilePosition().x - hatchPosition.x;
+				// Calculate the difference between LeftMostMineralPatch.y - ExpansionHatchery.y and store it in theY
+				theY = p->getTilePosition().y - hatchPosition.y;
+				break;
+			}
+
+			int gasX = 0;
+			int gasY = 0;
+			int counter4 = 0;
+			//Get all geysers near the expansion -- it should only return 1 for every map we play..
+			const BWAPI::Unitset gasSet = myLocation->getGeysers();
+			for (BWAPI::Unit p : gasSet)
+			{
+				naturalGas = p;
+				// Calculate the difference between Geyser.x- ExpansionHatchery.x and store it in gasX
+				gasX = p->getTilePosition().x - hatchPosition.x;
+				// Calculate the difference between Geyser.y- ExpansionHatchery.y and store it in gasY
+				gasY = p->getTilePosition().y - hatchPosition.y;
+				break;
+			}
+
+
+			int newx, newy;
+
+			int outercounter = 0;
+			int counter = 0;
+			newx = hatchPosition.x;
+			newy = hatchPosition.y;
+
+
+
+
+			//sunkPosition = BWAPI::TilePosition(newx, newy);
+
+			//test4 = BuildingPlacer::Instance().canBuildHere(sunkPosition, b);
+
+			// Form a new sunken position that starts at the hatchery positive.
+
+			bool useGasX = false;
+			bool useGasY = false;
+			bool useMinX = false;
+			bool useMinY = false;
+
+			if (abs(gasX) > abs(gasY))
+			{
+				useGasX = true;
+			}
+			else
+			{
+				useGasY = true;
+			}
+
+			if (abs(theX) > abs(theY))
+			{
+				useMinX = true;
+			}
+			else
+			{
+				useMinY = true;
+			}
+
+			// Gas differences is probably more reliable than mineral differences.
+			if (useGasX && useMinX)
+			{
+				BWAPI::Broodwar->printf("Use MinY and Gasx!\n");
+				useMinX = false;
+				useMinY = true;
+			}
+
+			// Gas differences is probably more reliable than mineral differences.
+			if (useGasY && useMinY)
+			{
+				BWAPI::Broodwar->printf("Use MinX and Gasy!\n");
+				useMinY = false;
+				useMinX = true;
+			}
+			// This is where we decide which directions we can make sunkens in
+			// It is based on X and Y differences in LeftMostMineral - Hatchery and Geyser - Hatchery
+			// It is not very good right now because we only use two variables. We should use four variables for better dection : theX, theY, gasX, gasY
+
+			// If the difference between LeftMostMineral.y - Hatchery.y is negative : It means the mierals are North of the hatchery
+			// If the difference between Geyser.X - Hatchery.X is negative : It means that the geyser is Left of the Hatchery
+			if (useMinY && useGasX)
+			{
+				if (theY < 0 && gasX < 0)
+				{
+					/* Allow the following directions for sunken to be built :
+					Increase X & Keep Y the same (East)
+					Increase X & Increase Y (Go South East)
+					Decrease X & Increase Y  (Go South West)
+					Keep X Same, Increase Y (Go South)
+
+					Go NORTHEAST **Test**
+					*/
+					incrementDecrement = { true, false, true, true, false, false, true, false };
+					//BWAPI::Broodwar->printf("Minerals North -- Geyser Left\n");
+
+				}
+
+				// If the difference between LeftMostMineral.y - Hatchery.y is positive : It means the mierals are South of the hatchery
+				// If the difference between Geyser.X - Hatchery.X is negative : It means that the geyser is Left of the Hatchery
+				else if (gasX < 0 && theY > 0)
+				{
+					/* Allow the following directions for sunken to be built :
+					Increase X & Keep Y the same (East)
+					Increase X & Decrease Y (Go North East)
+					Decrease X & Decrease Y (Go North West)
+					Keep X Same, Decrease Y (Go North)
+
+					GO SOUTHEAST --> Test
+					*/
+					incrementDecrement = { false, true, true, false, true, false, false, true };
+					//BWAPI::Broodwar->printf("Minerals South -- Geyser Left\n");
+				}
+
+				// If the difference between LeftMostMineral.y - Hatchery.y is negative : It means the mierals are North of the hatchery
+				// If the difference between Geyser.X - Hatchery.X is positive : It means that the geyser is Right or East of the Hatchery
+				else if (gasX > 0 && theY < 0)
+				{
+					/* Allow the following directions for sunken to be built :
+					Decrease X & Keep Y the same (West)
+					Decrease X & Increase Y (Go South West)
+					Increase X & Increase Y  (Go South East)
+					Keep X Same, Increase Y (Go South)
+
+					Go Northwest
+					*/
+					incrementDecrement = { true, false, false, true, false, true, true, false };
+					//BWAPI::Broodwar->printf("Minerals North -- Geyser Right\n");
+
+				}
+
+				// If the difference between LeftMostMineral.y - Hatchery.y is positive : It means the mierals are South of the hatchery
+				// If the difference between Geyser.X - Hatchery.X is positive : It means that the geyser is Right or East of the Hatchery
+				else if (theY > 0 && gasX > 0)
+				{
+					/* Decrease X & Keep Y the same (West)
+					Decrease X & Decrease Y (Go North West)
+					Increase X & Decrease Y (Go North East)
+					Don't change X Decrease y (Go North)
+
+					Go Southwest
+					*/
+					incrementDecrement = { false, true, false, false, true, true, false, true };
+					//BWAPI::Broodwar->printf("Minerals South -- Geyser Right\n");
+
+				}
+			}
+
+
+			else if (useMinX && useGasY)
+			{
+				// If the difference between LeftMostMineral.x - Hatchery.x is positive : It means the mierals are East of the hatchery
+				// If the difference between Geyser.Y - Hatchery.Y is negative : It means that the geyser is North of the Hatchery
+				if (gasY < 0 && theX > 0)
+				{
+					/* Decrease X(Go West)
+					Increase Y(Go South)
+					Decrease X, Increase Y(Go South West)
+					Decrease X, Decrease Y(Go North West)
+					I think can try SouthEast ? */
+					incrementDecrement = { false, false, false, true, true, true, true, false };
+					//BWAPI::Broodwar->printf("Minerals East -- Geyser North\n");
+
+				}
+
+				// If the difference between LeftMostMineral.x - Hatchery.x is positive : It means the mierals are East of the hatchery
+				// If the difference between Geyser.Y - Hatchery.Y is positive : It means that the geyser is South of the Hatchery
+				else if (theX > 0 && gasY > 0)
+				{
+					/* Decrease X(Go West)
+					Decrease Y(Go North)
+					Decrease X, INcrease Y(Go SOuth West)
+					Decrease X, Decrease Y(Go North West)
+					I think can try NOrthEast?
+					*/
+					incrementDecrement = { false, false, false, true, true, true, false, true };
+					//BWAPI::Broodwar->printf("Minerals East -- Geyser South\n");
+
+				}
+
+				// If the difference between LeftMostMineral.x - Hatchery.x is negative : It means the minerals are West of the hatchery
+				// If the difference between Geyser.Y - Hatchery.Y is negative : It means that the geyser is North of the Hatchery
+				else if (gasY < 0 && theX < 0)
+				{
+					/* Increase X(Go East)
+					Increase Y(Go South)
+					Increase X, Increase Y(Go South East)
+					Increase X, Decrease Y(Go North East)
+					I think maybe Southwest is okay?.. Even NW might be okay */
+
+					//BWAPI::Broodwar->printf("%s\n", BWAPI::Broodwar->mapName().c_str());
+					std::string circuit = "Circuit";
+					if (BWAPI::Broodwar->mapName().find(circuit) != std::string::npos)
+					{
+						//Buggy
+						incrementDecrement = { false, true, true, false, false, false, false, false };
+					}
+
+					else
+					{
+						incrementDecrement = { true, true, true, false, false, false, true, false };
+					}
+
+					//BWAPI::Broodwar->printf("Minerals West -- Geyser North\n");
+				}
+
+				// If the difference between LeftMostMineral.x - Hatchery.x is negative : It means the minerals are West of the hatchery
+				// If the difference between Geyser.Y - Hatchery.Y is positive : It means that the geyser is South of the Hatchery
+				else if (gasY > 0 && theX < 0)
+				{
+
+					incrementDecrement = { true, true, true, false, false, false, false, true };
+					/* Increase X(Go East)
+					Decrease Y(Go North)
+					Increase X, Increase Y(Go South East)
+					Increase X, Decrease Y(Go North East)
+					I think maybe Northwest is okay? */
+					//BWAPI::Broodwar->printf("Minerals West -- Geyser South\n");
+				}
+			}
+
+
+			std::pair<int, int> p1;
+
+			for (int i = 0; i < 8; i++)
+			{
+				if (incrementDecrement[i])
+				{
+					if (i == 0)
+					{
+						p1.first = 1;
+						p1.second = 1;
+					}
+
+					else if (i == 1)
+					{
+						p1.first = 1;
+						p1.second = -1;
+					}
+
+					else if (i == 2)
+					{
+						p1.first = 1;
+						p1.second = 0;
+					}
+
+					else if (i == 3)
+					{
+						p1.first = -1;
+						p1.second = 1;
+					}
+
+					else if (i == 4)
+					{
+						p1.first = -1;
+						p1.second = -1;
+					}
+
+					else if (i == 5)
+					{
+						p1.first = -1;
+						p1.second = 0;
+					}
+
+					else if (i == 6)
+					{
+						p1.first = 0;
+						p1.second = 1;
+					}
+
+					else if (i == 7)
+					{
+						p1.first = 0;
+						p1.second = -1;
+					}
+
+					myVec.push_back(p1);
+				}
 
 			}
 		}
-		// Get the set of mineral patches closest to BWTA::Location of the hatchery(it will return like 8 mineral patches usually in the set)
-		const BWAPI::Unitset mineralSet = myLocation->getMinerals();
-		//const std::set<BWAPI::Unit*> mineralSet = myLocation->getMinerals();
-
-		int counter3 = 0;
-		int theX = 0;
-		int theY = 0;
-		for (BWAPI::Unit p : mineralSet)
-		{
-			// Calculate the difference between LeftMostMineralPatch.x - ExpansionHatchery.x and store it in theX
-			theX = p->getTilePosition().x - hatchPosition.x;
-			// Calculate the difference between LeftMostMineralPatch.y - ExpansionHatchery.y and store it in theY
-			theY = p->getTilePosition().y - hatchPosition.y;
-			break;
-		}
-
-		int gasX = 0;
-		int gasY = 0;
-		int counter4 = 0;
-		//Get all geysers near the expansion -- it should only return 1 for every map we play..
-		const BWAPI::Unitset gasSet = myLocation->getGeysers();
-		for (BWAPI::Unit p : gasSet)
-		{
-			naturalGas = p;
-			// Calculate the difference between Geyser.x- ExpansionHatchery.x and store it in gasX
-			gasX = p->getTilePosition().x - hatchPosition.x;
-			// Calculate the difference between Geyser.y- ExpansionHatchery.y and store it in gasY
-			gasY = p->getTilePosition().y - hatchPosition.y;
-			break;
-		}
-
-
-
-
-
-		int newx, newy;
-
-		int outercounter = 0;
-		int counter = 0;
-		newx = hatchPosition.x;
-		newy = hatchPosition.y;
 
 		int beginX = hatchPosition.x;
 		int beginY = hatchPosition.y;
 
-
-		//sunkPosition = BWAPI::TilePosition(newx, newy);
-
-		//test4 = BuildingPlacer::Instance().canBuildHere(sunkPosition, b);
-
-		// Form a new sunken position that starts at the hatchery positive.
-
-
-		std::vector<bool> incrementDecrement(8);
-
-
-		bool useGasX = false;
-		bool useGasY = false;
-		bool useMinX = false;
-		bool useMinY = false;
-
-		if (abs(gasX) > abs(gasY))
-		{
-			useGasX = true;
-		}
-		else
-		{
-			useGasY = true;
-		}
-
-		if (abs(theX) > abs(theY))
-		{
-			useMinX = true;
-		}
-		else
-		{
-			useMinY = true;
-		}
-
-		// Gas differences is probably more reliable than mineral differences.
-		if (useGasX && useMinX)
-		{
-			BWAPI::Broodwar->printf("Use MinY and Gasx!\n");
-			useMinX = false;
-			useMinY = true;
-		}
-
-		// Gas differences is probably more reliable than mineral differences.
-		if (useGasY && useMinY)
-		{
-			BWAPI::Broodwar->printf("Use MinX and Gasy!\n");
-			useMinY = false;
-			useMinX = true;
-		}
-		// This is where we decide which directions we can make sunkens in
-		// It is based on X and Y differences in LeftMostMineral - Hatchery and Geyser - Hatchery
-		// It is not very good right now because we only use two variables. We should use four variables for better dection : theX, theY, gasX, gasY
-
-		// If the difference between LeftMostMineral.y - Hatchery.y is negative : It means the mierals are North of the hatchery
-		// If the difference between Geyser.X - Hatchery.X is negative : It means that the geyser is Left of the Hatchery
-		if (useMinY && useGasX)
-		{
-			if (theY < 0 && gasX < 0)
-			{
-				/* Allow the following directions for sunken to be built :
-				Increase X & Keep Y the same (East)
-				Increase X & Increase Y (Go South East)
-				Decrease X & Increase Y  (Go South West)
-				Keep X Same, Increase Y (Go South)
-
-				Go NORTHEAST **Test**
-				*/
-				incrementDecrement = { true, false, true, true, false, false, true, false };
-				//BWAPI::Broodwar->printf("Minerals North -- Geyser Left\n");
-
-			}
-
-			// If the difference between LeftMostMineral.y - Hatchery.y is positive : It means the mierals are South of the hatchery
-			// If the difference between Geyser.X - Hatchery.X is negative : It means that the geyser is Left of the Hatchery
-			else if (gasX < 0 && theY > 0)
-			{
-				/* Allow the following directions for sunken to be built :
-				Increase X & Keep Y the same (East)
-				Increase X & Decrease Y (Go North East)
-				Decrease X & Decrease Y (Go North West)
-				Keep X Same, Decrease Y (Go North)
-
-				GO SOUTHEAST --> Test
-				*/
-				incrementDecrement = { false, true, true, false, true, false, false, true };
-				//BWAPI::Broodwar->printf("Minerals South -- Geyser Left\n");
-			}
-
-			// If the difference between LeftMostMineral.y - Hatchery.y is negative : It means the mierals are North of the hatchery
-			// If the difference between Geyser.X - Hatchery.X is positive : It means that the geyser is Right or East of the Hatchery
-			else if (gasX > 0 && theY < 0)
-			{
-				/* Allow the following directions for sunken to be built :
-				Decrease X & Keep Y the same (West)
-				Decrease X & Increase Y (Go South West)
-				Increase X & Increase Y  (Go South East)
-				Keep X Same, Increase Y (Go South)
-
-				Go Northwest
-				*/
-				incrementDecrement = { true, false, false, true, false, true, true, false };
-				//BWAPI::Broodwar->printf("Minerals North -- Geyser Right\n");
-
-			}
-
-			// If the difference between LeftMostMineral.y - Hatchery.y is positive : It means the mierals are South of the hatchery
-			// If the difference between Geyser.X - Hatchery.X is positive : It means that the geyser is Right or East of the Hatchery
-			else if (theY > 0 && gasX > 0)
-			{
-				/* Decrease X & Keep Y the same (West)
-				Decrease X & Decrease Y (Go North West)
-				Increase X & Decrease Y (Go North East)
-				Don't change X Decrease y (Go North)
-
-				Go Southwest
-				*/
-				incrementDecrement = { false, true, false, false, true, true, false, true };
-				//BWAPI::Broodwar->printf("Minerals South -- Geyser Right\n");
-
-			}
-		}
-
-
-		else if (useMinX && useGasY)
-		{
-			// If the difference between LeftMostMineral.x - Hatchery.x is positive : It means the mierals are East of the hatchery
-			// If the difference between Geyser.Y - Hatchery.Y is negative : It means that the geyser is North of the Hatchery
-			if (gasY < 0 && theX > 0)
-			{
-				/* Decrease X(Go West)
-				Increase Y(Go South)
-				Decrease X, Increase Y(Go South West)
-				Decrease X, Decrease Y(Go North West)
-				I think can try SouthEast ? */
-				incrementDecrement = { false, false, false, true, true, true, true, false };
-				//BWAPI::Broodwar->printf("Minerals East -- Geyser North\n");
-
-			}
-
-			// If the difference between LeftMostMineral.x - Hatchery.x is positive : It means the mierals are East of the hatchery
-			// If the difference between Geyser.Y - Hatchery.Y is positive : It means that the geyser is South of the Hatchery
-			else if (theX > 0 && gasY > 0)
-			{
-				/* Decrease X(Go West)
-				Decrease Y(Go North)
-				Decrease X, INcrease Y(Go SOuth West)
-				Decrease X, Decrease Y(Go North West)
-				I think can try NOrthEast?
-				*/
-				incrementDecrement = { false, false, false, true, true, true, false, true };
-				//BWAPI::Broodwar->printf("Minerals East -- Geyser South\n");
-
-			}
-
-			// If the difference between LeftMostMineral.x - Hatchery.x is negative : It means the minerals are West of the hatchery
-			// If the difference between Geyser.Y - Hatchery.Y is negative : It means that the geyser is North of the Hatchery
-			else if (gasY < 0 && theX < 0)
-			{
-				/* Increase X(Go East)
-				Increase Y(Go South)
-				Increase X, Increase Y(Go South East)
-				Increase X, Decrease Y(Go North East)
-				I think maybe Southwest is okay?.. Even NW might be okay */
-				
-				//BWAPI::Broodwar->printf("%s\n", BWAPI::Broodwar->mapName().c_str());
-				std::string circuit = "Circuit";
-				if (BWAPI::Broodwar->mapName().find(circuit) != std::string::npos)
-				{
-					//Buggy
-					incrementDecrement = { false, true, true, false, false, false, false, false };
-				}
-
-				else
-				{
-					incrementDecrement = { true, true, true, false, false, false, true, false };
-				}
-				
-				//BWAPI::Broodwar->printf("Minerals West -- Geyser North\n");
-			}
-
-			// If the difference between LeftMostMineral.x - Hatchery.x is negative : It means the minerals are West of the hatchery
-			// If the difference between Geyser.Y - Hatchery.Y is positive : It means that the geyser is South of the Hatchery
-			else if (gasY > 0 && theX < 0)
-			{
-
-				incrementDecrement = { true, true, true, false, false, false, false, true };
-				/* Increase X(Go East)
-				Decrease Y(Go North)
-				Increase X, Increase Y(Go South East)
-				Increase X, Decrease Y(Go North East)
-				I think maybe Northwest is okay? */
-				//BWAPI::Broodwar->printf("Minerals West -- Geyser South\n");
-			}
-		}
-
-		beginX = hatchPosition.x;
-		beginY = hatchPosition.y;
-
-		std::vector<std::pair<int, int> > myVec;
-		std::pair<int, int> p1;
-
-		for (int i = 0; i < 8; i++)
-		{
-			if (incrementDecrement[i])
-			{
-				if (i == 0)
-				{
-					p1.first = 1;
-					p1.second = 1;
-				}
-
-				else if (i == 1)
-				{
-					p1.first = 1;
-					p1.second = -1;
-				}
-
-				else if (i == 2)
-				{
-					p1.first = 1;
-					p1.second = 0;
-				}
-
-				else if (i == 3)
-				{
-					p1.first = -1;
-					p1.second = 1;
-				}
-
-				else if (i == 4)
-				{
-					p1.first = -1;
-					p1.second = -1;
-				}
-
-				else if (i == 5)
-				{
-					p1.first = -1;
-					p1.second = 0;
-				}
-
-				else if (i == 6)
-				{
-					p1.first = 0;
-					p1.second = 1;
-				}
-
-				else if (i == 7)
-				{
-					p1.first = 0;
-					p1.second = -1;
-				}
-
-				myVec.push_back(p1);
-			}
-
-		}
-
-		int N = 20;
+		int N = 7;
 
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < N; j++)
@@ -702,52 +710,15 @@ void BuildingManager::update()
 		BWAPI::Broodwar->printf("WE HAVE HATCH\n");
 	}
 	*/
-	manageLarva();
+	
 	if (BWAPI::Broodwar->getFrameCount() % 24 == 0)
 	{
-
-			checkForBuildingProblems();
+		manageLarva();
+		checkForBuildingProblems();
 
 
 		checkSunkenUpgrade();
 	}
-	/*
-	std::set<BWAPI::Unit> CreepSet;
-	std::set<BWAPI::TilePosition> CreepSet2;
-	BWAPI::Unit testUnit;
-	for (BWAPI::Unit p : BWAPI::Broodwar->self()->getUnits())
-	{
-		if (p->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
-		{
-			CreepSet2.insert(p->getTilePosition());
-			CreepSet.insert(p);
-			testUnit = p;
-			//BWAPI::Broodwar->printf("Creep Position %d %d\n", p->getTilePosition().x, p->getTilePosition().y;)x
-		}
-	}
-	
-	for (auto x : CreepSet2)
-	{
-		BWAPI::Broodwar->printf("Creep Position %d %d Distance is : %f\n", x.x, x.y, x.getDistance(testUnit->getTilePosition()));
-	
-		//BWAPI::Broodwar->printf->("The distance is %d\n", x.getDistance(testUnit->getTilePosition()));
-	}
-
-		//double tempDist = Euclidean_Distance(x->getTilePosition().x, testUnit->getTilePosition().x, x->getTilePosition().y, testUnit->getTilePosition().y);
-
-		//BWAPI::Broodwar->printf("Creep Position %d %d Distance is : %d\n", x->getTilePosition().x, x->getTilePosition().y,tempDist);
-	
-	*/
-	
-	//BWTA::getNearestChokepoint(BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition());
-
-
-	//BWTA::getStartLocation(BWAPI::Broodwar->self())->getNearestChokePoint();
-
-	//BWTA::BaseLocation = BWTA::getStartLocation(BWAPI::Broodwar->self());
-
-	//BWAPI::Broodwar->printf("Making sunken at %d %d. Main base is %d %d, Expansion is %d %d", sunkPos.x, sunkPos.y, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().x, BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition().y, createdHatcheriesVector[0].x, createdHatcheriesVector[0].y);
-	//BWAPI::Broodwar->printf("My ChokePoint is %d %d", baseChoke.x, baseChoke.y, 
 
 	if (canBuild && BWAPI::Broodwar->getFrameCount() > sunkenBuildTimer)
 	{
@@ -1480,7 +1451,7 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 	}
 
 	//TOMMY
-	if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()) || b.typeisResourceDepot() && !b.isMacro)
+	if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()) || b.type.isResourceDepot() && !b.isMacro)
 	//if ((b.type.isResourceDepot()) && (createdHatcheriesVector.size() == 0) && (!b.isMacro))
 	{
 		// get the location

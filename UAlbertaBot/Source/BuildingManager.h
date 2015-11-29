@@ -30,10 +30,9 @@ namespace UAlbertaBot
 		void            checkForStartedConstruction();                      // STEP 4
 		void            checkForDeadTerranBuilders();                       // STEP 5
 		void            checkForCompletedBuildings();                       // STEP 6
-
+		std::vector<std::pair<int, int> > myVec;
 		char            getBuildingWorkerCode(const Building & b) const;
-
-
+		std::vector<bool> incrementDecrement;
 	public:
 
 		static BuildingManager &    Instance();
