@@ -15,7 +15,6 @@ namespace UAlbertaBot
 	{
 		ProductionManager();
 
-		
 		BWAPI::TilePosition _predictedTilePosition;
 		bool                _enemyCloakedDetected;
 		bool                _assignedWorkerForThisBuilding;
@@ -38,6 +37,8 @@ namespace UAlbertaBot
 		void                predictWorkerMovement(const Building & b);
 
 		bool                detectBuildOrderDeadlock();
+		int					hatchCounter = 0;
+		int					mutaCounter = 0;
 
 		int                 getFreeMinerals();
 		int                 getFreeGas();

@@ -113,49 +113,55 @@ const bool StrategyManager::isSpireBuilding() const
 }
 const bool StrategyManager::shouldExpandNow() const
 {
+
 	// if there is no place to expand to, we can't expand
 	if (MapTools::Instance().getNextExpansion() == BWAPI::TilePositions::None)
 	{
-        BWAPI::Broodwar->printf("No valid expansion location");
+		BWAPI::Broodwar->printf("No valid expansion location");
 		return false;
 	}
 
-	size_t numDepots    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Terran_Command_Center)
-                        + UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Protoss_Nexus)
-                        + UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hatchery)
-                        + UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Lair)
-                        + UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hive);
-	int frame           = BWAPI::Broodwar->getFrameCount();
-    int minute          = frame / (24*60);
-
-	// if we have a ton of idle workers then we need a new expansion
-	// TOMMY
-	if (WorkerManager::Instance().getNumIdleWorkers() > 6)
-	{
-		return true;
-	}
+	size_t numDepots = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Terran_Command_Center)
+		+ UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Protoss_Nexus)
+		+ UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hatchery)
+		+ UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Lair)
+		+ UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hive);
+	int frame = BWAPI::Broodwar->getFrameCount();
+	int minute = frame / (24 * 60);
 
 	// if we have a ridiculous stockpile of minerals, expand
-	if (BWAPI::Broodwar->self()->minerals() > 600 && !isSpireBuilding())
+	if (BWAPI::Broodwar->self()->minerals() > 600)
 	{
 		//BuildingManager::Instance().shouldIExpand = true;
 		return true;
 	}
 
-    // we will make expansion N after array[N] minutes have passed
-    std::vector<int> expansionTimes = {5, 10, 20, 30, 40 , 50};
+	if (InformationManager::Instance().isEnemyExpand()) //&& Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
+	{
+		return true;
+	}
+	// if we have a ton of idle workers then we need a new expansion
+	if (WorkerManager::Instance().getNumIdleWorkers() > 6)
+	{
+		//BuildingManager::Instance().shouldIExpand = true;
+		return true;
+	}
 
-    for (size_t i(0); i < expansionTimes.size(); ++i)
-    {
-        if (numDepots < (i+2) && minute > expansionTimes[i])
-        {
-            return true;
-        }
-    }
+
+	// we will make expansion N after array[N] minutes have passed
+	std::vector<int> expansionTimes = { 5, 10, 20, 30, 40, 50 };
+
+	for (size_t i(0); i < expansionTimes.size(); ++i)
+	{
+		if (numDepots < (i + 2) && minute > expansionTimes[i])
+		{
+			//BuildingManager::Instance().shouldIExpand = true;
+			return true;
+		}
+	}
 
 	return false;
 }
-
 void StrategyManager::addStrategy(const std::string & name, Strategy & strategy)
 {
     _strategies[name] = strategy;
@@ -345,15 +351,16 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	int numHydras       = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk);
     int numScourge      = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Scourge);
     int numGuardians    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Guardian);
+	int numExtract		= UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor);
 
-	int mutasWanted = numMutas + 6;
+	int mutasWanted = numMutas + 20;
 	int hydrasWanted = numHydras + 6;
 
 	if (shouldExpandNow())
 	{
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 10));
-
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract + 1));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 11));
 	}
 
     if (Config::Strategy::StrategyName == "Zerg_9Pool")
@@ -392,7 +399,7 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 
 	else if (Config::Strategy::StrategyName == "Zerg_3HatchHydra")
 	{
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 12));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, mutasWanted + 12));
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 12));
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 8));
 	}
@@ -568,6 +575,7 @@ void StrategyManager::setLearnedStrategy()
 }
 
 //PAST THIS POINT IS TOMMY
+//note: modify this function by changing order of items, max batch of items, and different items in response to different enemy units
 std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 {
 	std::map<BWAPI::UnitType, int> defenses;
@@ -597,7 +605,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 	int newSunkens = 0;
 	int newLings = 0;
 	// if we lose, add one sunken and resimulate
-	if ((score < 0) && (BuildingManager::Instance().canBuild))
+	if ((score < 0))// && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllySunken();
 		newSunkens++;
@@ -606,10 +614,10 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		test.finishMoving();
 		score = test.simulateCombat();
 	}
-	else if (!(BuildingManager::Instance().canBuild))
+	/*else if (!(BuildingManager::Instance().canBuild))
 	{
 		BWAPI::Broodwar->printf("Only making lings; expansion not ready yet!");
-	}
+	}*/
 	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
 	while ((score < 0) && (newLings < 6))
 	{
@@ -621,7 +629,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		score = test.simulateCombat();
 	}
 	// if we still lose, keep adding sunkens until we win
-	while ((score < 0) && (newSunkens < 4) && (BuildingManager::Instance().canBuild))
+	while ((score < 0) && (newSunkens < 4))// && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllySunken();
 		newSunkens++;

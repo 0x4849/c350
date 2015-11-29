@@ -12,6 +12,7 @@ const size_t BaseDefensePriority = 4;
 const size_t ScoutDefensePriority = 5;
 const size_t DropPriority = 6;
 const size_t HarassPriority = 7;
+const size_t DodgePriority = 8;
 
 CombatCommander::CombatCommander() 
     : _initialized(false)
@@ -45,6 +46,12 @@ void CombatCommander::initializeSquads()
 	SquadOrder confuseOrder(SquadOrderTypes::Confuse, getMainAttackLocation(), 1000, "Distract Zealots");
 	_squadData.addSquad("Distract", Squad("Distract", confuseOrder, DistractPriority));
 
+	SquadOrder dodgeOrder(SquadOrderTypes::Dodge, getMainAttackLocation(), 1000, "Dodge storms");
+	_squadData.addSquad("Dodge", Squad("Dodge", dodgeOrder, DodgePriority));
+
+	SquadOrder standbyOrder(SquadOrderTypes::Standby, BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()), 100, "Wait for cue");
+	_squadData.addSquad("Standby", Squad("Standby", standbyOrder, StandbyPriority));
+
     _initialized = true;
 }
 
@@ -71,6 +78,7 @@ void CombatCommander::update(const BWAPI::Unitset & combatUnits)
 	if (isSquadUpdateFrame())
 	{
 		//TOMMY
+		updateStormDodgeSquad();
 		updateHarassSquad();
 		updateDropSquads();
 		updateScoutDefenseSquad();
@@ -85,9 +93,104 @@ void CombatCommander::update(const BWAPI::Unitset & combatUnits)
 }
 
 //TOMMY
+void CombatCommander::updateStormDodgeSquad()
+{
+	// code to turn off storm dodge
+	return;
+
+	// only use if fighting protoss
+	if (!(BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))
+	{
+		//BWAPI::Broodwar->printf("not fighting Protoss; storm dodge unneeded");
+		return;
+	}
+
+	Squad &dodgeSquad = _squadData.getSquad("Dodge");
+
+	// get all psi storm particles
+	BWAPI::Bulletset psi;
+	for (auto &particle : BWAPI::Broodwar->getBullets())
+	{
+		if (particle->getType() == BWAPI::BulletTypes::Psionic_Storm)
+		{
+			psi.insert(particle);
+		}
+	}
+
+	// for all units within 2 tiles of a psi storm, add to squad
+	BWAPI::Position unitPos;
+	BWAPI::Position psiPos;
+	double dist = 100000000000;
+	for (auto &unit : _combatUnits)
+	{
+		unitPos = unit->getPosition();
+		for (auto &psiStorm : psi)
+		{
+			psiPos = psiStorm->getPosition();
+			dist = sqrt(pow((psiPos.x - unitPos.x), 2) + pow((psiPos.y - unitPos.y), 2));
+			if ((dist < 64) && (_squadData.canAssignUnitToSquad(unit, dodgeSquad)))
+			{
+				_squadData.assignUnitToSquad(unit, dodgeSquad);
+				break;	// does break break out of the for loop? (what we want). if this fails, it will either lag or not all units will dodge storms
+			}
+		}
+	}
+
+	// for all units in the squad that arent near a psi storm, remove from the squad
+	for (auto &dodger : dodgeSquad.getUnits())
+	{
+		unitPos = dodger->getPosition();
+		for (auto &storm : psi)
+		{
+			psiPos = storm->getPosition();
+			dist = sqrt(pow((psiPos.x - unitPos.x), 2) + pow((psiPos.y - unitPos.y), 2));
+			if (dist < 64)
+			{
+				break;	// if this fails, it will lag
+			}
+		}
+		if (dist >= 64)
+		{
+			dodgeSquad.removeUnit(dodger);	// if this fails, units will never return to attack squad
+		}
+	}
+
+	SquadOrder dodgeOrder(SquadOrderTypes::Dodge, getMainAttackLocation(), 1000, "Dodge storms");
+	dodgeSquad.setSquadOrder(dodgeOrder);
+}
+
+//TOMMY
 void CombatCommander::updateStandbySquad()
 {
+	// code to turn off standby
+	return;
 
+	if (!_squadData.squadExists("Standby"))
+	{
+		return;
+	}
+
+	Squad &standbySquad = _squadData.getSquad("Standby");
+
+	// cue to delete the squad and attack
+	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk) > 15)
+	{
+		BWAPI::Broodwar->printf("Got 15 hydras; let's kill them");
+		_squadData.getSquad("Standby").clear();
+		_squadData.removeSquad("Standby");
+		return;
+	}
+
+	for (auto & unit : _combatUnits)
+	{
+		if ((_squadData.canAssignUnitToSquad(unit, standbySquad)) && (unit->getType() == BWAPI::UnitTypes::Zerg_Hydralisk))
+		{
+			standbySquad.addUnit(unit);
+		}
+	}
+
+	SquadOrder standbyOrder(SquadOrderTypes::Standby, BWAPI::Position(BWAPI::Broodwar->self()->getStartLocation()), 100, "Wait for cue");
+	standbySquad.setSquadOrder(standbyOrder);
 }
 
 //TOMMY
