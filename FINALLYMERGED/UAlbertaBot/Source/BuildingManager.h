@@ -110,7 +110,13 @@ namespace UAlbertaBot
 		std::set<BWAPI::TilePosition> completedBuilding;
 
 		bool shouldIExpand = false;
-		
+		std::vector<BWAPI::Unit> createdBaseUnit;
+		BWAPI::TilePosition getNextExpandLocation();
+		std::set<BWAPI::TilePosition> currentExpansions;
+
+		std::set<BWAPI::Unit> hatchSet;
+		std::set<BWAPI::TilePosition> closestBaseSet;
+		void manageLarva();
 	};
 }
 

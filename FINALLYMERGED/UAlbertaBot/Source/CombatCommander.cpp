@@ -96,7 +96,7 @@ void CombatCommander::update(const BWAPI::Unitset & combatUnits)
 void CombatCommander::updateStormDodgeSquad()
 {
 	// code to turn off storm dodge
-	return;
+	//return;
 
 	// only use if fighting protoss
 	if (!(BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))
@@ -139,19 +139,26 @@ void CombatCommander::updateStormDodgeSquad()
 	// for all units in the squad that arent near a psi storm, remove from the squad
 	for (auto &dodger : dodgeSquad.getUnits())
 	{
-		unitPos = dodger->getPosition();
-		for (auto &storm : psi)
+		if (dodger->isCompleted() &&
+			dodger->getHitPoints() > 0 &&
+			dodger->exists() &&
+			dodger->getPosition().isValid() &&
+			dodger->getType() != BWAPI::UnitTypes::Unknown)
 		{
-			psiPos = storm->getPosition();
-			dist = sqrt(pow((psiPos.x - unitPos.x), 2) + pow((psiPos.y - unitPos.y), 2));
-			if (dist < 64)
+			unitPos = dodger->getPosition();
+			for (auto &storm : psi)
 			{
-				break;	// if this fails, it will lag
+				psiPos = storm->getPosition();
+				dist = sqrt(pow((psiPos.x - unitPos.x), 2) + pow((psiPos.y - unitPos.y), 2));
+				if (dist < 64)
+				{
+					break;	// if this fails, it will lag
+				}
 			}
-		}
-		if (dist >= 64)
-		{
-			dodgeSquad.removeUnit(dodger);	// if this fails, units will never return to attack squad
+			if (dist >= 64)
+			{
+				dodgeSquad.removeUnit(dodger);	// if this fails, units will never return to attack squad
+			}
 		}
 	}
 

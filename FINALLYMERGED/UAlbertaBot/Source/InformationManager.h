@@ -31,8 +31,8 @@ class InformationManager
 	int													_firstProdBuildingTime;
 	int						_frameCounter;
 	std::map<BWAPI::TilePosition, bool>					_movedOutMap;
-	double					_distToEnemyChoke;
-	double					_distToFarthestBase;
+	int					_distToEnemyChoke;
+	int					_distToFarthestBase;
 
     int                     getIndex(BWAPI::Player player) const;
 

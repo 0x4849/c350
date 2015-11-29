@@ -330,15 +330,31 @@ void CombatSimulation::generateCurrentSituation()
 		// consider enemy combat units and not static defenses
 		if ((UnitUtil::IsCombatUnit(unit.second.unit)) && (!unit.second.type.isBuilding()) && (SparCraft::System::isSupportedUnitType(unit.second.type)))
 		{
-			sparUnit = getSparCraftUnit(unit.second.type, 2, xPos, yPos);
-			addToState(sparUnit);
-			xPos += 16;
-			if (xPos >= 129)
+			//code for dealing with firebats, which tend to be overestimated
+			if (unit.second.type == BWAPI::UnitTypes::Terran_Firebat)
 			{
-				xPos = 17;
-				yPos += 32;
+				sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Terran_Marine, 2, xPos, yPos);
+				addToState(sparUnit);
+				xPos += 16;
+				if (xPos >= 129)
+				{
+					xPos = 17;
+					yPos += 32;
+				}
+				theirCombatUnits++;
 			}
-			theirCombatUnits++;
+			else
+			{
+				sparUnit = getSparCraftUnit(unit.second.type, 2, xPos, yPos);
+				addToState(sparUnit);
+				xPos += 16;
+				if (xPos >= 129)
+				{
+					xPos = 17;
+					yPos += 32;
+				}
+				theirCombatUnits++;
+			}
 		}
 		//medics
 		else if (unit.second.type == BWAPI::UnitTypes::Terran_Medic)

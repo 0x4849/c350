@@ -15,6 +15,115 @@ BuildingManager::BuildingManager()
 
 }
 
+void BuildingManager::manageLarva()
+{
+	if (createdBaseUnit.size() >= 1)
+	{
+		for (auto x : createdBaseVector)
+		{
+			WorkerData  workerData;
+			//Change X to all possible locations!!
+			BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(x), BWAPI::Filter::IsResourceDepot);
+			/*
+			int assignedWorkers = workerData.getNumAssignedWorkers(x.getTilePosition());
+			int mineralsNearDepot = workerData.getMineralsNearDepot(x->getTilePosition());
+			if (assignedWorkers < mineralsNearDepot || assignedWorkers2 < mineralsNearDepot2)
+			*/
+			if (!WorkerManager::Instance().isDepotSemiFull(pExpansion))
+			{
+				hatchSet.insert(pExpansion);
+
+			}
+			else
+			{
+				if (hatchSet.find(pExpansion) != hatchSet.end())
+				{
+					hatchSet.erase(pExpansion);
+				}
+				continue;
+			}
+
+			BWAPI::Unitset myUnits = pExpansion->getUnitsInRadius(500);
+			BWAPI::UnitType larva = BWAPI::UnitTypes::Zerg_Larva;
+
+			for (BWAPI::Unit p : myUnits)
+			{
+				if (p->getType() == larva)
+				{
+					p->morph(BWAPI::UnitTypes::Zerg_Drone);
+				}
+			}
+		}
+	}
+}
+
+
+BWAPI::TilePosition BuildingManager::getNextExpandLocation()
+{
+	//BWTA::BaseLocation * enemyBaseLocation =;
+	BWAPI::Broodwar->printf("Base count is currently %d\n", baseCount);
+	BWAPI::Broodwar->printf("Entered getNextExpandLocation\n");
+	double distance = 1;
+	double expDist = 999999.0;
+	BWTA::BaseLocation * farthestLocation;
+	BWTA::BaseLocation * hisExpansion;
+	if (InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy()))
+	{
+		return BWAPI::TilePositions::None;
+	}
+	BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
+
+
+
+	const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
+	BWAPI::Broodwar->printf("Checking for his expansion location\n");
+	for (auto x : locations)
+	{
+
+
+		double myDist = BWTA::getGroundDistance(enemyBaseLocation->getTilePosition(), x->getTilePosition());
+		if (myDist >= 1 && myDist < expDist && !x->isMineralOnly() && x != enemyBaseLocation)
+		{
+			hisExpansion = x;
+			expDist = myDist;
+
+		}
+	}
+	BWAPI::Broodwar->printf("Checking for any location to build it in.\n");
+	for (auto x : locations)
+	{
+		if (currentExpansions.find(x->getTilePosition()) != currentExpansions.end() || createdBuilding.find(x->getTilePosition()) != createdBuilding.end())
+		{
+			continue;
+		}
+		double myDist = BWTA::getGroundDistance(BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition(), x->getTilePosition());
+		if (!x->isMineralOnly() && x != hisExpansion && x != enemyBaseLocation && myDist >= distance)
+		{
+			//distance = myDist;
+			farthestLocation = x;
+			distance = myDist;
+		}
+	}
+
+	BWAPI::Broodwar->printf("Checking if farthestLocation.\n");
+	if (farthestLocation)
+	{
+		currentExpansions.insert(farthestLocation->getTilePosition());
+		BWAPI::Broodwar->printf("Returning farthestLocation\n");
+		return farthestLocation->getTilePosition();
+	}
+	else
+	{
+		BWAPI::Broodwar->printf("Returning None\n");
+		return BWAPI::TilePositions::None;
+	}
+
+
+	//BWAPI::TilePosition getNextExpandLocation();
+
+}
+
+
 BWAPI::TilePosition BuildingManager::getExtractorPosition(BWAPI::TilePosition desiredPosition)
 {
 	if (createdBuilding.find(desiredPosition) != createdBuilding.end() && baseCount == 2)
@@ -430,7 +539,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition(BWAPI::Unit myBuilder)
 
 		}
 
-		int N = 20;
+		int N = 7;
 
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < N; j++)
@@ -608,10 +717,8 @@ void BuildingManager::update()
 	*/
 	if (BWAPI::Broodwar->getFrameCount() % 24 == 0)
 	{
-
-			checkForBuildingProblems();
-
-
+		checkForBuildingProblems();
+		manageLarva();
 		checkSunkenUpgrade();
 	}
 	/*
@@ -1108,6 +1215,9 @@ void BuildingManager::checkForCompletedBuildings()
 
 			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.finalPosition == createdHatcheriesVector[0] && canBuildTrigger)
 			{
+				currentExpansions.insert(b.buildingUnit->getTilePosition());
+				currentExpansions.insert(BWAPI::Broodwar->self()->getStartLocation());
+
 				hatcheryUnit = b.buildingUnit;
 				canBuild = true;
 				canBuildTrigger = false;
@@ -1147,17 +1257,32 @@ void BuildingManager::checkForCompletedBuildings()
 						expansionToChokeDistance = distance1;
 					}
 				}
+
+				std::string circuit = "Python";
+				if (BWAPI::Broodwar->mapName().find(circuit) == std::string::npos)
+				{
+					for (auto x : BWAPI::Broodwar->self()->getUnits())
+					{
+						if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+						{
+							x->move(ourChokePointPosition);
+						}
+					}
+				}
 	
 			}
 
-			for (auto x : BWAPI::Broodwar->self()->getUnits())
-			{
-				if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
-				{
-					x->move(ourChokePointPosition);
-				}
-			}
 
+			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.buildingUnit->getTilePosition() != BWAPI::Broodwar->self()->getStartLocation() && b.buildingUnit->getTilePosition() != createdHatcheriesVector[0] && isBaseLocation(b.buildingUnit->getTilePosition()))
+			{
+				baseCount++;
+				BWAPI::Broodwar->printf("Hatch is done --> base count is now %d\n", baseCount);
+				createdBaseVector.push_back(b.buildingUnit->getTilePosition());
+				createdBaseUnit.push_back(b.buildingUnit);
+
+				BWAPI::Broodwar->printf("Queuing up extractor\n");
+				ProductionManager::Instance()._queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Extractor), true);
+			}
 			// if we are terran, give the worker back to worker manager
 			if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Terran)
 			{
@@ -1365,7 +1490,7 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 	}
 
 	//TOMMY
-	if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()))
+	if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()) || b.type.isResourceDepot() && !b.isMacro)
 	//if ((b.type.isResourceDepot()) && (createdHatcheriesVector.size() == 0) && (!b.isMacro))
 	{
 		// get the location

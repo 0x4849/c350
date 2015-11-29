@@ -795,3 +795,8 @@ int WorkerManager::getNumGasWorkers()
 {
 	return workerData.getNumGasWorkers();
 }
+
+bool WorkerManager::isDepotSemiFull(BWAPI::Unit depot)
+{
+	return workerData.depotIsSemiFull(depot);
+}
