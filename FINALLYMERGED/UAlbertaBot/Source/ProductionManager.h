@@ -15,7 +15,6 @@ namespace UAlbertaBot
 	{
 		ProductionManager();
 
-		
 		BWAPI::TilePosition _predictedTilePosition;
 		bool                _enemyCloakedDetected;
 		bool                _assignedWorkerForThisBuilding;

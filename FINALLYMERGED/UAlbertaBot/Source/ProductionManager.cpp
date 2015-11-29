@@ -57,7 +57,7 @@ void ProductionManager::update()
 	manageBuildOrderQueue();
 
 	// if nothing is currently building, get a new goal from the strategy manager
-	if ((_queue.size() == 0) && (BWAPI::Broodwar->getFrameCount() > 10))
+	if (((_queue.size() == 0) || (BWAPI::Broodwar->self()->minerals() > 1500)) && (BWAPI::Broodwar->getFrameCount() > 10))
 	{
 		if (Config::Debug::DrawBuildOrderSearchInfo)
 		{
@@ -883,7 +883,7 @@ bool ProductionManager::checkDefenses()
 {
 	if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Zerg)
 	{
-		BWAPI::Broodwar->printf("fighting Zerg; don't check defenses");
+		//BWAPI::Broodwar->printf("fighting Zerg; don't check defenses");
 		return false;
 	}
 
@@ -895,6 +895,12 @@ bool ProductionManager::checkDefenses()
 		{
 			return false;
 		}
+		
+		if (it->metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Zergling)
+		{
+			return false;
+		}
+		
 	}
 
 
@@ -903,6 +909,18 @@ bool ProductionManager::checkDefenses()
 		if (unit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
 		{
 			return false;
+		}
+
+		if (unit->getType() == BWAPI::UnitTypes::Zerg_Larva)
+		{
+			if (unit->isMorphing())
+			{
+				if (unit->getBuildType() == BWAPI::UnitTypes::Zerg_Zergling)
+				{
+					BWAPI::Broodwar->printf("Larvae are morphing into zerglings");
+					return false;
+				}
+			}
 		}
 	}
 

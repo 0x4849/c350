@@ -31,6 +31,23 @@ void Squad::update()
 	// update all necessary unit information within this squad
 	updateUnits();
 
+	//TOMMY
+	if (_order.getType() == SquadOrderTypes::Dodge)
+	{
+		BWAPI::Position ourBase = BWTA::getRegion(BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition())->getCenter();
+		_meleeManager.regroup(ourBase);
+		_rangedManager.regroup(ourBase);
+		_tankManager.regroup(ourBase);
+		_medicManager.regroup(ourBase);
+		return;
+	}
+
+	//TOMMY
+	if (_order.getType() == SquadOrderTypes::Standby)
+	{
+		return;
+	}
+
 	// determine whether or not we should regroup
 	bool needToRegroup = needsToRegroup();
     

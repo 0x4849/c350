@@ -345,6 +345,7 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	int numHydras       = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk);
     int numScourge      = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Scourge);
     int numGuardians    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Guardian);
+	int numExtract		= UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor);
 
 	int mutasWanted = numMutas + 6;
 	int hydrasWanted = numHydras + 6;
@@ -352,8 +353,8 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 	if (shouldExpandNow())
 	{
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 10));
-
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract + 1));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 11));
 	}
 
     if (Config::Strategy::StrategyName == "Zerg_9Pool")
@@ -568,6 +569,7 @@ void StrategyManager::setLearnedStrategy()
 }
 
 //PAST THIS POINT IS TOMMY
+//note: modify this function by changing order of items, max batch of items, and different items in response to different enemy units
 std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 {
 	std::map<BWAPI::UnitType, int> defenses;
@@ -597,7 +599,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 	int newSunkens = 0;
 	int newLings = 0;
 	// if we lose, add one sunken and resimulate
-	if ((score < 0) && (BuildingManager::Instance().canBuild))
+	if ((score < 0))// && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllySunken();
 		newSunkens++;
@@ -606,10 +608,10 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		test.finishMoving();
 		score = test.simulateCombat();
 	}
-	else if (!(BuildingManager::Instance().canBuild))
+	/*else if (!(BuildingManager::Instance().canBuild))
 	{
 		BWAPI::Broodwar->printf("Only making lings; expansion not ready yet!");
-	}
+	}*/
 	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
 	while ((score < 0) && (newLings < 6))
 	{
@@ -621,7 +623,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		score = test.simulateCombat();
 	}
 	// if we still lose, keep adding sunkens until we win
-	while ((score < 0) && (newSunkens < 4) && (BuildingManager::Instance().canBuild))
+	while ((score < 0) && (newSunkens < 4))// && (BuildingManager::Instance().canBuild))
 	{
 		sim.addAllySunken();
 		newSunkens++;

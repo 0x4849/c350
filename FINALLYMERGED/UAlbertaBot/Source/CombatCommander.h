@@ -23,6 +23,7 @@ class CombatCommander
 	void			updateDistractSquad();
 	void			updateHarassSquad();
 	void			updateStandbySquad();
+	void			updateStormDodgeSquad();
 
 	bool            isSquadUpdateFrame();
 	int             getNumType(BWAPI::Unitset & units, BWAPI::UnitType type);
