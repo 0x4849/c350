@@ -15,16 +15,45 @@ BuildingManager::BuildingManager()
 
 }
 
+BWAPI::TilePosition BuildingManager::simcityRow()
+{
+	if (simcity_row.empty()){ simcity_init(); }
+	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
+	for (unsigned i = 0; i < simcity_row.size(); i++)
+	{
+		BWAPI::TilePosition sunkPosition = simcity_row[0];
+		Building b(sunk, sunkPosition);
+		simcity_row.erase(simcity_row.begin());
+		if (buildable(sunkPosition.x, sunkPosition.y, sunkPosition))
+		{
+			return sunkPosition;
+		}
+	}
+	if (simcity_row.empty()){ simcity_init(); }
+	for (unsigned i = 0; i < simcity_row.size(); i++)
+	{
+		BWAPI::TilePosition sunkPosition = simcity_row[0];
+		Building b(sunk, sunkPosition);
+		simcity_row.erase(simcity_row.begin());
+		if (buildable(sunkPosition.x, sunkPosition.y, sunkPosition))
+		{
+			return sunkPosition;
+		}
+	}
+	return BWAPI::TilePositions::None;
+}
+
 BWAPI::TilePosition BuildingManager::simcityWall()
 {
 	if (simcity_wall.empty()){ simcity_init(); }
 	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
+	BWAPI::TilePosition sunkPosition;
 	for (unsigned i = 0; i < simcity_wall.size(); i++)
 	{
-		BWAPI::TilePosition sunkPosition = simcity_wall[0];
+		sunkPosition = simcity_wall[0];
 		Building b(sunk, sunkPosition);
 		simcity_wall.erase(simcity_wall.begin());
-		if (BWAPI::Broodwar->hasCreep(sunkPosition) && BuildingPlacer::Instance().canBuildHere(sunkPosition, b))
+		if (buildable(sunkPosition.x, sunkPosition.y, sunkPosition))
 		{
 			return sunkPosition;
 		}
@@ -32,10 +61,10 @@ BWAPI::TilePosition BuildingManager::simcityWall()
 	if (simcity_wall.empty()){ simcity_init(); }
 	for (unsigned i = 0; i < simcity_wall.size(); i++)
 	{
-		BWAPI::TilePosition sunkPosition = simcity_wall[0];
+		sunkPosition = simcity_wall[0];
 		Building b(sunk, sunkPosition);
 		simcity_wall.erase(simcity_wall.begin());
-		if (BWAPI::Broodwar->hasCreep(sunkPosition) && BuildingPlacer::Instance().canBuildHere(sunkPosition, b))
+		if (buildable(sunkPosition.x, sunkPosition.y, sunkPosition))
 		{
 			return sunkPosition;
 		}
@@ -47,12 +76,13 @@ BWAPI::TilePosition BuildingManager::simcitySunken()
 {
 	if (simcity_sunken.empty()){ simcity_init(); }
 	BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
-	for (unsigned i = 0; i < simcity_sunken.size(); i++)
+	BWAPI::TilePosition sunkPosition;
+	for(unsigned i = 0; i < simcity_sunken.size(); i++)
 	{
-		BWAPI::TilePosition sunkPosition = simcity_sunken[0];
+		sunkPosition = simcity_sunken[0];
 		Building b(sunk, sunkPosition);
 		simcity_sunken.erase(simcity_sunken.begin());
-		if ( BWAPI::Broodwar->hasCreep(sunkPosition) && BuildingPlacer::Instance().canBuildHere(sunkPosition, b))
+		if (buildable(sunkPosition.x, sunkPosition.y, sunkPosition))
 		{
 			return sunkPosition;
 		}
@@ -62,10 +92,10 @@ BWAPI::TilePosition BuildingManager::simcitySunken()
 	simcity_init();
 	for (unsigned i = 0; i < simcity_sunken.size(); i++)
 	{
-		BWAPI::TilePosition sunkPosition = simcity_sunken[0];
+		sunkPosition = simcity_sunken[0];
 		Building b(sunk, sunkPosition);
 		simcity_sunken.erase(simcity_sunken.begin());
-		if (BWAPI::Broodwar->hasCreep(sunkPosition) && BuildingPlacer::Instance().canBuildHere(sunkPosition, b))
+		if (buildable(sunkPosition.x, sunkPosition.y, sunkPosition))
 		{
 			return sunkPosition;
 		}
@@ -180,8 +210,19 @@ void BuildingManager::simcity_init()
 		else if (place[gaspos + 1]){ placepos = gaspos + 1; }
 		else if (place[gaspos - 1]){ placepos = gaspos - 1; }
 		else if (place[gaspos + 2]){ placepos = gaspos + 2; }
-		// oppsite of gas
-		placepos = minepos + 2;
+
+		
+
+		// the place position nearest gas
+		int chokepos = 0;
+		int ChokeX = ourChokePointPosition.x/32 - hatchPosition.x;
+		int ChokeY = ourChokePointPosition.y/32 - hatchPosition.y;
+		if ((ChokeX*ChokeX) >(ChokeY*ChokeY)){ if (ChokeX < 0){ chokepos = 1; } else{ chokepos = 3; } }// left and right
+		else{ if (ChokeY < 0){ chokepos = 4; } else{ chokepos = 2; } }// top and bot
+		// place towards choke
+		placepos = chokepos;
+		
+
 
 		// give the sunken position
 		int sunkenX = hatchPosition.x;
@@ -199,8 +240,8 @@ void BuildingManager::simcity_init()
 			direction[0] = false; direction[4] = false;
 			break;
 		case 7:
-		case 3://right
-			sunkenX += 3;
+		case 3://right 3
+			sunkenX += 5;
 			direction[1] = false; direction[5] = false;
 			break;
 		case 0:
@@ -216,45 +257,49 @@ void BuildingManager::simcity_init()
 		else if (direction[gaspos + 1]){ direcpos = gaspos + 1; }
 		else if (direction[gaspos - 1]){ direcpos = gaspos - 1; }
 		else if (direction[gaspos + 2]){ direcpos = gaspos + 2; }
+		direcpos = placepos + 1;
 
 		// set up before loop
 		// want to put index of -1 also
-		/*
+		
 		switch (direcpos){
 		case 5:
 		case 1://left
-			sunkenX += 2;
+			sunkenX += 4;
 			break;
 		case 6:
 		case 2://bot
-			sunkenY -= 2;
+			sunkenY -= 4;
 			break;
 		case 7:
 		case 3://right
-			sunkenX -= 2;
+			sunkenX -= 4;
 			break;
 		case 0:
 		case 4://top
-			sunkenY += 2;
+			sunkenY += 4;
 			break;
 		}
-		*/
+		
 		// use for second row of 
 		int sunkenX2;
 		int sunkenY2;
 		int rowpos = -1;
+		rowpos = placepos;
+		/*
 		if ((placepos != direcpos) && (((placepos - direcpos)*(placepos - direcpos)) != 16)){ rowpos = placepos; } // placepos == direction
 		else if (((minepos + 2) != direcpos) && ((((minepos + 2) - direcpos)*((minepos + 2) - direcpos)) != 16)){ rowpos = minepos + 2; } // opposite of mineral == direction
 		else { rowpos = gaspos + 2; } // opposite of gas == direction
-
+		*/
 		// to see which place is availible
 		BWAPI::TilePosition sunkPosition;
 		//BWAPI::UnitType sunk = BWAPI::UnitTypes::Zerg_Creep_Colony;
-		for (int i = 0; i < 3; i++){
+		for (int i = 0; i < 4; i++){
 			sunkPosition = BWAPI::TilePosition(sunkenX, sunkenY);
 			//Building b(sunk, sunkPosition);
 			//if (BWAPI::Broodwar->hasCreep(sunkPosition) && BuildingPlacer::Instance().canBuildHere(sunkPosition, b)) {return sunkPosition;}
 			simcity_sunken.push_back(sunkPosition);
+			simcity_row.push_back(sunkPosition);
 			// look at the second row
 			switch (rowpos){
 			case 5:
@@ -292,6 +337,7 @@ void BuildingManager::simcity_init()
 				sunkenY2 = sunkenY;
 				simcity_wall.push_back(BWAPI::TilePosition(sunkenX2, sunkenY2));
 				simcity_wall.push_back(BWAPI::TilePosition(sunkenX2 - 1, sunkenY2));
+				simcity_wall.push_back(BWAPI::TilePosition(sunkenX2 - 2, sunkenY2));
 				break;
 			case 6:
 			case 2://bot
@@ -306,6 +352,7 @@ void BuildingManager::simcity_init()
 				sunkenY2 = sunkenY;
 				simcity_wall.push_back(BWAPI::TilePosition(sunkenX2, sunkenY2));
 				simcity_wall.push_back(BWAPI::TilePosition(sunkenX2 + 1, sunkenY2));
+				simcity_wall.push_back(BWAPI::TilePosition(sunkenX2 + 2, sunkenY2));
 				break;
 			case 0:
 			case 4://top
@@ -337,6 +384,7 @@ void BuildingManager::simcity_init()
 				break;
 			}
 		}
+		simcity_row.push_back(BWAPI::TilePosition(sunkenX, sunkenY));
 		//return BWAPI::TilePositions::(sunkenX, sunkenY);
 
 
@@ -935,13 +983,14 @@ void BuildingManager::constructAssignedBuildings()
 		if (!b.builderUnit->isConstructing())
 		{
 			// if we haven't explored the build position, go there
+			/*
 			if (!isBuildingPositionExplored(b))
 			{
 				Micro::SmartMove(b.builderUnit, BWAPI::Position(b.finalPosition));
-			}
+			}*/
 			// if this is not the first time we've sent this guy to build this
 			// it must be the case that something was in the way of building
-			else if (b.buildCommandGiven)
+			if (b.buildCommandGiven)
 			{
 				// tell worker manager the unit we had is not needed now, since we might not be able
 				// to get a valid location soon enough
@@ -971,6 +1020,12 @@ void BuildingManager::constructAssignedBuildings()
 					}
 					if (std::find(createdHatcheriesVector.begin(), createdHatcheriesVector.end(), b.finalPosition) == createdHatcheriesVector.end())
 					{
+						BWAPI::TilePosition wallPos = simcityWall();
+
+						if (wallPos != BWAPI::TilePositions::None){
+							b.finalPosition = wallPos;
+							BWAPI::Broodwar->printf("hatchery wall faillllllllllllllll. Using %d %d\n", b.finalPosition.x, b.finalPosition.y);
+						} 
 						createdHatcheriesSet.insert(b.finalPosition);
 						createdHatcheriesVector.push_back(b.finalPosition);
 					}
@@ -990,6 +1045,15 @@ void BuildingManager::constructAssignedBuildings()
 				{
 
 					BWAPI::TilePosition sunkPos = simcitySunken();
+					/*
+					for (auto x : BWAPI::Broodwar->self()->getUnits())
+					{
+						if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+						{
+							x->move(sunkPos);
+						}
+					}
+					*/
 					//if (sunkPos == BWAPI::TilePositions::None){ sunkPos = getSunkenPosition(); }
 					//b.finalPosition = sunkPos;
 					if (sunkPos != BWAPI::TilePositions::None)
@@ -1235,7 +1299,29 @@ void BuildingManager::checkForCompletedBuildings()
 					}
 
 				}
+
+				for (auto x : chokePoints)
+				{
+
+					double distance1 = BWTA::getGroundDistance(createdHatcheriesVector[0], BWAPI::TilePosition(x->getCenter()));
+
+					double sum = distance1;
+
+					if (sum < lowestDistance && x->getCenter() != ourRampPosition && BWTA::getGroundDistance(BWAPI::Broodwar->self()->getStartLocation(), BWAPI::TilePosition(x->getCenter())) > mainToRampDistance)
+					{
+						lowestDistance = sum;
+						ourChokePointPosition = x->getCenter();
+						expansionToChokeDistance = distance1;
+					}
+				}
 	
+			}
+			for (auto x : BWAPI::Broodwar->self()->getUnits())
+			{
+				if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+				{
+					x->move(ourChokePointPosition);
+				}
 			}
 
 			// if we are terran, give the worker back to worker manager

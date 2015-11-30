@@ -80,12 +80,16 @@ namespace UAlbertaBot
 		std::set<BWAPI::TilePosition> createdBuilding;
 		std::set<BWAPI::TilePosition> buildableSunkenTilePositions;
 		std::map<int, std::pair<int, int> > knownBuildableLocations;
+		BWAPI::Position		ourChokePointPosition;
+		double				expansionToChokeDistance;
 
 		void BuildingManager::simcity_init();
 		std::vector<BWAPI::TilePosition> simcity_sunken;
 		std::vector<BWAPI::TilePosition> simcity_wall;
+		std::vector<BWAPI::TilePosition> simcity_row;
 		BWAPI::TilePosition BuildingManager::simcitySunken(void);
 		BWAPI::TilePosition BuildingManager::simcityWall(void);
+		BWAPI::TilePosition BuildingManager::simcityRow(void);
 		
 	};
 }
