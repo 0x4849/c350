@@ -130,7 +130,7 @@ const bool StrategyManager::shouldExpandNow() const
 	int minute = frame / (24 * 60);
 
 	// if we have a ridiculous stockpile of minerals, expand
-	if (BWAPI::Broodwar->self()->minerals() > 600)
+	if (BWAPI::Broodwar->self()->minerals() > 450)
 	{
 		//BuildingManager::Instance().shouldIExpand = true;
 		return true;
@@ -147,7 +147,7 @@ const bool StrategyManager::shouldExpandNow() const
 		return true;
 	}
 
-
+	/*
 	// we will make expansion N after array[N] minutes have passed
 	std::vector<int> expansionTimes = { 5, 10, 20, 30, 40, 50 };
 
@@ -158,7 +158,7 @@ const bool StrategyManager::shouldExpandNow() const
 			//BuildingManager::Instance().shouldIExpand = true;
 			return true;
 		}
-	}
+	}*/
 
 	return false;
 }
@@ -353,14 +353,32 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
     int numGuardians    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Guardian);
 	int numExtract		= UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor);
 
-	int mutasWanted = numMutas + 20;
-	int hydrasWanted = numHydras + 6;
+	//int mutasWanted = numMutas + 20;
+	//int hydrasWanted = numHydras + 6;
+	int numBases = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hatchery);
+
+	while (numExtract < numBases)
+	{
+		numExtract++;
+	}
+
+	goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract));
+
+	int mineralPatches = 0;
+	for (auto & depot : WorkerManager::Instance().getWorkerData().getDepots())
+	{
+		mineralPatches += WorkerManager::Instance().getWorkerData().getMineralsNearDepot(depot);
+	}
+	if (numWorkers < mineralPatches)
+	{
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, mineralPatches));
+	}
 
 	if (shouldExpandNow())
 	{
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract + 1));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 11));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 14));
 	}
 
     if (Config::Strategy::StrategyName == "Zerg_9Pool")
@@ -375,8 +393,8 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
     }
     else if (Config::Strategy::StrategyName == "Zerg_3HatchMuta")
     {
-        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 12));
-        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
+        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 9));
+        goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 3));
     }
 	else if (Config::Strategy::StrategyName == "Zerg_3HatchScourge")
 	{
@@ -393,23 +411,33 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
 	}
 	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch"){
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 12));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Grooved_Spines, 1));
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Muscular_Augments, 1));
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 9));
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 3));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 8));
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 1));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 1));
 	}
 
 	else if (Config::Strategy::StrategyName == "Zerg_3HatchHydra")
 	{
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, mutasWanted + 12));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 12));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 8));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 7));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 5));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 3));
 	}
 
 	//TOMMY
 	if (shouldMakeMacroHatchery())
 	{
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 1));
-		macroHatchCount++;
+		int hatchNeeded = BWAPI::Broodwar->self()->minerals() / 600;
+		while (hatchNeeded > 0)
+		{
+			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
+			//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 1));
+			macroHatchCount++;
+			hatchNeeded--;
+		}
 	}
 	return goal;
 }
@@ -605,7 +633,23 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 	int newSunkens = 0;
 	int newLings = 0;
 	// if we lose, add one sunken and resimulate
-	if ((score < 0))// && (BuildingManager::Instance().canBuild))
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
+	{
+		if ((BWAPI::Broodwar->getFrameCount() > BuildingManager::Instance().sunkenBuildTimer) && (score < 0))
+		{
+			sim.addAllySunken();
+			newSunkens++;
+
+			CombatSimulation test(sim);
+			test.finishMoving();
+			score = test.simulateCombat();
+		}
+		else if (score < 0)
+		{
+			BWAPI::Broodwar->printf("Only making lings; expansion not ready yet!");
+		}
+	}
+	else if ((score < 0))
 	{
 		sim.addAllySunken();
 		newSunkens++;
@@ -614,10 +658,6 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		test.finishMoving();
 		score = test.simulateCombat();
 	}
-	/*else if (!(BuildingManager::Instance().canBuild))
-	{
-		BWAPI::Broodwar->printf("Only making lings; expansion not ready yet!");
-	}*/
 	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
 	while ((score < 0) && (newLings < 6))
 	{
@@ -629,30 +669,33 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		score = test.simulateCombat();
 	}
 	// if we still lose, keep adding sunkens until we win
-	while ((score < 0) && (newSunkens < 4))// && (BuildingManager::Instance().canBuild))
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
 	{
-		sim.addAllySunken();
-		newSunkens++;
+		if (BWAPI::Broodwar->getFrameCount() > BuildingManager::Instance().sunkenBuildTimer)
+		{
+			while ((score < 0) && (newSunkens < 4))
+			{
+				sim.addAllySunken();
+				newSunkens++;
 
-		CombatSimulation test(sim);
-		test.finishMoving();
-		score = test.simulateCombat();
+				CombatSimulation test(sim);
+				test.finishMoving();
+				score = test.simulateCombat();
+			}
+		}
 	}
-	// possibly may need to cap the number of sunkens (3-6)
+	else
+	{
+		while ((score < 0) && (newSunkens < 4))
+		{
+			sim.addAllySunken();
+			newSunkens++;
 
-	// build 1 sunken at a time. actually, this code may be useless
-	/*if (score < 0)
-	{
-	for (auto &unit : BWAPI::Broodwar->enemy()->getUnits())
-	{
-	if ( ( (unit->getType() == BWAPI::UnitTypes::Zerg_Creep_Colony) && (unit->isBeingConstructed()) ) ||
-	((unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony) && (unit->isMorphing())) )
-	{
-	BWAPI::Broodwar->printf("Already making a sunken");
-	return false;
+			CombatSimulation test(sim);
+			test.finishMoving();
+			score = test.simulateCombat();
+		}
 	}
-	}
-	}*/
 
 	// return a list of units to be made. production manager should queue these at highest priority
 	defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony] = newSunkens;
@@ -763,7 +806,7 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens2() const
 //NEW
 const bool StrategyManager::shouldMakeMacroHatchery() const
 {
-	if (BWAPI::Broodwar->self()->minerals() > 800)
+	if (BWAPI::Broodwar->self()->minerals() > 600)
 	{
 		return true;
 	}

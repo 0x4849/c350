@@ -10,8 +10,8 @@ InformationManager::InformationManager()
 	//TOMMY
 	, _enemyMovedOut(false)
 	, _frameCounter(0)
-	, _distToEnemyChoke(0.0)
-	, _distToFarthestBase(0.0)
+	, _distToEnemyChoke(0)
+	, _distToFarthestBase(0)
 {
 	initializeRegionInformation();
 }
@@ -28,23 +28,24 @@ void InformationManager::update()
 	updateBaseLocationInfo();
 	//TOMMY
 	//updateEnemyProductionEstimate();
-	/*for (auto &unit : BWAPI::Broodwar->self()->getUnits())
+	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1)
 	{
-		if (unit->getType() == BWAPI::UnitTypes::Zerg_Spire)
-		{
-			return;
-		}
-	}*/
+		return;
+	}
+	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk_Den) >= 1)
+	{
+		return;
+	}
 	
 	if ((!_enemyMovedOut) && (BWAPI::Broodwar->getFrameCount() >= _frameCounter))
 	{
 		checkEnemyMovedOut();
-		_frameCounter = BWAPI::Broodwar->getFrameCount() + 24;
+		_frameCounter = BWAPI::Broodwar->getFrameCount() + 36;
 	}
 	if ((_enemyMovedOut) && (BWAPI::Broodwar->getFrameCount() >= _frameCounter))
 	{
 		checkEnemyMovedOut();
-		_frameCounter = BWAPI::Broodwar->getFrameCount() + 120;
+		_frameCounter = BWAPI::Broodwar->getFrameCount() + 180;
 	}
 }
 
@@ -646,13 +647,13 @@ void InformationManager::checkEnemyMovedOut(){
 	BWAPI::TilePosition ourBase = BWAPI::TilePosition(ourBaseLocation->getPosition());
 	if (enemyBaseLocation == nullptr)
 	{
-		double baseToBase = 0;
-		if (_distToFarthestBase < 1.0)
+		int baseToBase = 0;
+		if (_distToFarthestBase < 1)
 		{
-			double currentBtoB = 0;
+			int currentBtoB = 0;
 			for (auto &bases : BWTA::getStartLocations())
 			{
-				currentBtoB = BWTA::getGroundDistance(ourBase, bases->getTilePosition());
+				currentBtoB = ourBase.getApproxDistance(bases->getTilePosition());
 				if (currentBtoB > baseToBase)
 				{
 					baseToBase = currentBtoB;
@@ -678,7 +679,7 @@ void InformationManager::checkEnemyMovedOut(){
 				}
 				else
 				{
-					baseToUnit = BWTA::getGroundDistance(ourBase, BWAPI::TilePosition(unit.second.lastPosition));
+					baseToUnit = ourBase.getApproxDistance(BWAPI::TilePosition(unit.second.lastPosition));
 					if (baseToUnit < baseToBase)
 					{
 						//BWAPI::Broodwar->printf("Enemy has moved out!");
@@ -699,9 +700,9 @@ void InformationManager::checkEnemyMovedOut(){
 	else
 	{
 		BWAPI::TilePosition enemyChoke = BWAPI::TilePosition(BWTA::getNearestChokepoint(enemyBaseLocation->getPosition())->getCenter());
-		if (_distToEnemyChoke < 1.0)
+		if (_distToEnemyChoke < 1)
 		{
-			_distToEnemyChoke = BWTA::getGroundDistance(ourBase, enemyChoke);
+			_distToEnemyChoke = ourBase.getApproxDistance(enemyChoke);
 		}
 		double baseToChoke = _distToEnemyChoke;
 		double baseToUnit;
@@ -721,7 +722,7 @@ void InformationManager::checkEnemyMovedOut(){
 				}
 				else
 				{
-					baseToUnit = BWTA::getGroundDistance(ourBase, enemyPos);
+					baseToUnit = ourBase.getApproxDistance(enemyPos);
 					if (baseToUnit < baseToChoke)
 					{
 						//BWAPI::Broodwar->printf("Enemy has moved out!");
@@ -743,6 +744,9 @@ void InformationManager::checkEnemyMovedOut(){
 
 void InformationManager::updateEnemyProductionEstimate()
 {
+	//code to turn this off
+	return;
+
 	if (_enemyProductionEstimate.empty())
 	{
 		return;
@@ -781,6 +785,7 @@ std::map<BWAPI::UnitType, int> InformationManager::getEnemyProductionEstimate()
 void InformationManager::onUnitShow(BWAPI::Unit unit)
 {
 	updateUnit(unit);
+	/*
 	if ((_enemyProductionEstimate.empty()) && ((unit->getType() == BWAPI::UnitTypes::Terran_Barracks) ||
 		//(unit->getType() == BWAPI::UnitTypes::Terran_Factory) ||
 		//(unit->getType() == BWAPI::UnitTypes::Protoss_Stargate) ||
@@ -797,5 +802,5 @@ void InformationManager::onUnitShow(BWAPI::Unit unit)
 				_enemyProductionEstimate[unit->getType()]++;
 			}
 		}
-	}
+	}*/
 }

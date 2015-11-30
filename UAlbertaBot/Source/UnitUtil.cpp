@@ -201,3 +201,14 @@ BWAPI::Unit UnitUtil::GetClosestUnitTypeToTarget(BWAPI::UnitType type, BWAPI::Po
 
 	return closestUnit;
 }
+
+//TOMMY
+double UnitUtil::GetAirDistance(BWAPI::Position pos1, BWAPI::Position pos2)
+{
+	return sqrt(pow((pos1.x - pos2.x), 2) + pow((pos1.y - pos2.y), 2));
+}
+
+double UnitUtil::GetAirDistance(BWAPI::TilePosition pos1, BWAPI::TilePosition pos2)
+{
+	return sqrt(pow((pos1.x - pos2.x), 2) + pow((pos1.y - pos2.y), 2));
+}

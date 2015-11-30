@@ -289,112 +289,59 @@ void CombatSimulation::addAllySunken()
 // currently need to adjust this to make all units hypothetical
 void CombatSimulation::generateCurrentSituation()
 {
-	// add our units along one side of the map
-	// space them half a tile apart
-	// when you have 7 units in a row start a new row one tile under
-	int xPos = 17;
-	int yPos = 17;
 	SparCraft::Unit sparUnit;
 	int ourCombatUnits = 0;
 	for (auto &unit : BWAPI::Broodwar->self()->getUnits())
 	{
-		if (((UnitUtil::IsCombatUnit(unit)) || (unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony)) && (SparCraft::System::isSupportedUnitType(unit->getType())))	// will this code add our sunkens to the sim? (I think so)
+		if (((UnitUtil::IsCombatUnit(unit)) || (unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony)) && (SparCraft::System::isSupportedUnitType(unit->getType()))) // will this code add our sunkens to the sim? (I think so)
 		{
-			sparUnit = getSparCraftUnit(unit->getType(), 1, xPos, yPos);
-			addToState(sparUnit);
-			xPos += 16;
-			if (xPos >= 129)
+			if ((unit->getType() == BWAPI::UnitTypes::Zerg_Sunken_Colony) && (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Zerg))
 			{
-				xPos = 17;
-				yPos += 32;
+				sparUnit = getSparCraftUnit(unit->getType(), 1, 10, 10);
+				addToState(sparUnit);
+				ourCombatUnits++;
+				sparUnit = getSparCraftUnit(unit->getType(), 1, 10, 10);
+				addToState(sparUnit);
+				ourCombatUnits++;
 			}
-			ourCombatUnits++;
+			else
+			{
+				sparUnit = getSparCraftUnit(unit->getType(), 1, 10, 10);
+				addToState(sparUnit);
+				ourCombatUnits++;
+			}
 		}
 	}
 	BWAPI::Broodwar->printf("We have this many units: %d\n", ourCombatUnits);
 
-	current_x = xPos;
-	current_y = yPos;
-
-	// add enemy units along the other side of the map and let them start at the range of a marine
-	int range = BWAPI::UnitTypes::Terran_Marine.groundWeapon().maxRange();
-	yPos += range;
-	xPos = 17;
 	int theirCombatUnits = 0;
-	//int theirProducingUnits = 0;
-	// using InfoManager to see former enemy units
-	// apparently InfoManager can recognize previously seen enemy units, so this is always more accurate than counting
-	// currently visible enemy units
 	for (auto &unit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
 	{
-		// consider enemy combat units and not static defenses
-		if ((UnitUtil::IsCombatUnit(unit.second.unit)) && (!unit.second.type.isBuilding()) && (SparCraft::System::isSupportedUnitType(unit.second.type)))
+		if ((UnitUtil::IsCombatUnit(unit.second.unit)) && (!unit.second.type.isBuilding())
+			&& (SparCraft::System::isSupportedUnitType(unit.second.type)) && (unit.second.type != BWAPI::UnitTypes::Terran_SCV)
+			&& (unit.second.type != BWAPI::UnitTypes::Protoss_Probe))
 		{
-			sparUnit = getSparCraftUnit(unit.second.type, 2, xPos, yPos);
-			addToState(sparUnit);
-			xPos += 16;
-			if (xPos >= 129)
+			if (unit.second.type == BWAPI::UnitTypes::Terran_Firebat)
 			{
-				xPos = 17;
-				yPos += 32;
+				sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Terran_Marine, 2, 100, 100);
+				addToState(sparUnit);
+				theirCombatUnits++;
 			}
-			theirCombatUnits++;
+			else
+			{
+				sparUnit = getSparCraftUnit(unit.second.type, 2, 100, 100);
+				addToState(sparUnit);
+				theirCombatUnits++;
+			}
 		}
-		//medics
 		else if (unit.second.type == BWAPI::UnitTypes::Terran_Medic)
 		{
-			sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Terran_Marine, 2, xPos, yPos);
+			sparUnit = getSparCraftUnit(BWAPI::UnitTypes::Terran_Marine, 2, 100, 100);
 			addToState(sparUnit);
-			xPos += 16;
-			if (xPos >= 129)
-			{
-				xPos = 17;
-				yPos += 32;
-			}
 			theirCombatUnits++;
 		}
-
-		// if unit is building and can produce a combat unit seen in the enemy's roster
-		// add to state all the units of that type the building can produce in the time to build a sunken
-		/*
-		if (unit.second.type.isBuilding())
-		{
-			BWAPI::UnitType::set thingsUnitCanMake(unit.second.type.buildsWhat());
-			int buildTime;
-			int sunkenTime = BWAPI::UnitTypes::Zerg_Sunken_Colony.buildTime() + BWAPI::UnitTypes::Zerg_Creep_Colony.buildTime();
-			int unitCount = 0;
-			// only consider potential unit production of enemy units we know they have made. is this bad?
-			for (auto &seenUnit : InformationManager::Instance().getUnitInfo(BWAPI::Broodwar->enemy()))
-			{
-				// potential issue: if enemy has been making two types of units from the same building, it will overestimate
-				// production. however it is quite unlikely for the enemy to do this early in the game
-				if (thingsUnitCanMake.find(seenUnit.second.type) != thingsUnitCanMake.end())
-				{
-					buildTime = seenUnit.second.type.buildTime();
-					if (!(buildTime > 0))
-					{
-						continue;
-					}
-					unitCount = sunkenTime / buildTime;
-					while (unitCount > 0)
-					{
-						sparUnit = getSparCraftUnit(seenUnit.second.type, 2, xPos, yPos);
-						addToState(sparUnit);
-						xPos += 16;
-						if (xPos >= 129)
-						{
-							xPos = 17;
-							yPos += 32;
-						}
-						unitCount--;
-						theirProducingUnits++;
-					}
-				}
-			}
-		}*/
 	}
 	BWAPI::Broodwar->printf("They currently have this many units: %d\n", theirCombatUnits);
-	//BWAPI::Broodwar->printf("They might make this many more units: %d\n", theirProducingUnits);
 }
 
 void CombatSimulation::generateCurrentSituation2()

@@ -29,5 +29,9 @@ namespace UnitUtil
 
     double GetDistanceBetweenTwoRectangles(Rect & rect1, Rect & rect2);
     Rect GetRect(BWAPI::Unit unit);
+
+	//TOMMY
+	double GetAirDistance(BWAPI::Position pos1, BWAPI::Position pos2);
+	double GetAirDistance(BWAPI::TilePosition pos1, BWAPI::TilePosition pos2);
 };
 }

@@ -14,6 +14,8 @@ namespace UAlbertaBot
 		BWAPI::Unit						_workerScout;
 		BWAPI::TilePosition				_ninjaBaseLocation;
 		BWAPI::Position					_enemyRamp;
+		BWAPI::Position					_scoutLocation1;
+		BWAPI::Position					_scoutLocation2;
 
 		void                            moveScouts();
 

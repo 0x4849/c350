@@ -7,7 +7,7 @@ namespace Config
     {
         bool ConfigFileFound                = false;
         bool ConfigFileParsed               = false;
-		std::string ConfigFileLocation = "C:/Users/Soul/Documents/School/CMPUT/350/DingkaiV3/c350-Dingkai/UAlbertaBot/UAlbertaBot_Config.txt";
+		std::string ConfigFileLocation = "E:/c350/UAlbertaBot/UAlbertaBot_Config.txt";
     }
 
     namespace Strategy
@@ -95,7 +95,7 @@ namespace Config
         bool UseSparcraftSimulation         = true;
         bool KiteWithRangedUnits            = true;
         std::set<BWAPI::UnitType> KiteLongerRangedUnits;
-        bool WorkersDefendRush              = false; 
+		bool WorkersDefendRush				= true;
 		int RetreatMeleeUnitShields         = 0;
         int RetreatMeleeUnitHP              = 0;
         int CombatRadius                    = 1000;     // radius of combat to consider units for Micro Search

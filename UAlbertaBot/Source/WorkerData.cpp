@@ -631,3 +631,4 @@ bool WorkerData::isMacroHatch(BWAPI::Unit depot)
 
 	return true;
 }
+

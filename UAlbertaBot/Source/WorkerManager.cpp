@@ -671,7 +671,7 @@ void WorkerManager::rebalanceWorkers()
 		}
 
 		//TOMMY
-		else if (depot && workerData.depotIsSemiFull(depot))
+		else if (depot && workerData.depotIsSemiFull(depot) && (BWAPI::Broodwar->getFrameCount() % 360 == 0))
 		{
 			for (auto &goodDepot : workerData.getDepots())
 			{
@@ -737,7 +737,10 @@ void WorkerManager::drawResourceDebugInfo()
 		}
 	}
 }
-
+WorkerData WorkerManager::getWorkerData()
+{
+	return workerData;
+}
 void WorkerManager::drawWorkerInformation(int x, int y) 
 {
     if (!Config::Debug::DrawWorkerInfo)
@@ -794,4 +797,9 @@ int WorkerManager::getNumIdleWorkers()
 int WorkerManager::getNumGasWorkers() 
 {
 	return workerData.getNumGasWorkers();
+}
+
+bool WorkerManager::isDepotSemiFull(BWAPI::Unit depot)
+{
+	return workerData.depotIsSemiFull(depot);
 }

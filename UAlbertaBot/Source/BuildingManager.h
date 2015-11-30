@@ -75,7 +75,7 @@ namespace UAlbertaBot
 		std::set<BWAPI::Unit> evoCompleted;
 		std::set<int> sentSunkenCommand;
 		int baseCount = 0;
-		BWAPI::TilePosition getSunkenPosition(BWAPI::Unit myBuilder);
+		BWAPI::TilePosition getSunkenPosition();
 		std::vector<BWAPI::UnitType> buildingsQueued();
 		std::set<BWAPI::TilePosition> createdHatcheriesSet;
 		std::set<BWAPI::TilePosition> createdSunkenSet;
@@ -116,6 +116,17 @@ namespace UAlbertaBot
 		std::set<BWAPI::Unit> hatchSet;
 		std::set<BWAPI::TilePosition> closestBaseSet;
 		void manageLarva();
+		BWAPI::TilePosition getSpirePosition();
+
+
+		void BuildingManager::simcity_init();
+		std::vector<BWAPI::TilePosition> simcity_sunken;
+		std::vector<BWAPI::TilePosition> simcity_wall;
+		std::vector<BWAPI::TilePosition> simcity_row;
+		BWAPI::TilePosition BuildingManager::simcitySunken(void);
+		BWAPI::TilePosition BuildingManager::simcityWall(void);
+		BWAPI::TilePosition BuildingManager::simcityRow(void);
+
 	};
 }
 

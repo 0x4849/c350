@@ -66,5 +66,9 @@ public:
     void        rebalanceWorkers();
 
     static WorkerManager &  Instance();
+	bool isDepotSemiFull(BWAPI::Unit depot);
+
+	WorkerData getWorkerData();
+
 };
 }

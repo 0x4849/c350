@@ -48,16 +48,19 @@ void ProductionManager::performBuildOrderSearch()
 
 void ProductionManager::update()
 {
+	/*
 	if (muscBuild && BWAPI::Broodwar->getFrameCount() > muscBuildTimer)
 	{
 		muscBuild = false;
 		_queue.queueAsHighestPriority(MetaType(BWAPI::UpgradeTypes::Grooved_Spines), true);
 	}
+	*/
+
 	// check the _queue for stuff we can build
 	manageBuildOrderQueue();
 
 	// if nothing is currently building, get a new goal from the strategy manager
-	if (((_queue.size() == 0) || (BWAPI::Broodwar->self()->minerals() > 1500)) && (BWAPI::Broodwar->getFrameCount() > 10))
+	if (((_queue.size() == 0) || (BWAPI::Broodwar->self()->minerals() > 2350)) && (BWAPI::Broodwar->getFrameCount() > 10))
 	{
 		if (Config::Debug::DrawBuildOrderSearchInfo)
 		{
@@ -82,12 +85,12 @@ void ProductionManager::update()
 			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
 		}
 		
-		if (BWAPI::Broodwar->self()->supplyUsed() >= 40 && !StrategyManager::Instance().isSpireBuilding())
+		if (BWAPI::Broodwar->self()->supplyUsed() >= 80 && !StrategyManager::Instance().isSpireBuilding())
 		{
 			BWAPI::Broodwar->printf("Queuing one extra overlord");
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 		}
-		if (BWAPI::Broodwar->self()->supplyUsed() >= 100 && !StrategyManager::Instance().isSpireBuilding())
+		if (BWAPI::Broodwar->self()->supplyUsed() >= 200 && !StrategyManager::Instance().isSpireBuilding())
 		{
 			BWAPI::Broodwar->printf("Queuing two extra overlord");
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
@@ -107,6 +110,7 @@ void ProductionManager::update()
 		BuildingManager::Instance().shouldIExpand = false;
 	}
 
+
 	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hatchery) <= 12)
 	{
 		if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 900 && StrategyManager::Instance().isSpireBuilding())
@@ -114,40 +118,37 @@ void ProductionManager::update()
 			BWAPI::Broodwar->printf("Entering hatchery loop\n");
 			//int totalMinerals = BWAPI::Broodwar->self()->minerals();
 			//int numHatch = 0;
-			/*while (totalMinerals > 1000)
-			{
-			numHatch++;
-			totalMinerals -= 300;
-			}
+			//*while (totalMinerals > 1000)
+			//{
+			//numHatch++;
+			//totalMinerals -= 300;
+			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
+			//}
+
+			/*
 			numHatch = numHatch / 2;
 			for (int i = 0; i < numHatch; i++)
 			{
-			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
+
 			}
 			*/
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
 			hatchCounter = BWAPI::Broodwar->getFrameCount() + 360;
-
 		}
+
 		if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 650 && !StrategyManager::Instance().isSpireBuilding())
 		{
 			BWAPI::Broodwar->printf("Entering hatchery loop\n");
-			int totalMinerals = BWAPI::Broodwar->self()->minerals();
+			//int totalMinerals = BWAPI::Broodwar->self()->minerals();
 			//int numHatch = 0;
-			/*while (totalMinerals > 300)
-			{
-			numHatch++;
-			totalMinerals -= 300;
-			}
-			numHatch = numHatch / 2;
-			for (int i = 0; i < numHatch; i++)
-			{
-			*/
-			//	}
+			//*while (totalMinerals > 300)
+		
+
+	
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
 			hatchCounter = BWAPI::Broodwar->getFrameCount() + 360;
 		}
-
+		/*
 		if (BWAPI::Broodwar->getFrameCount() > mutaCounter && BWAPI::Broodwar->self()->minerals() >= 900 && !StrategyManager::Instance().isSpireBuilding() && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1)
 		{
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
@@ -162,8 +163,8 @@ void ProductionManager::update()
 
 			mutaCounter = BWAPI::Broodwar->getFrameCount() + BWAPI::UnitTypes::Zerg_Mutalisk.buildTime();
 		}
+		*/
 	}
-		/*
 
 	/*
 	if (BWAPI::Broodwar->getFrameCount() % 240 == 0 && BWAPI::Broodwar->self()->minerals() > 600)
@@ -177,6 +178,7 @@ void ProductionManager::update()
 		}
 	}
 	*/
+
 
 	//TOMMY
 	if ((BWAPI::Broodwar->getFrameCount() % 24 == 0) && (checkDefenses()))
@@ -204,6 +206,8 @@ void ProductionManager::update()
 				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Creep_Colony), true);
 				// EVERY TIME WE MAKE A SUNKEN, SHOULD WE MAKE A DRONE TO REPLACE IT???? and at what priority? and block or no?
 				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Drone), true);
+				//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Creep_Colony), true);
+				//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Drone), true);
 			}
 			for (int j = 0; j < defenses[BWAPI::UnitTypes::Zerg_Zergling]; j++)
 			{
@@ -281,10 +285,11 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit unit)
 		// if it's a worker or a building, we need to re-search for the current goal
 		if ((unit->getType().isWorker() && !WorkerManager::Instance().isWorkerScout(unit)) || unit->getType().isBuilding())
 		{
-			if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone)
+			if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone && unit->getType() != BWAPI::UnitTypes::Zerg_Sunken_Colony
+				&& unit->getType() != BWAPI::UnitTypes::Zerg_Zergling)
 			{
 				//performBuildOrderSearch();
-				_queue.queueAsLowestPriority(MetaType(unit->getType()), true);
+				//_queue.queueAsLowestPriority(MetaType(unit->getType()), true);
 			}
 		}
 	}
@@ -949,6 +954,21 @@ bool ProductionManager::checkDefenses()
 		return false;
 	}
 
+	//if more than 6 sunkens, stop checking
+	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Sunken_Colony) >= 8)
+	{
+		return false;
+	}
+
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
+	{
+		if (!(!BuildingManager::Instance().canBuild && BWAPI::Broodwar->getFrameCount() > BuildingManager::Instance().sunkenBuildTimer))
+		{
+			return false;
+		}
+	}
+
+
 	std::deque< BuildOrderItem > items = _queue.getQueue();
 
 	for (auto it = items.begin(); it != items.end(); it++)
@@ -961,10 +981,8 @@ bool ProductionManager::checkDefenses()
 		if (it->metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Zergling)
 		{
 			return false;
-		}
-		
+		}		
 	}
-
 
 	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
 	{
@@ -983,6 +1001,20 @@ bool ProductionManager::checkDefenses()
 					return false;
 				}
 			}
+		}
+	}
+
+	/*
+	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1)
+	{
+		return false;
+	}
+	*/
+	for (auto x : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (x->getType() == BWAPI::UnitTypes::Zerg_Spire && x->getHitPoints() == 600)
+		{
+			return false;
 		}
 	}
 
