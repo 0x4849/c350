@@ -411,13 +411,19 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 4));
 	}
 	else if (Config::Strategy::StrategyName == "Zerg_9/10Hatch"){
-		//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Grooved_Spines, 1));
-		//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Muscular_Augments, 1));
-		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 9));
-		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 3));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 8));
-		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 1));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 1));
+		
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Lair, 1));
+		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Zerg_Lair) == 1)
+		{
+			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Spire, 1));
+		}
+
+		if (BWAPI::Broodwar->self()->completedUnitCount(BWAPI::UnitTypes::Zerg_Spire) == 1)
+		{
+			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 8));
+		}
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 10));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 4));
 	}
 
 	else if (Config::Strategy::StrategyName == "Zerg_3HatchHydra")
@@ -427,18 +433,21 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 3));
 	}
 
-	//TOMMY
+
 	if (shouldMakeMacroHatchery())
 	{
 		int hatchNeeded = BWAPI::Broodwar->self()->minerals() / 600;
 		while (hatchNeeded > 0)
 		{
+			BuildingManager::Instance().shouldIExpand = false;
 			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
+			
 			//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 1));
 			macroHatchCount++;
 			hatchNeeded--;
 		}
 	}
+
 	return goal;
 }
 
@@ -610,7 +619,6 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 
 	SparCraft::ScoreType score = 0;
 	CombatSimulation sim;
-	//sim.generateMap(); THIS IS NOT WORKING LOL
 
 	sim.generateCurrentSituation();
 
@@ -658,8 +666,8 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		test.finishMoving();
 		score = test.simulateCombat();
 	}
-	// if we stil lose, keep adding zerglings until we hit 6 (larva cap)
-	while ((score < 0) && (newLings < 6))
+	// if we stil lose, keep adding zerglings until we hit 2
+	while ((score < 0) && (newLings < 2))
 	{
 		sim.addAllyZergling();
 		newLings++;
@@ -668,36 +676,6 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens() const
 		test.finishMoving();
 		score = test.simulateCombat();
 	}
-	// if we still lose, keep adding sunkens until we win
-	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
-	{
-		if (BWAPI::Broodwar->getFrameCount() > BuildingManager::Instance().sunkenBuildTimer)
-		{
-			while ((score < 0) && (newSunkens < 4))
-			{
-				sim.addAllySunken();
-				newSunkens++;
-
-				CombatSimulation test(sim);
-				test.finishMoving();
-				score = test.simulateCombat();
-			}
-		}
-	}
-	else
-	{
-		while ((score < 0) && (newSunkens < 4))
-		{
-			sim.addAllySunken();
-			newSunkens++;
-
-			CombatSimulation test(sim);
-			test.finishMoving();
-			score = test.simulateCombat();
-		}
-	}
-
-	// return a list of units to be made. production manager should queue these at highest priority
 	defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony] = newSunkens;
 	defenses[BWAPI::UnitTypes::Zerg_Zergling] = newLings;
 	BWAPI::Broodwar->printf("Sunkens for defense: %d\n", newSunkens);

@@ -46,6 +46,16 @@ void ProductionManager::performBuildOrderSearch()
 	}
 }
 
+bool ProductionManager::isLairCompleted()
+{
+	for (auto x : BWAPI::Broodwar->self()->getUnits())
+	{
+		if (x->getType() == BWAPI::UnitTypes::Zerg_Lair && x->isCompleted()){
+			return true;
+		}
+	}
+	return false;
+}
 void ProductionManager::update()
 {
 	/*
@@ -132,11 +142,11 @@ void ProductionManager::update()
 
 			}
 			*/
-			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
+			//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
 			hatchCounter = BWAPI::Broodwar->getFrameCount() + 360;
 		}
 
-		if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 650 && !StrategyManager::Instance().isSpireBuilding())
+		if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 500 && !StrategyManager::Instance().isSpireBuilding())
 		{
 			BWAPI::Broodwar->printf("Entering hatchery loop\n");
 			//int totalMinerals = BWAPI::Broodwar->self()->minerals();
@@ -146,10 +156,50 @@ void ProductionManager::update()
 
 	
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
-			hatchCounter = BWAPI::Broodwar->getFrameCount() + 360;
+			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Extractor), true);
+			
+			//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Overlord), true);
+			hatchCounter = BWAPI::Broodwar->getFrameCount() + 720;
+			if (!buildOrderSearch && Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName){
+				performBuildOrderSearch();
+				buildOrderSearch = true;
+			}
 		}
 		/*
-		if (BWAPI::Broodwar->getFrameCount() > mutaCounter && BWAPI::Broodwar->self()->minerals() >= 900 && !StrategyManager::Instance().isSpireBuilding() && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1)
+		if (BWAPI::Broodwar->getFrameCount() %24 == 0 && BWAPI::Broodwar->self()->gas() > 100 && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Lair) == 0 && !queuedLair)
+		{
+			BWAPI::Broodwar->printf("Entering hatchery loop\n");
+			//int totalMinerals = BWAPI::Broodwar->self()->minerals();
+			//int numHatch = 0;
+			//*while (totalMinerals > 300)
+
+
+
+			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Lair), true);
+			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Extractor), true);
+			queuedLair = true;
+			lairCounter = BWAPI::Broodwar->getFrameCount() + BWAPI::UnitTypes::Zerg_Lair.buildTime();
+
+			//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Overlord), true);
+			//hatchCounter = BWAPI::Broodwar->getFrameCount() + 720;
+		}
+
+		if (BWAPI::Broodwar->getFrameCount() % 24 == 0 && BWAPI::Broodwar->getFrameCount() > lairCounter && BWAPI::Broodwar->self()->gas() >= 150 && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Lair) == 1 && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) == 0 && !queuedSpire)
+		{
+			//BWAPI::Broodwar->printf("Entering hatchery loop\n");
+			//int totalMinerals = BWAPI::Broodwar->self()->minerals();
+			//int numHatch = 0;
+			//*while (totalMinerals > 300)
+
+
+
+			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Spire), true);
+			queuedSpire = true;
+			//hatchCounter = BWAPI::Broodwar->getFrameCount() + 720;
+		}
+		
+		*/
+		if (BWAPI::Broodwar->getFrameCount() > mutaCounter && BWAPI::Broodwar->self()->minerals() >= 900 && !StrategyManager::Instance().isSpireBuilding() && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1 Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
 		{
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
@@ -163,7 +213,7 @@ void ProductionManager::update()
 
 			mutaCounter = BWAPI::Broodwar->getFrameCount() + BWAPI::UnitTypes::Zerg_Mutalisk.buildTime();
 		}
-		*/
+	
 	}
 
 	/*
@@ -205,7 +255,7 @@ void ProductionManager::update()
 			{
 				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Creep_Colony), true);
 				// EVERY TIME WE MAKE A SUNKEN, SHOULD WE MAKE A DRONE TO REPLACE IT???? and at what priority? and block or no?
-				_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Drone), true);
+				//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Drone), true);
 				//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Creep_Colony), true);
 				//_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Drone), true);
 			}
@@ -955,10 +1005,12 @@ bool ProductionManager::checkDefenses()
 	}
 
 	//if more than 6 sunkens, stop checking
+	/*
 	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Sunken_Colony) >= 8)
 	{
 		return false;
 	}
+	*/
 
 	if (Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
 	{

@@ -70,5 +70,7 @@ public:
 
 	WorkerData getWorkerData();
 
+	BWAPI::Unit getClosestGoodDepot(BWAPI::Unit worker);
+
 };
 }

@@ -1634,17 +1634,20 @@ void BuildingManager::checkForCompletedBuildings()
 					}
 				}
 
+				for (auto x : BWAPI::Broodwar->self()->getUnits())
+				{
+					if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
+					{
+						x->move(ourChokePointPosition);
+					}
+				}
+				/*
 				std::string circuit = "Python";
 				if (BWAPI::Broodwar->mapName().find(circuit) == std::string::npos)
 				{
-					for (auto x : BWAPI::Broodwar->self()->getUnits())
-					{
-						if (x->getType() == BWAPI::UnitTypes::Zerg_Overlord)
-						{
-							x->move(ourChokePointPosition);
-						}
-					}
+		
 				}
+				*/
 	
 			}
 

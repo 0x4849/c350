@@ -647,7 +647,7 @@ void WorkerManager::rebalanceWorkers()
 	// for each worker
 	for (auto & worker : workerData.getWorkers())
 	{
-        UAB_ASSERT(worker != nullptr, "Worker was null");
+		UAB_ASSERT(worker != nullptr, "Worker was null");
 
 		if (!workerData.getWorkerJob(worker) == WorkerData::Minerals)
 		{
@@ -656,34 +656,10 @@ void WorkerManager::rebalanceWorkers()
 
 		BWAPI::Unit depot = workerData.getWorkerDepot(worker);
 
-		//if (depot && workerData.depotIsFull(depot))
-		//TOMMY
-		if ((depot && workerData.depotIsFull(depot)) || (workerData.isMacroHatch(depot)))
-		{//workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);
-			for (auto &newDepot : workerData.getDepots())
-			{
-				if (!workerData.depotIsFull(newDepot))
-				{
-					BWAPI::Broodwar->printf("Depot is full; moving to different one");
-					workerData.setWorkerJob(worker, WorkerData::Minerals, newDepot);
-				}
-			}
-		}
-
-		//TOMMY
-		else if (depot && workerData.depotIsSemiFull(depot) && (BWAPI::Broodwar->getFrameCount() % 360 == 0))
+		if (depot && workerData.depotIsFull(depot))
 		{
-			for (auto &goodDepot : workerData.getDepots())
-			{
-				if ((!workerData.depotIsSemiFull(goodDepot)) && (!workerData.depotIsFull(goodDepot)))
-				{
-					BWAPI::Broodwar->printf("Depot is semifull; moving to optimal one");
-					workerData.setWorkerJob(worker, WorkerData::Minerals, goodDepot);
-				}
-			}
+			workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);
 		}
-
-		//TOMMY
 		else if (!depot)
 		{
 			workerData.setWorkerJob(worker, WorkerData::Idle, nullptr);
@@ -802,4 +778,36 @@ int WorkerManager::getNumGasWorkers()
 bool WorkerManager::isDepotSemiFull(BWAPI::Unit depot)
 {
 	return workerData.depotIsSemiFull(depot);
+}
+
+BWAPI::Unit WorkerManager::getClosestGoodDepot(BWAPI::Unit worker)
+{
+	UAB_ASSERT(worker != nullptr, "Worker was null");
+
+	BWAPI::Unit closestDepot = nullptr;
+	double closestDistance = 0;
+
+	for (auto & unit : BWAPI::Broodwar->self()->getUnits())
+	{
+		UAB_ASSERT(unit != nullptr, "Unit was null");
+
+		//if (unit->getType().isResourceDepot() && (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair) && !workerData.depotIsFull(unit))
+		//TOMMY
+
+		if (unit->getType().isResourceDepot()
+			&& (unit->isCompleted() || unit->getType() == BWAPI::UnitTypes::Zerg_Lair)
+			&& !workerData.depotIsFull(unit)
+			&& !workerData.isMacroHatch(unit)
+			&& !workerData.depotIsSemiFull(unit))
+		{
+			double distance = unit->getDistance(worker);
+			if (!closestDepot || distance < closestDistance)
+			{
+				closestDepot = unit;
+				closestDistance = distance;
+			}
+		}
+	}
+
+	return closestDepot;
 }

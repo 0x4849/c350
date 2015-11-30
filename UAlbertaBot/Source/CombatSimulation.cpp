@@ -300,9 +300,7 @@ void CombatSimulation::generateCurrentSituation()
 				sparUnit = getSparCraftUnit(unit->getType(), 1, 10, 10);
 				addToState(sparUnit);
 				ourCombatUnits++;
-				sparUnit = getSparCraftUnit(unit->getType(), 1, 10, 10);
-				addToState(sparUnit);
-				ourCombatUnits++;
+
 			}
 			else
 			{

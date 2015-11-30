@@ -64,11 +64,14 @@ namespace UAlbertaBot
 		void        queueGasSteal();
 		void        performCommand(BWAPI::UnitCommandType t);
 
-
+		bool		isLairCompleted();
+		bool		queuedLair = false;
 		void		onEvoUpgradeComplete();
 		BWAPI::Unit getUnusedEvo();
 		int		    evoUpgradeTimer = 0;
-
+		int			lairCounter = 99999999;
+		bool		queuedSpire = false;
+		bool		buildOrderSearch = false;
 
 		std::set<BWAPI::UpgradeType> upgradeSearch;
 
