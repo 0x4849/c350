@@ -1,3 +1,1495 @@
-11/22/2015 6:12:32 PM 4688 Logging started
-11/22/2015 6:12:32 PM 4688 Already running
-11/22/2015 6:12:32 PM 4688 Logging ended
+12/1/2015 9:39:03 AM 1996 Logging started
+12/1/2015 9:39:03 AM 1996 Already running
+12/1/2015 9:39:03 AM 1996 Logging ended
+12/1/2015 9:39:19 AM 4060 Startbutton
+12/1/2015 9:39:19 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 9:39:19 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 9:39:19 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 9:39:19 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 9:39:19 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 9:39:19 AM 4060 Obtained DebugPrivilege
+12/1/2015 9:39:19 AM 4060 CreateProcess
+12/1/2015 9:39:19 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 9:39:19 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:39:19 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 9:39:19 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 9:39:19 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 9:39:19 AM 4060 ResumeThread
+12/1/2015 9:39:19 AM 4060 WaitForInputIdle
+12/1/2015 9:39:20 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 9:39:20 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:39:20 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 9:39:20 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 9:39:20 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 9:39:20 AM 4060 Starting Starcraft completed
+12/1/2015 9:39:20 AM 4060 Startbutton
+12/1/2015 9:39:20 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 9:39:20 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 9:39:20 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 9:39:20 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 9:39:20 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 9:39:20 AM 4060 Obtained DebugPrivilege
+12/1/2015 9:39:20 AM 4060 CreateProcess
+12/1/2015 9:39:20 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 9:39:20 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:39:20 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 9:39:20 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 9:39:21 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 9:39:21 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 9:39:23 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 9:39:23 AM 4060 ResumeThread
+12/1/2015 9:39:23 AM 4060 WaitForInputIdle
+12/1/2015 9:39:23 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 9:39:23 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:39:23 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 9:39:23 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 9:39:23 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 9:39:23 AM 4060 Starting Starcraft completed
+12/1/2015 9:42:34 AM 4060 Startbutton
+12/1/2015 9:42:34 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 9:42:34 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 9:42:34 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 9:42:34 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 9:42:34 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 9:42:34 AM 4060 Obtained DebugPrivilege
+12/1/2015 9:42:34 AM 4060 CreateProcess
+12/1/2015 9:42:34 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 9:42:34 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:42:34 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 9:42:34 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 9:42:34 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 9:42:34 AM 4060 ResumeThread
+12/1/2015 9:42:34 AM 4060 WaitForInputIdle
+12/1/2015 9:42:34 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 9:42:34 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:42:34 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 9:42:34 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 9:42:34 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 9:42:34 AM 4060 Starting Starcraft completed
+12/1/2015 9:42:35 AM 4060 Startbutton
+12/1/2015 9:42:35 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 9:42:35 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 9:42:35 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 9:42:35 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 9:42:35 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 9:42:35 AM 4060 Obtained DebugPrivilege
+12/1/2015 9:42:35 AM 4060 CreateProcess
+12/1/2015 9:42:35 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 9:42:35 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:42:35 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 9:42:35 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 9:42:36 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 9:42:36 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 9:42:37 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 9:42:37 AM 4060 ResumeThread
+12/1/2015 9:42:37 AM 4060 WaitForInputIdle
+12/1/2015 9:42:37 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 9:42:37 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:42:37 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 9:42:37 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 9:42:37 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 9:42:37 AM 4060 Starting Starcraft completed
+12/1/2015 9:56:07 AM 4060 Startbutton
+12/1/2015 9:56:07 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 9:56:07 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 9:56:07 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 9:56:07 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 9:56:07 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 9:56:07 AM 4060 Obtained DebugPrivilege
+12/1/2015 9:56:07 AM 4060 CreateProcess
+12/1/2015 9:56:07 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 9:56:07 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:56:07 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 9:56:07 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 9:56:07 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 9:56:07 AM 4060 ResumeThread
+12/1/2015 9:56:07 AM 4060 WaitForInputIdle
+12/1/2015 9:56:07 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 9:56:07 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:56:07 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 9:56:07 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 9:56:07 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 9:56:07 AM 4060 Starting Starcraft completed
+12/1/2015 9:56:08 AM 4060 Startbutton
+12/1/2015 9:56:08 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 9:56:08 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 9:56:08 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 9:56:08 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 9:56:08 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 9:56:08 AM 4060 Obtained DebugPrivilege
+12/1/2015 9:56:08 AM 4060 CreateProcess
+12/1/2015 9:56:08 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 9:56:08 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:56:08 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 9:56:08 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 9:56:09 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 9:56:09 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 9:56:09 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 9:56:09 AM 4060 ResumeThread
+12/1/2015 9:56:09 AM 4060 WaitForInputIdle
+12/1/2015 9:56:09 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 9:56:09 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 9:56:09 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 9:56:09 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 9:56:09 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 9:56:09 AM 4060 Starting Starcraft completed
+12/1/2015 10:03:17 AM 4060 Startbutton
+12/1/2015 10:03:17 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 10:03:17 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 10:03:17 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 10:03:17 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 10:03:17 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 10:03:17 AM 4060 Obtained DebugPrivilege
+12/1/2015 10:03:17 AM 4060 CreateProcess
+12/1/2015 10:03:17 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 10:03:17 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 10:03:17 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 10:03:17 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 10:03:17 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 10:03:17 AM 4060 ResumeThread
+12/1/2015 10:03:17 AM 4060 WaitForInputIdle
+12/1/2015 10:03:17 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 10:03:17 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 10:03:17 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 10:03:17 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 10:03:17 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 10:03:17 AM 4060 Starting Starcraft completed
+12/1/2015 10:03:35 AM 4060 Startbutton
+12/1/2015 10:03:35 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 10:03:35 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 10:03:35 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 10:03:35 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 10:03:35 AM 4060 Obtained DebugPrivilege
+12/1/2015 10:03:35 AM 4060 CreateProcess
+12/1/2015 10:03:35 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 10:03:35 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 10:03:35 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 10:03:36 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 10:03:36 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 10:03:37 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 10:03:37 AM 4060 ResumeThread
+12/1/2015 10:03:37 AM 4060 WaitForInputIdle
+12/1/2015 10:03:37 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 10:03:37 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 10:03:37 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 10:03:37 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 10:03:37 AM 4060 Starting Starcraft completed
+12/1/2015 10:25:51 AM 4060 Startbutton
+12/1/2015 10:25:51 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 10:25:51 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 10:25:51 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 10:25:51 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 10:25:51 AM 4060 Obtained DebugPrivilege
+12/1/2015 10:25:51 AM 4060 CreateProcess
+12/1/2015 10:25:51 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 10:25:51 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 10:25:51 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 10:25:51 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 10:25:51 AM 4060 ResumeThread
+12/1/2015 10:25:51 AM 4060 WaitForInputIdle
+12/1/2015 10:25:51 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 10:25:51 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 10:25:51 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 10:25:51 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 10:25:51 AM 4060 Starting Starcraft completed
+12/1/2015 11:08:35 AM 4060 Startbutton
+12/1/2015 11:08:35 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:08:35 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:08:35 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:08:35 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:08:35 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:08:35 AM 4060 CreateProcess
+12/1/2015 11:08:35 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:08:35 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:08:35 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:08:35 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:08:35 AM 4060 ResumeThread
+12/1/2015 11:08:35 AM 4060 WaitForInputIdle
+12/1/2015 11:08:35 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:08:35 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:08:35 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:08:35 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:08:35 AM 4060 Starting Starcraft completed
+12/1/2015 11:13:20 AM 4060 Startbutton
+12/1/2015 11:13:20 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:13:20 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:13:20 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:13:20 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:13:20 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:13:20 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:13:20 AM 4060 CreateProcess
+12/1/2015 11:13:20 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:13:20 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:13:20 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:13:20 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:13:20 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:13:20 AM 4060 ResumeThread
+12/1/2015 11:13:20 AM 4060 WaitForInputIdle
+12/1/2015 11:13:20 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:13:20 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:13:20 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:13:20 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:13:20 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:13:20 AM 4060 Starting Starcraft completed
+12/1/2015 11:13:21 AM 4060 Startbutton
+12/1/2015 11:13:21 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:13:21 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:13:21 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:13:21 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:13:21 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:13:21 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:13:21 AM 4060 CreateProcess
+12/1/2015 11:13:21 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:13:21 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:13:21 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:13:21 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:13:23 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:13:23 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:13:23 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:13:23 AM 4060 ResumeThread
+12/1/2015 11:13:23 AM 4060 WaitForInputIdle
+12/1/2015 11:13:23 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:13:23 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:13:23 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:13:23 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:13:23 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:13:23 AM 4060 Starting Starcraft completed
+12/1/2015 11:19:02 AM 4060 Startbutton
+12/1/2015 11:19:02 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:19:02 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:19:02 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:19:02 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:19:02 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:19:02 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:19:02 AM 4060 CreateProcess
+12/1/2015 11:19:02 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:19:02 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:19:02 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:19:02 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:19:02 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:19:02 AM 4060 ResumeThread
+12/1/2015 11:19:02 AM 4060 WaitForInputIdle
+12/1/2015 11:19:02 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:19:02 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:19:02 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:19:02 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:19:02 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:19:02 AM 4060 Starting Starcraft completed
+12/1/2015 11:19:02 AM 4060 Startbutton
+12/1/2015 11:19:02 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:19:02 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:19:02 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:19:02 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:19:02 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:19:02 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:19:02 AM 4060 CreateProcess
+12/1/2015 11:19:02 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:19:02 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:19:02 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:19:02 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:19:04 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:19:04 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:19:04 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:19:04 AM 4060 ResumeThread
+12/1/2015 11:19:04 AM 4060 WaitForInputIdle
+12/1/2015 11:19:04 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:19:04 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:19:04 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:19:04 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:19:04 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:19:04 AM 4060 Starting Starcraft completed
+12/1/2015 11:22:28 AM 4060 Startbutton
+12/1/2015 11:22:28 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:22:28 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:22:28 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:22:28 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:22:28 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:22:28 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:22:28 AM 4060 CreateProcess
+12/1/2015 11:22:28 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:22:28 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:22:28 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:22:28 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:22:28 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:22:28 AM 4060 ResumeThread
+12/1/2015 11:22:28 AM 4060 WaitForInputIdle
+12/1/2015 11:22:29 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:22:29 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:22:29 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:22:29 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:22:29 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:22:29 AM 4060 Starting Starcraft completed
+12/1/2015 11:22:29 AM 4060 Startbutton
+12/1/2015 11:22:29 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:22:29 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:22:29 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:22:29 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:22:29 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:22:29 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:22:29 AM 4060 CreateProcess
+12/1/2015 11:22:29 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:22:29 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:22:29 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:22:29 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:22:30 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:22:30 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:22:31 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:22:31 AM 4060 ResumeThread
+12/1/2015 11:22:31 AM 4060 WaitForInputIdle
+12/1/2015 11:22:31 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:22:31 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:22:31 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:22:31 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:22:31 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:22:31 AM 4060 Starting Starcraft completed
+12/1/2015 11:24:12 AM 4060 Startbutton
+12/1/2015 11:24:12 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:24:12 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:24:12 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:24:12 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:24:12 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:24:12 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:24:12 AM 4060 CreateProcess
+12/1/2015 11:24:12 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:24:12 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:24:12 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:24:12 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:24:12 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:24:12 AM 4060 ResumeThread
+12/1/2015 11:24:12 AM 4060 WaitForInputIdle
+12/1/2015 11:24:12 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:24:12 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:24:12 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:24:12 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:24:12 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:24:12 AM 4060 Starting Starcraft completed
+12/1/2015 11:24:34 AM 4060 Startbutton
+12/1/2015 11:24:34 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:24:34 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:24:34 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:24:34 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:24:35 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:24:35 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:24:35 AM 4060 CreateProcess
+12/1/2015 11:24:35 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:24:35 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:24:35 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:24:35 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:24:35 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:24:35 AM 4060 ResumeThread
+12/1/2015 11:24:35 AM 4060 WaitForInputIdle
+12/1/2015 11:24:35 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:24:35 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:24:35 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:24:35 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:24:35 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:24:35 AM 4060 Starting Starcraft completed
+12/1/2015 11:25:18 AM 4060 Startbutton
+12/1/2015 11:25:18 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:25:18 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:25:18 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:25:18 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:25:18 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:25:18 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:25:18 AM 4060 CreateProcess
+12/1/2015 11:25:18 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:25:18 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:25:18 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:25:18 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:25:18 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:25:18 AM 4060 ResumeThread
+12/1/2015 11:25:18 AM 4060 WaitForInputIdle
+12/1/2015 11:25:18 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:25:18 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:25:18 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:25:18 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:25:18 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:25:18 AM 4060 Starting Starcraft completed
+12/1/2015 11:25:46 AM 4060 Startbutton
+12/1/2015 11:25:46 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:25:46 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:25:46 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:25:46 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:25:46 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:25:46 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:25:46 AM 4060 CreateProcess
+12/1/2015 11:25:46 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:25:46 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:25:46 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:25:46 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:25:46 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:25:46 AM 4060 ResumeThread
+12/1/2015 11:25:46 AM 4060 WaitForInputIdle
+12/1/2015 11:25:46 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:25:46 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:25:46 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:25:46 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:25:46 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:25:46 AM 4060 Starting Starcraft completed
+12/1/2015 11:26:34 AM 4060 Startbutton
+12/1/2015 11:26:34 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:26:34 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:26:34 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:26:34 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:26:34 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:26:34 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:26:34 AM 4060 CreateProcess
+12/1/2015 11:26:34 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:26:34 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:26:34 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:26:34 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:26:34 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:26:34 AM 4060 ResumeThread
+12/1/2015 11:26:34 AM 4060 WaitForInputIdle
+12/1/2015 11:26:34 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:26:34 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:26:34 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:26:34 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:26:34 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:26:34 AM 4060 Starting Starcraft completed
+12/1/2015 11:26:53 AM 4060 Startbutton
+12/1/2015 11:26:53 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:26:53 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:26:53 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:26:53 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:26:53 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:26:53 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:26:53 AM 4060 CreateProcess
+12/1/2015 11:26:53 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:26:53 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:26:53 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:26:53 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:26:53 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:26:53 AM 4060 ResumeThread
+12/1/2015 11:26:53 AM 4060 WaitForInputIdle
+12/1/2015 11:26:53 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:26:53 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:26:53 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:26:53 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:26:53 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:26:53 AM 4060 Starting Starcraft completed
+12/1/2015 11:27:21 AM 4060 Startbutton
+12/1/2015 11:27:21 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:27:21 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:27:21 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:27:21 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:27:21 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:27:21 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:27:21 AM 4060 CreateProcess
+12/1/2015 11:27:21 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:27:21 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:27:21 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:27:21 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:27:21 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:27:21 AM 4060 ResumeThread
+12/1/2015 11:27:21 AM 4060 WaitForInputIdle
+12/1/2015 11:27:21 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:27:21 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:27:21 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:27:21 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:27:21 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:27:21 AM 4060 Starting Starcraft completed
+12/1/2015 11:27:33 AM 4060 Startbutton
+12/1/2015 11:27:33 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:27:33 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:27:33 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:27:33 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:27:33 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:27:33 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:27:33 AM 4060 CreateProcess
+12/1/2015 11:27:33 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:27:33 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:27:33 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:27:33 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:27:33 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:27:33 AM 4060 ResumeThread
+12/1/2015 11:27:33 AM 4060 WaitForInputIdle
+12/1/2015 11:27:33 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:27:33 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:27:33 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:27:33 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:27:33 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:27:33 AM 4060 Starting Starcraft completed
+12/1/2015 11:28:03 AM 4060 Startbutton
+12/1/2015 11:28:03 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:28:04 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:28:04 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:28:04 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:28:04 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:28:04 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:28:04 AM 4060 CreateProcess
+12/1/2015 11:28:04 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:28:04 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:28:04 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:28:04 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:28:04 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:28:04 AM 4060 ResumeThread
+12/1/2015 11:28:04 AM 4060 WaitForInputIdle
+12/1/2015 11:28:04 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:28:04 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:28:04 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:28:04 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:28:04 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:28:04 AM 4060 Starting Starcraft completed
+12/1/2015 11:29:40 AM 4060 Startbutton
+12/1/2015 11:29:40 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:29:40 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:29:40 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:29:40 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:29:40 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:29:40 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:29:40 AM 4060 CreateProcess
+12/1/2015 11:29:40 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:29:40 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:29:41 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:29:41 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:29:41 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:29:41 AM 4060 ResumeThread
+12/1/2015 11:29:41 AM 4060 WaitForInputIdle
+12/1/2015 11:29:41 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:29:41 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:29:41 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:29:41 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:29:41 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:29:41 AM 4060 Starting Starcraft completed
+12/1/2015 11:30:01 AM 4060 Startbutton
+12/1/2015 11:30:01 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:30:01 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:30:01 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:30:01 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:30:01 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:30:01 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:30:01 AM 4060 CreateProcess
+12/1/2015 11:30:01 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:30:01 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:30:01 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:30:01 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:30:01 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:30:01 AM 4060 ResumeThread
+12/1/2015 11:30:01 AM 4060 WaitForInputIdle
+12/1/2015 11:30:01 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:30:01 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:30:01 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:30:01 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:30:01 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:30:01 AM 4060 Starting Starcraft completed
+12/1/2015 11:30:27 AM 4060 Startbutton
+12/1/2015 11:30:27 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:30:27 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:30:27 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:30:27 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:30:27 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:30:27 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:30:27 AM 4060 CreateProcess
+12/1/2015 11:30:27 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:30:27 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:30:27 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:30:27 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:30:27 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:30:27 AM 4060 ResumeThread
+12/1/2015 11:30:27 AM 4060 WaitForInputIdle
+12/1/2015 11:30:27 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:30:27 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:30:27 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:30:27 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:30:27 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:30:27 AM 4060 Starting Starcraft completed
+12/1/2015 11:30:56 AM 4060 Startbutton
+12/1/2015 11:30:56 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:30:56 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:30:56 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:30:56 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:30:56 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:30:56 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:30:56 AM 4060 CreateProcess
+12/1/2015 11:30:56 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:30:56 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:30:56 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:30:56 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:30:56 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:30:56 AM 4060 ResumeThread
+12/1/2015 11:30:56 AM 4060 WaitForInputIdle
+12/1/2015 11:30:56 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:30:56 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:30:56 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:30:56 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:30:56 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:30:56 AM 4060 Starting Starcraft completed
+12/1/2015 11:31:07 AM 4060 Startbutton
+12/1/2015 11:31:07 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:31:07 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:31:07 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:31:07 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:31:07 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:31:07 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:31:07 AM 4060 CreateProcess
+12/1/2015 11:31:07 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:31:07 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:31:07 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:31:07 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:31:07 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:31:07 AM 4060 ResumeThread
+12/1/2015 11:31:07 AM 4060 WaitForInputIdle
+12/1/2015 11:31:07 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:31:07 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:31:07 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:31:07 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:31:07 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:31:07 AM 4060 Starting Starcraft completed
+12/1/2015 11:31:36 AM 4060 Startbutton
+12/1/2015 11:31:36 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:31:36 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:31:36 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:31:36 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:31:36 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:31:36 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:31:36 AM 4060 CreateProcess
+12/1/2015 11:31:36 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:31:36 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:31:36 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:31:36 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:31:36 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:31:36 AM 4060 ResumeThread
+12/1/2015 11:31:36 AM 4060 WaitForInputIdle
+12/1/2015 11:31:36 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:31:36 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:31:36 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:31:36 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:31:36 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:31:36 AM 4060 Starting Starcraft completed
+12/1/2015 11:31:48 AM 4060 Startbutton
+12/1/2015 11:31:48 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:31:48 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:31:48 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:31:48 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:31:48 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:31:48 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:31:48 AM 4060 CreateProcess
+12/1/2015 11:31:48 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:31:48 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:31:48 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:31:48 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:31:48 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:31:48 AM 4060 ResumeThread
+12/1/2015 11:31:48 AM 4060 WaitForInputIdle
+12/1/2015 11:31:48 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:31:48 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:31:48 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:31:48 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:31:48 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:31:48 AM 4060 Starting Starcraft completed
+12/1/2015 11:32:01 AM 4060 Startbutton
+12/1/2015 11:32:01 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:32:01 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:32:01 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:32:01 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:32:01 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:32:01 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:32:01 AM 4060 CreateProcess
+12/1/2015 11:32:01 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:32:01 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:01 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:32:01 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:32:01 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:32:01 AM 4060 ResumeThread
+12/1/2015 11:32:01 AM 4060 WaitForInputIdle
+12/1/2015 11:32:01 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:32:01 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:01 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:32:01 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:32:01 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:32:01 AM 4060 Starting Starcraft completed
+12/1/2015 11:32:02 AM 4060 Startbutton
+12/1/2015 11:32:02 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:32:02 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:32:02 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:32:02 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:32:02 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:32:02 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:32:02 AM 4060 CreateProcess
+12/1/2015 11:32:02 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:32:02 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:02 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:32:02 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:32:03 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:32:03 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:32:03 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:32:03 AM 4060 ResumeThread
+12/1/2015 11:32:03 AM 4060 WaitForInputIdle
+12/1/2015 11:32:03 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:32:03 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:03 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:32:03 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:32:03 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:32:03 AM 4060 Starting Starcraft completed
+12/1/2015 11:32:25 AM 4060 Startbutton
+12/1/2015 11:32:25 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:32:26 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:32:26 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:32:26 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:32:26 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:32:26 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:32:26 AM 4060 CreateProcess
+12/1/2015 11:32:26 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:32:26 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:26 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:32:26 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:32:26 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:32:26 AM 4060 ResumeThread
+12/1/2015 11:32:26 AM 4060 WaitForInputIdle
+12/1/2015 11:32:26 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:32:26 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:26 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:32:26 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:32:26 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:32:26 AM 4060 Starting Starcraft completed
+12/1/2015 11:32:26 AM 4060 Startbutton
+12/1/2015 11:32:26 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:32:26 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:32:26 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:32:26 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:32:26 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:32:26 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:32:26 AM 4060 CreateProcess
+12/1/2015 11:32:26 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:32:26 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:26 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:32:26 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:32:27 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:32:28 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:32:28 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:32:28 AM 4060 ResumeThread
+12/1/2015 11:32:28 AM 4060 WaitForInputIdle
+12/1/2015 11:32:28 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:32:28 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:32:28 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:32:28 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:32:28 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:32:28 AM 4060 Starting Starcraft completed
+12/1/2015 11:52:58 AM 4060 Startbutton
+12/1/2015 11:52:58 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:52:58 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:52:58 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:52:58 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:52:58 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:52:58 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:52:58 AM 4060 CreateProcess
+12/1/2015 11:52:58 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:52:58 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:52:58 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:52:58 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:52:58 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:52:58 AM 4060 ResumeThread
+12/1/2015 11:52:58 AM 4060 WaitForInputIdle
+12/1/2015 11:52:58 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:52:58 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:52:58 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:52:58 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:52:58 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:52:58 AM 4060 Starting Starcraft completed
+12/1/2015 11:53:17 AM 4060 Startbutton
+12/1/2015 11:53:17 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:53:17 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:53:17 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:53:17 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:53:17 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:53:17 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:53:17 AM 4060 CreateProcess
+12/1/2015 11:53:17 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:53:17 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:53:17 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:53:17 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:53:18 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:53:18 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:53:19 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:53:19 AM 4060 ResumeThread
+12/1/2015 11:53:19 AM 4060 WaitForInputIdle
+12/1/2015 11:53:19 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:53:19 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:53:19 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:53:19 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:53:19 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:53:19 AM 4060 Starting Starcraft completed
+12/1/2015 11:58:18 AM 4060 Startbutton
+12/1/2015 11:58:18 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:58:18 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:58:18 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:58:18 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:58:18 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:58:18 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:58:18 AM 4060 CreateProcess
+12/1/2015 11:58:18 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:58:18 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:58:18 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:58:18 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:58:18 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:58:18 AM 4060 ResumeThread
+12/1/2015 11:58:18 AM 4060 WaitForInputIdle
+12/1/2015 11:58:18 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:58:18 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:58:18 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:58:18 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:58:18 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:58:18 AM 4060 Starting Starcraft completed
+12/1/2015 11:58:18 AM 4060 Startbutton
+12/1/2015 11:58:18 AM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 11:58:18 AM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 11:58:18 AM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 11:58:18 AM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 11:58:18 AM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 11:58:18 AM 4060 Obtained DebugPrivilege
+12/1/2015 11:58:18 AM 4060 CreateProcess
+12/1/2015 11:58:18 AM 4060 Call ScSuspended for all active Plugins
+12/1/2015 11:58:18 AM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:58:18 AM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 11:58:18 AM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:58:20 AM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 11:58:20 AM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 11:58:20 AM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 11:58:20 AM 4060 ResumeThread
+12/1/2015 11:58:20 AM 4060 WaitForInputIdle
+12/1/2015 11:58:20 AM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 11:58:20 AM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 11:58:20 AM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 11:58:20 AM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 11:58:20 AM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 11:58:20 AM 4060 Starting Starcraft completed
+12/1/2015 12:07:01 PM 4060 Startbutton
+12/1/2015 12:07:01 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:07:01 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:07:01 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:07:01 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:07:01 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:07:01 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:07:01 PM 4060 CreateProcess
+12/1/2015 12:07:01 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:07:01 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:07:01 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:07:01 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:07:01 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:07:01 PM 4060 ResumeThread
+12/1/2015 12:07:01 PM 4060 WaitForInputIdle
+12/1/2015 12:07:02 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:07:02 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:07:02 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:07:02 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:07:02 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:07:02 PM 4060 Starting Starcraft completed
+12/1/2015 12:07:10 PM 4060 Startbutton
+12/1/2015 12:07:10 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:07:10 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:07:10 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:07:10 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:07:10 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:07:10 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:07:10 PM 4060 CreateProcess
+12/1/2015 12:07:10 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:07:10 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:07:10 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:07:10 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:07:11 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:07:11 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:07:12 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:07:12 PM 4060 ResumeThread
+12/1/2015 12:07:12 PM 4060 WaitForInputIdle
+12/1/2015 12:07:12 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:07:12 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:07:12 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:07:12 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:07:12 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:07:12 PM 4060 Starting Starcraft completed
+12/1/2015 12:11:04 PM 4060 Startbutton
+12/1/2015 12:11:04 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:11:04 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:11:04 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:11:04 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:11:04 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:11:04 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:11:04 PM 4060 CreateProcess
+12/1/2015 12:11:04 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:11:04 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:11:04 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:11:04 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:11:05 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:11:05 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:11:06 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:11:06 PM 4060 ResumeThread
+12/1/2015 12:11:06 PM 4060 WaitForInputIdle
+12/1/2015 12:11:06 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:11:06 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:11:06 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:11:06 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:11:06 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:11:06 PM 4060 Starting Starcraft completed
+12/1/2015 12:11:13 PM 4060 Startbutton
+12/1/2015 12:11:13 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:11:13 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:11:13 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:11:13 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:11:13 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:11:13 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:11:13 PM 4060 CreateProcess
+12/1/2015 12:11:13 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:11:13 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:11:13 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:11:13 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:11:13 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:11:13 PM 4060 ResumeThread
+12/1/2015 12:11:13 PM 4060 WaitForInputIdle
+12/1/2015 12:11:13 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:11:13 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:11:13 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:11:13 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:11:13 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:11:13 PM 4060 Starting Starcraft completed
+12/1/2015 12:11:14 PM 4060 Startbutton
+12/1/2015 12:11:14 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:11:14 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:11:14 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:11:14 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:11:14 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:11:14 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:11:14 PM 4060 CreateProcess
+12/1/2015 12:11:14 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:11:14 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:11:14 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:11:14 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:11:15 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:11:15 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:11:16 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:11:16 PM 4060 ResumeThread
+12/1/2015 12:11:16 PM 4060 WaitForInputIdle
+12/1/2015 12:11:16 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:11:16 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:11:16 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:11:16 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:11:16 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:11:16 PM 4060 Starting Starcraft completed
+12/1/2015 12:16:16 PM 4060 Startbutton
+12/1/2015 12:16:16 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:16:16 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:16:16 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:16:16 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:16:16 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:16:16 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:16:16 PM 4060 CreateProcess
+12/1/2015 12:16:16 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:16:16 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:16:17 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:16:17 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:16:17 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:16:17 PM 4060 ResumeThread
+12/1/2015 12:16:17 PM 4060 WaitForInputIdle
+12/1/2015 12:16:17 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:16:17 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:16:17 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:16:17 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:16:17 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:16:17 PM 4060 Starting Starcraft completed
+12/1/2015 12:16:18 PM 4060 Startbutton
+12/1/2015 12:16:18 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:16:18 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:16:18 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:16:18 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:16:18 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:16:18 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:16:18 PM 4060 CreateProcess
+12/1/2015 12:16:18 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:16:18 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:16:18 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:16:18 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:16:19 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:16:19 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:16:19 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:16:19 PM 4060 ResumeThread
+12/1/2015 12:16:19 PM 4060 WaitForInputIdle
+12/1/2015 12:16:19 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:16:19 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:16:19 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:16:19 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:16:19 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:16:19 PM 4060 Starting Starcraft completed
+12/1/2015 12:23:19 PM 4060 Startbutton
+12/1/2015 12:23:19 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:23:19 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:23:19 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:23:19 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:23:19 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:23:19 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:23:19 PM 4060 CreateProcess
+12/1/2015 12:23:19 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:23:19 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:23:19 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:23:19 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:23:19 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:23:19 PM 4060 ResumeThread
+12/1/2015 12:23:19 PM 4060 WaitForInputIdle
+12/1/2015 12:23:19 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:23:19 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:23:19 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:23:19 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:23:19 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:23:19 PM 4060 Starting Starcraft completed
+12/1/2015 12:23:33 PM 4060 Startbutton
+12/1/2015 12:23:33 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:23:33 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:23:33 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:23:33 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:23:33 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:23:33 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:23:33 PM 4060 CreateProcess
+12/1/2015 12:23:33 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:23:33 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:23:34 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:23:34 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:23:34 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:23:34 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:23:35 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:23:35 PM 4060 ResumeThread
+12/1/2015 12:23:35 PM 4060 WaitForInputIdle
+12/1/2015 12:23:35 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:23:35 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:23:35 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:23:35 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:23:35 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:23:35 PM 4060 Starting Starcraft completed
+12/1/2015 12:31:11 PM 4060 Startbutton
+12/1/2015 12:31:11 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:31:11 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:31:11 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:31:11 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:31:11 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:31:11 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:31:11 PM 4060 CreateProcess
+12/1/2015 12:31:11 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:31:11 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:31:11 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:31:11 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:31:11 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:31:11 PM 4060 ResumeThread
+12/1/2015 12:31:11 PM 4060 WaitForInputIdle
+12/1/2015 12:31:11 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:31:11 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:31:11 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:31:11 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:31:11 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:31:11 PM 4060 Starting Starcraft completed
+12/1/2015 12:31:23 PM 4060 Startbutton
+12/1/2015 12:31:23 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:31:23 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:31:23 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:31:23 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:31:23 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:31:23 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:31:23 PM 4060 CreateProcess
+12/1/2015 12:31:23 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:31:23 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:31:23 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:31:23 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:31:24 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:31:24 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:31:25 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:31:25 PM 4060 ResumeThread
+12/1/2015 12:31:25 PM 4060 WaitForInputIdle
+12/1/2015 12:31:25 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:31:25 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:31:25 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:31:25 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:31:25 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:31:25 PM 4060 Starting Starcraft completed
+12/1/2015 12:35:42 PM 4060 Start latest Starcraft
+12/1/2015 12:35:42 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:35:42 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:35:42 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:35:42 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:35:42 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:35:42 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:35:42 PM 4060 CreateProcess
+12/1/2015 12:35:42 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:35:42 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:35:43 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:35:43 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:35:43 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:35:43 PM 4060 ResumeThread
+12/1/2015 12:35:43 PM 4060 WaitForInputIdle
+12/1/2015 12:35:43 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:35:43 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:35:43 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:35:43 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:35:43 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:35:43 PM 4060 Starting Starcraft completed
+12/1/2015 12:35:45 PM 4060 Start latest Starcraft
+12/1/2015 12:35:45 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:35:45 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:35:45 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:35:45 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:35:45 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:35:45 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:35:45 PM 4060 CreateProcess
+12/1/2015 12:35:45 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:35:45 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:35:45 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:35:45 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:35:46 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:35:46 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:35:46 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:35:46 PM 4060 ResumeThread
+12/1/2015 12:35:46 PM 4060 WaitForInputIdle
+12/1/2015 12:35:46 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:35:46 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:35:46 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:35:46 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:35:46 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:35:46 PM 4060 Starting Starcraft completed
+12/1/2015 12:40:29 PM 4060 Start latest Starcraft
+12/1/2015 12:40:29 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:40:29 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:40:29 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:40:29 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:40:29 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:40:29 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:40:29 PM 4060 CreateProcess
+12/1/2015 12:40:29 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:40:29 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:40:29 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:40:29 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:40:29 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:40:29 PM 4060 ResumeThread
+12/1/2015 12:40:29 PM 4060 WaitForInputIdle
+12/1/2015 12:40:29 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:40:29 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:40:29 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:40:29 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:40:29 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:40:29 PM 4060 Starting Starcraft completed
+12/1/2015 12:40:33 PM 4060 Start latest Starcraft
+12/1/2015 12:40:33 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:40:33 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:40:33 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:40:33 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:40:33 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:40:33 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:40:33 PM 4060 CreateProcess
+12/1/2015 12:40:33 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:40:33 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:40:33 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:40:33 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:40:34 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:40:34 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:40:35 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:40:35 PM 4060 ResumeThread
+12/1/2015 12:40:35 PM 4060 WaitForInputIdle
+12/1/2015 12:40:35 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:40:35 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:40:35 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:40:35 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:40:35 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:40:35 PM 4060 Starting Starcraft completed
+12/1/2015 12:44:05 PM 4060 Start latest Starcraft
+12/1/2015 12:44:05 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:44:05 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:44:05 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:44:05 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:44:05 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:44:05 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:44:05 PM 4060 CreateProcess
+12/1/2015 12:44:05 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:44:05 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:44:05 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:44:05 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:44:05 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:44:05 PM 4060 ResumeThread
+12/1/2015 12:44:05 PM 4060 WaitForInputIdle
+12/1/2015 12:44:05 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:44:05 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:44:05 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:44:05 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:44:05 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:44:05 PM 4060 Starting Starcraft completed
+12/1/2015 12:44:07 PM 4060 Start latest Starcraft
+12/1/2015 12:44:07 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:44:07 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:44:07 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:44:07 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:44:07 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:44:07 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:44:07 PM 4060 CreateProcess
+12/1/2015 12:44:07 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:44:07 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:44:08 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:44:08 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:44:08 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:44:08 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:44:09 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:44:09 PM 4060 ResumeThread
+12/1/2015 12:44:09 PM 4060 WaitForInputIdle
+12/1/2015 12:44:09 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:44:09 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:44:09 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:44:09 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:44:09 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:44:09 PM 4060 Starting Starcraft completed
+12/1/2015 12:49:30 PM 4060 Start latest Starcraft
+12/1/2015 12:49:30 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:49:30 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:49:30 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:49:30 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:49:30 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:49:30 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:49:30 PM 4060 CreateProcess
+12/1/2015 12:49:30 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:49:30 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:49:30 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:49:30 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:49:30 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:49:30 PM 4060 ResumeThread
+12/1/2015 12:49:30 PM 4060 WaitForInputIdle
+12/1/2015 12:49:30 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:49:30 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:49:30 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:49:30 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:49:30 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:49:30 PM 4060 Starting Starcraft completed
+12/1/2015 12:49:37 PM 4060 Start latest Starcraft
+12/1/2015 12:49:37 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:49:37 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:49:37 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:49:37 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:49:37 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:49:37 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:49:37 PM 4060 CreateProcess
+12/1/2015 12:49:37 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:49:37 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:49:37 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:49:37 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:49:38 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:49:38 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:49:39 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:49:39 PM 4060 ResumeThread
+12/1/2015 12:49:39 PM 4060 WaitForInputIdle
+12/1/2015 12:49:39 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:49:39 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:49:39 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:49:39 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:49:39 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:49:39 PM 4060 Starting Starcraft completed
+12/1/2015 12:57:22 PM 4060 Start latest Starcraft
+12/1/2015 12:57:22 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:57:22 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:57:22 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:57:22 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:57:22 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:57:22 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:57:22 PM 4060 CreateProcess
+12/1/2015 12:57:22 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:57:22 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:22 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:57:22 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:57:22 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:57:22 PM 4060 ResumeThread
+12/1/2015 12:57:22 PM 4060 WaitForInputIdle
+12/1/2015 12:57:22 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:57:22 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:22 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:57:22 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:57:22 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:57:22 PM 4060 Starting Starcraft completed
+12/1/2015 12:57:26 PM 4060 Start latest Starcraft
+12/1/2015 12:57:26 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:57:26 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:57:26 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:57:26 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:57:26 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:57:26 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:57:26 PM 4060 CreateProcess
+12/1/2015 12:57:26 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:57:26 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:26 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:57:26 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:57:27 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:57:27 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:57:27 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:57:27 PM 4060 ResumeThread
+12/1/2015 12:57:27 PM 4060 WaitForInputIdle
+12/1/2015 12:57:27 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:57:27 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:27 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:57:27 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:57:27 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:57:27 PM 4060 Starting Starcraft completed
+12/1/2015 12:57:36 PM 4060 Start latest Starcraft
+12/1/2015 12:57:36 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:57:36 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:57:36 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:57:36 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:57:36 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:57:36 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:57:36 PM 4060 CreateProcess
+12/1/2015 12:57:36 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:57:36 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:36 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:57:36 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:57:36 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:57:36 PM 4060 ResumeThread
+12/1/2015 12:57:36 PM 4060 WaitForInputIdle
+12/1/2015 12:57:36 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:57:36 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:36 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:57:36 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:57:37 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:57:37 PM 4060 Starting Starcraft completed
+12/1/2015 12:57:39 PM 4060 Start latest Starcraft
+12/1/2015 12:57:39 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 12:57:39 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 12:57:39 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 12:57:39 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 12:57:39 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 12:57:39 PM 4060 Obtained DebugPrivilege
+12/1/2015 12:57:39 PM 4060 CreateProcess
+12/1/2015 12:57:39 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 12:57:39 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:39 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 12:57:39 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:57:40 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 12:57:40 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 12:57:40 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 12:57:40 PM 4060 ResumeThread
+12/1/2015 12:57:40 PM 4060 WaitForInputIdle
+12/1/2015 12:57:40 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 12:57:40 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 12:57:40 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 12:57:40 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 12:57:40 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 12:57:40 PM 4060 Starting Starcraft completed
+12/1/2015 1:01:26 PM 4060 Start latest Starcraft
+12/1/2015 1:01:26 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 1:01:26 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 1:01:26 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 1:01:26 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 1:01:26 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 1:01:26 PM 4060 Obtained DebugPrivilege
+12/1/2015 1:01:26 PM 4060 CreateProcess
+12/1/2015 1:01:26 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 1:01:26 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:01:26 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 1:01:26 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 1:01:26 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 1:01:26 PM 4060 ResumeThread
+12/1/2015 1:01:26 PM 4060 WaitForInputIdle
+12/1/2015 1:01:26 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 1:01:26 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:01:26 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 1:01:26 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 1:01:26 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 1:01:26 PM 4060 Starting Starcraft completed
+12/1/2015 1:01:29 PM 4060 Start latest Starcraft
+12/1/2015 1:01:29 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 1:01:29 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 1:01:29 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 1:01:29 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 1:01:29 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 1:01:29 PM 4060 Obtained DebugPrivilege
+12/1/2015 1:01:29 PM 4060 CreateProcess
+12/1/2015 1:01:29 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 1:01:29 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:01:29 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 1:01:29 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 1:01:30 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 1:01:30 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 1:01:30 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 1:01:30 PM 4060 ResumeThread
+12/1/2015 1:01:30 PM 4060 WaitForInputIdle
+12/1/2015 1:01:30 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 1:01:30 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:01:30 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 1:01:30 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 1:01:30 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 1:01:30 PM 4060 Starting Starcraft completed
+12/1/2015 1:05:11 PM 4060 Start latest Starcraft
+12/1/2015 1:05:11 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 1:05:11 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 1:05:11 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 1:05:11 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 1:05:11 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 1:05:11 PM 4060 Obtained DebugPrivilege
+12/1/2015 1:05:11 PM 4060 CreateProcess
+12/1/2015 1:05:11 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 1:05:11 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:05:11 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 1:05:11 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 1:05:11 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 1:05:11 PM 4060 ResumeThread
+12/1/2015 1:05:11 PM 4060 WaitForInputIdle
+12/1/2015 1:05:12 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 1:05:12 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:05:12 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 1:05:12 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 1:05:12 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 1:05:12 PM 4060 Starting Starcraft completed
+12/1/2015 1:05:14 PM 4060 Start latest Starcraft
+12/1/2015 1:05:14 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 1:05:14 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 1:05:14 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 1:05:14 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 1:05:14 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 1:05:14 PM 4060 Obtained DebugPrivilege
+12/1/2015 1:05:14 PM 4060 CreateProcess
+12/1/2015 1:05:14 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 1:05:14 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:05:14 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 1:05:14 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 1:05:15 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 1:05:15 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 1:05:15 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 1:05:15 PM 4060 ResumeThread
+12/1/2015 1:05:15 PM 4060 WaitForInputIdle
+12/1/2015 1:05:15 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 1:05:15 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:05:15 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 1:05:15 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 1:05:15 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 1:05:15 PM 4060 Starting Starcraft completed
+12/1/2015 1:11:51 PM 4060 Start latest Starcraft
+12/1/2015 1:11:51 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 1:11:51 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 1:11:51 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 1:11:51 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 1:11:51 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 1:11:51 PM 4060 Obtained DebugPrivilege
+12/1/2015 1:11:51 PM 4060 CreateProcess
+12/1/2015 1:11:51 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 1:11:51 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:11:51 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 1:11:51 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 1:11:51 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 1:11:51 PM 4060 ResumeThread
+12/1/2015 1:11:51 PM 4060 WaitForInputIdle
+12/1/2015 1:11:51 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 1:11:51 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:11:51 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 1:11:51 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 1:11:51 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 1:11:51 PM 4060 Starting Starcraft completed
+12/1/2015 1:11:54 PM 4060 Start latest Starcraft
+12/1/2015 1:11:54 PM 4060 Starting Game Starcraft 1.16.1 E:\StarCraft\StarCraft.exe
+12/1/2015 1:11:54 PM 4060 BWAPI 4.1.2 Injector [RELEASE] Version  Compatible
+12/1/2015 1:11:54 PM 4060 Chaosplugin for 1.16.1 Version 0.8.9.3 Compatible
+12/1/2015 1:11:54 PM 4060 LatencyChanger for 1.16.1 Version 0.2.3 Compatible
+12/1/2015 1:11:54 PM 4060 W-MODE 1.02 Version 1.0.2 Compatible
+12/1/2015 1:11:54 PM 4060 Obtained DebugPrivilege
+12/1/2015 1:11:54 PM 4060 CreateProcess
+12/1/2015 1:11:54 PM 4060 Call ScSuspended for all active Plugins
+12/1/2015 1:11:54 PM 4060 ApplyPatchSuspended for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:11:54 PM 4060 ApplyPatchSuspended for Chaosplugin for 1.16.1
+12/1/2015 1:11:54 PM 4060 Exception at: StartGame ScSuspended Chaosplugin for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 1:11:55 PM 4060 ApplyPatchSuspended for LatencyChanger for 1.16.1
+12/1/2015 1:11:55 PM 4060 Exception at: StartGame ScSuspended LatencyChanger for 1.16.1 class: Exception msg: Mainthread already running
+12/1/2015 1:11:55 PM 4060 ApplyPatchSuspended for W-MODE 1.02
+12/1/2015 1:11:55 PM 4060 ResumeThread
+12/1/2015 1:11:55 PM 4060 WaitForInputIdle
+12/1/2015 1:11:55 PM 4060 Call ScWindowCreated for all active Plugins
+12/1/2015 1:11:55 PM 4060 ApplyPatch for BWAPI 4.1.2 Injector [RELEASE]
+12/1/2015 1:11:55 PM 4060 ApplyPatch for Chaosplugin for 1.16.1
+12/1/2015 1:11:55 PM 4060 ApplyPatch for LatencyChanger for 1.16.1
+12/1/2015 1:11:55 PM 4060 ApplyPatch for W-MODE 1.02
+12/1/2015 1:11:55 PM 4060 Starting Starcraft completed

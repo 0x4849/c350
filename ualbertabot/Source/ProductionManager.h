@@ -22,6 +22,7 @@ namespace UAlbertaBot
 		bool                _haveLocationForThisBuilding;
 		int					_overlordTimer;
 		bool				_isLastBuildOrder;
+		int					_gasTrickTimer;
 
 		BWAPI::Unit         getClosestUnitToPosition(const BWAPI::Unitset & units, BWAPI::Position closestTo);
 		BWAPI::Unit         selectUnitOfType(BWAPI::UnitType type, BWAPI::Position closestTo = BWAPI::Position(0, 0));
@@ -72,6 +73,8 @@ namespace UAlbertaBot
 		int		    overlordBuildTimer = 0;
 		std::set<BWAPI::Unit> upgradingStuff;
 		BWAPI::Unit getProducer(MetaType t, BWAPI::Position closestTo = BWAPI::Positions::None);
+		int hatchCounter = 0;
+		int mutaCounter = 0;
 
 	};
 

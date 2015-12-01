@@ -1,5 +1,6 @@
 #include "ProductionManager.h"
 #include "UnitUtil.h"
+#include "StrategyManager.h"
 
 using namespace UAlbertaBot;
 
@@ -18,6 +19,7 @@ void ProductionManager::setBuildOrder(const BuildOrder & buildOrder)
 
 	for (size_t i(0); i<buildOrder.size(); ++i)
 	{
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Muscular_Augments, 1));
 		_queue.queueAsLowestPriority(buildOrder[i], true);
 	}
 }
@@ -77,17 +79,64 @@ void ProductionManager::update()
 		{
 			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
 		}
-		
+
 		if (BWAPI::Broodwar->self()->supplyUsed() >= 40)
 		{
+			BWAPI::Broodwar->printf("Queuing one extra overlord");
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 		}
 		if (BWAPI::Broodwar->self()->supplyUsed() >= 100)
 		{
+			BWAPI::Broodwar->printf("Queuing two extra overlord");
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 		}
 
 		_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
+	}
+
+	if (!BuildingManager::Instance().shouldIExpand && BWAPI::Broodwar->getFrameCount() % 24 == 0 && StrategyManager::Instance().shouldExpandNow())
+	{
+		BuildingManager::Instance().shouldIExpand = true;
+	}
+
+	else if (BuildingManager::Instance().shouldIExpand && BWAPI::Broodwar->getFrameCount() % 24 == 0 && !StrategyManager::Instance().shouldExpandNow())
+	{
+		BuildingManager::Instance().shouldIExpand = false;
+	}
+
+	if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 800 && !StrategyManager::Instance().isSpireBuilding())
+	{
+		BWAPI::Broodwar->printf("Entering hatchery loop\n");
+		int totalMinerals = BWAPI::Broodwar->self()->minerals();
+		//int numHatch = 0;
+		/*while (totalMinerals > 300)
+		{
+		numHatch++;
+		totalMinerals -= 300;
+		}
+		numHatch = numHatch / 2;
+		for (int i = 0; i < numHatch; i++)
+		{
+		*/
+		//	}
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Hatchery), true);
+		hatchCounter = BWAPI::Broodwar->getFrameCount() + 360;
+	}
+
+
+	if (BWAPI::Broodwar->getFrameCount() > mutaCounter && BWAPI::Broodwar->self()->minerals() >= 900 && !StrategyManager::Instance().isSpireBuilding() && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1)
+	{
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+		_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
+
+		mutaCounter = BWAPI::Broodwar->getFrameCount() + BWAPI::UnitTypes::Zerg_Mutalisk.buildTime();
 	}
 
 	// if they have cloaked units get a new goal asap
@@ -131,16 +180,9 @@ void ProductionManager::update()
 	// play gas trick for 9/10Hatch strategy
 	if (Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
 	{
-		size_t count = 0;
-		for (const auto & unit : BWAPI::Broodwar->self()->getUnits())
-		{
-			if (unit->getType() == BWAPI::UnitTypes::Zerg_Drone)
-			{
-				count++;
-			}
-		}
-		if (count == 9){
-			ProductionManager::Instance().performCommand(BWAPI::UnitCommandTypes::Cancel_Construction);
+		if (BWAPI::Broodwar->getFrameCount() == _gasTrickTimer) ProductionManager::Instance().performCommand(BWAPI::UnitCommandTypes::Cancel_Construction);
+		if (!_gasTrickTimer && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Drone) == 9 && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor) == 1){
+			_gasTrickTimer = BWAPI::Broodwar->getFrameCount() + 1;
 		}
 	}
 }
@@ -161,7 +203,7 @@ void ProductionManager::onUnitDestroy(BWAPI::Unit unit)
 		{
 			if (unit->getType() != BWAPI::UnitTypes::Zerg_Drone)
 			{
-				performBuildOrderSearch();
+				//performBuildOrderSearch();
 			}
 		}
 	}
@@ -225,14 +267,30 @@ void ProductionManager::manageBuildOrderQueue()
 		if (currentItem.metaType.isBuilding() && !(producer && canMake) && currentItem.metaType.whatBuilds().isWorker())
 		{
 			// construct a temporary building object
-			Building b(currentItem.metaType.getUnitType(), BWAPI::Broodwar->self()->getStartLocation());
-			b.isGasSteal = currentItem.isGasSteal;
+			if (currentItem.metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Creep_Colony)
+			{
+				Building b(currentItem.metaType.getUnitType(), BuildingManager::Instance().createdHatcheriesVector[0]);
+				b.isGasSteal = currentItem.isGasSteal;
+				// set the producer as the closest worker, but do not set its job yet
+				producer = WorkerManager::Instance().getBuilder(b, false);
 
-			// set the producer as the closest worker, but do not set its job yet
-			producer = WorkerManager::Instance().getBuilder(b, false);
+				// predict the worker movement to that building location
+				predictWorkerMovement(b);
+			}
+			else
+			{
+				Building b(currentItem.metaType.getUnitType(), BWAPI::Broodwar->self()->getStartLocation());
+				b.isGasSteal = currentItem.isGasSteal;
+				// set the producer as the closest worker, but do not set its job yet
+				producer = WorkerManager::Instance().getBuilder(b, false);
 
-			// predict the worker movement to that building location
-			predictWorkerMovement(b);
+				// predict the worker movement to that building location
+				predictWorkerMovement(b);
+			}
+			
+			
+
+
 		}
 
 		// if we can make the current item
@@ -611,7 +669,12 @@ void ProductionManager::performCommand(BWAPI::UnitCommandType t)
 
 		if (extractor)
 		{
-			extractor->cancelConstruction();
+			BuildingManager::Instance().firstExtractorPosition = extractor->getTilePosition();
+			extractor->cancelMorph();
+			BWAPI::Broodwar->printf("Freeing tiles\n");
+			BuildingManager::Instance().removeBuildingExternal(extractor->getTilePosition());
+			BuildingPlacer::Instance().freeTiles(extractor->getTilePosition(), 4, 2);
+			BuildingManager::Instance().didGasTrickFrames = BWAPI::Broodwar->getFrameCount();
 		}
 	}
 }
