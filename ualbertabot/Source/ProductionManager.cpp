@@ -104,7 +104,7 @@ void ProductionManager::update()
 		BuildingManager::Instance().shouldIExpand = false;
 	}
 
-	if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 800 && !StrategyManager::Instance().isSpireBuilding())
+	if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 600 && !StrategyManager::Instance().isSpireBuilding())
 	{
 		BWAPI::Broodwar->printf("Entering hatchery loop\n");
 		int totalMinerals = BWAPI::Broodwar->self()->minerals();
