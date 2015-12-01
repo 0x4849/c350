@@ -9,7 +9,6 @@ ScoutManager::ScoutManager()
 	, _scouter2(nullptr)
 	, _overlordScout(nullptr)
 	, _workerScout(nullptr)
-	, _ninjaBaseLocation(BWAPI::TilePosition(0, 0))
 	, _enemyRamp(BWAPI::Position(0, 0))
 	, _scoutLocation1(BWAPI::Position(0, 0))
 	, _scoutLocation2(BWAPI::Position(0, 0))
@@ -69,47 +68,70 @@ void ScoutManager::moveScouts()
 			Micro::SmartMove(_scouter1, BWAPI::Position(enemyBaseLocation->getTilePosition()));
 		}
 		if (_scouter2) Micro::SmartMove(_scouter2, _enemyRamp);
-		if (_workerScout) buildNinjaBase();
+		if (_workerScout)
+		{
+			WorkerManager::Instance().finishedWithWorker(_workerScout);
+			_workerScout = nullptr;
+		}
 	}
 	else
 	{
-		if (_overlordScout) Micro::SmartMove(_overlordScout, BWAPI::Position(BWAPI::Broodwar->mapWidth() * 16, BWAPI::Broodwar->mapHeight() * 16));
 		if (_scoutLocation1 == BWAPI::Position(0, 0)||_scoutLocation2 == BWAPI::Position(0,0)){
-			int count = 0;
 			for (BWTA::BaseLocation * startLocation : BWTA::getStartLocations())
 			{
 				if (!BWAPI::Broodwar->isExplored(startLocation->getTilePosition()))
 				{
-					if (!count) { _scoutLocation1 = startLocation->getPosition(); }
-					else { _scoutLocation2 = startLocation->getPosition(); }
-					++count;
+					if (_scoutLocation1 == BWAPI::Position(0, 0) && startLocation->getPosition()!=_scoutLocation2) { _scoutLocation1 = startLocation->getPosition(); }
+					else if (_scoutLocation2 == BWAPI::Position(0, 0) && startLocation->getPosition() != _scoutLocation1){ _scoutLocation2 = startLocation->getPosition(); }
+					else if (startLocation->getPosition() != _scoutLocation1 && startLocation->getPosition() != _scoutLocation2) { _scoutLocation2 = startLocation->getPosition(); }
 				}
 			}
 			if (_scoutLocation2 == BWAPI::Position(0, 0))
 			{
 				_scoutLocation2 = _scoutLocation1;
 			}
+			if (_scoutLocation1 == BWAPI::Position(0, 0))
+			{
+				_scoutLocation1 = _scoutLocation2;
+			}
 		}
-		if (_scouter1) {
+		if (_scouter1) 
+		{
 			Micro::SmartMove(_scouter1, _scoutLocation1);
 			if (BWAPI::Broodwar->isExplored(BWAPI::TilePosition(_scoutLocation1))){
 				_scoutLocation1 = BWAPI::Position(0, 0);
 			}
 		}
-		if (_scouter2) {
+		if (_scouter2) 
+		{
 			Micro::SmartMove(_scouter2, _scoutLocation2);
-			if (BWAPI::Broodwar->isExplored(BWAPI::TilePosition(_scoutLocation1))){
+			if (BWAPI::Broodwar->isExplored(BWAPI::TilePosition(_scoutLocation2))){
 				_scoutLocation2 = BWAPI::Position(0, 0);
 			}
 		}
-	}
-}
+		if (_workerScout)
+		{
+			Micro::SmartMove(_workerScout, _scoutLocation1);
+			if (BWAPI::Broodwar->isExplored(BWAPI::TilePosition(_scoutLocation1))){
+				_scoutLocation1 = BWAPI::Position(0, 0);
+			}
 
-void ScoutManager::buildNinjaBase()
-{
-	if (_ninjaBaseLocation == BWAPI::TilePosition(0, 0)) _ninjaBaseLocation = getFarthestPoint();
-	if (BWAPI::Broodwar->self()->minerals() >= 300 && _workerScout->getDistance(BWAPI::Position(_ninjaBaseLocation)) <= 100) _workerScout->build(BWAPI::UnitTypes::Zerg_Hatchery, _ninjaBaseLocation);
-	else Micro::SmartMove(_workerScout, BWAPI::Position(_ninjaBaseLocation));
+		}
+		if (_overlordScout)
+		{
+			if (Config::Strategy::StrategyName == Config::Strategy::AgainstZergStrategyName)
+			{
+				Micro::SmartMove(_overlordScout, _scoutLocation2);
+				if (BWAPI::Broodwar->isExplored(BWAPI::TilePosition(_scoutLocation2))){
+					_scoutLocation2 = BWAPI::Position(0, 0);
+				}
+			}
+			else 
+			{
+				Micro::SmartMove(_overlordScout, BWAPI::Position(BWAPI::Broodwar->mapWidth() * 16, BWAPI::Broodwar->mapHeight() * 16));
+			}
+		}
+	}
 }
 
 BWAPI::TilePosition ScoutManager::getFarthestPoint()

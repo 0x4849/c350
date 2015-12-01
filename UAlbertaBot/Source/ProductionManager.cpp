@@ -76,7 +76,7 @@ void ProductionManager::update()
 		{
 			BWAPI::Broodwar->drawTextScreen(150, 10, "Nothing left to build, new search!");
 		}
-		if (_isLastBuildOrder)
+		if (_isLastBuildOrder || BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Zerg)
 		{
 			performBuildOrderSearch();
 		}
@@ -146,7 +146,7 @@ void ProductionManager::update()
 			hatchCounter = BWAPI::Broodwar->getFrameCount() + 360;
 		}
 
-		if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 500 && !StrategyManager::Instance().isSpireBuilding())
+		if (BWAPI::Broodwar->getFrameCount() > hatchCounter && BWAPI::Broodwar->self()->minerals() > 500 && !StrategyManager::Instance().isSpireBuilding() && Config::Strategy::StrategyName != Config::Strategy::AgainstZergStrategyName)
 		{
 			BWAPI::Broodwar->printf("Entering hatchery loop\n");
 			//int totalMinerals = BWAPI::Broodwar->self()->minerals();
@@ -199,7 +199,7 @@ void ProductionManager::update()
 		}
 		
 		*/
-		if (BWAPI::Broodwar->getFrameCount() > mutaCounter && BWAPI::Broodwar->self()->minerals() >= 900 && !StrategyManager::Instance().isSpireBuilding() && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1 Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
+		if (BWAPI::Broodwar->getFrameCount() > mutaCounter && BWAPI::Broodwar->self()->minerals() >= 900 && !StrategyManager::Instance().isSpireBuilding() && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1 && Config::Strategy::StrategyName == Config::Strategy::AgainstTerrenStrategyName)
 		{
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);
 			_queue.queueAsHighestPriority(MetaType(BWAPI::UnitTypes::Zerg_Mutalisk), true);

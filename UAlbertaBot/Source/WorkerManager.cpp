@@ -361,10 +361,7 @@ void WorkerManager::finishedWithWorker(BWAPI::Unit unit)
 	UAB_ASSERT(unit != nullptr, "Unit was null");
 
 	//BWAPI::Broodwar->printf("BuildingManager finished with worker %d", unit->getID());
-	if (workerData.getWorkerJob(unit) != WorkerData::Scout)
-	{
-		workerData.setWorkerJob(unit, WorkerData::Idle, nullptr);
-	}
+	workerData.setWorkerJob(unit, WorkerData::Idle, nullptr);
 }
 
 BWAPI::Unit WorkerManager::getGasWorker(BWAPI::Unit refinery)

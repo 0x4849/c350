@@ -147,37 +147,37 @@ void GameCommander::setScoutUnits()
 		// if it exists
 		if (supplyProvider)
 		{
-			// grab the Zergling to the supply provider to send to scout
-
-			BWAPI::UnitInterface * scout = nullptr;
-			for (auto unit : BWAPI::Broodwar->self()->getUnits())
+			if (Config::Strategy::StrategyName == Config::Strategy::AgainstZergStrategyName)
 			{
-				if (unit->getType() == BWAPI::UnitTypes::Zerg_Zergling && !isAssigned(unit))
-				{
-					scout = unit;
-				}
-			}
+				// grab the closest worker to the supply provider to send to scout
+				BWAPI::Unit workerScout = getClosestWorkerToTarget(supplyProvider->getPosition());
 
-			// if we find a zergling add it to the scout units
-			if (scout)
-			{
-				if (ScoutManager::Instance().setScout(scout)) assignUnit(scout, _scoutUnits);
-				if (_scoutUnits.size() == 2)
+				// if we find a worker (which we should) add it to the scout units
+				if (workerScout)
 				{
-					if (Config::Modules::UsingWorkerScout)
-					{
-						// grab the closest worker to the supply provider to send to scout
-						BWAPI::Unit workerScout = getClosestWorkerToTarget(supplyProvider->getPosition());
-
-						// if we find a worker (which we should) add it to the scout units
-						if (workerScout)
-						{
-							ScoutManager::Instance().setWorkerScout(workerScout);
-							assignUnit(workerScout, _scoutUnits);
-							_initialScoutSet = true;
-						}
-					}
+					ScoutManager::Instance().setWorkerScout(workerScout);
+					assignUnit(workerScout, _scoutUnits);
 					_initialScoutSet = true;
+				}
+			} 
+			else
+			{
+				// grab the Zergling to the supply provider to send to scout
+
+				BWAPI::UnitInterface * scout = nullptr;
+				for (auto unit : BWAPI::Broodwar->self()->getUnits())
+				{
+					if (unit->getType() == BWAPI::UnitTypes::Zerg_Zergling && !isAssigned(unit))
+					{
+						scout = unit;
+					}
+				}
+
+				// if we find a zergling add it to the scout units
+				if (scout)
+				{
+					if (ScoutManager::Instance().setScout(scout)) assignUnit(scout, _scoutUnits);
+					if (_scoutUnits.size() == 2){_initialScoutSet = true;}
 				}
 			}
 		}

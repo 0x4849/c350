@@ -7,7 +7,7 @@ namespace Config
     {
         bool ConfigFileFound                = false;
         bool ConfigFileParsed               = false;
-		std::string ConfigFileLocation = "E:/c350/UAlbertaBot/UAlbertaBot_Config.txt";
+		std::string ConfigFileLocation = "E:/starcraftai/c350/UAlbertaBot_Config.txt";
     }
 
     namespace Strategy
@@ -28,7 +28,6 @@ namespace Config
     {
         // the default tournament bot modules
         bool UsingGameCommander             = true;     // toggle GameCommander, effectively UAlbertaBot
-		bool UsingWorkerScout				= true;
         bool UsingCombatCommander           = true;
         bool UsingBuildOrderSearch          = true;     // toggle use of Build Order Search, currently no backup
         bool UsingAutoObserver              = false;

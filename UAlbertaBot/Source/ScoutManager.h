@@ -12,7 +12,6 @@ namespace UAlbertaBot
 		BWAPI::Unit						_scouter2;
 		BWAPI::Unit						_overlordScout;
 		BWAPI::Unit						_workerScout;
-		BWAPI::TilePosition				_ninjaBaseLocation;
 		BWAPI::Position					_enemyRamp;
 		BWAPI::Position					_scoutLocation1;
 		BWAPI::Position					_scoutLocation2;

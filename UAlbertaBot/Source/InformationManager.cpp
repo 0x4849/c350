@@ -26,6 +26,8 @@ void InformationManager::update()
 {
 	updateUnitInfo();
 	updateBaseLocationInfo();
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstZergStrategyName && UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Zergling) >= 30) Config::Micro::UseSparcraftSimulation = false;
+	else{ Config::Micro::UseSparcraftSimulation = true; }
 	//TOMMY
 	//updateEnemyProductionEstimate();
 	if (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) >= 1)

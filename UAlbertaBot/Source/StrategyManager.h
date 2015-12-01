@@ -62,6 +62,7 @@ class StrategyManager
 	//TOMMY
 	mutable int						macroHatchCount;
 	const	bool					shouldMakeMacroHatchery() const;
+	mutable int						_mineralToBuildMacroHatchery;
 
 public:
     

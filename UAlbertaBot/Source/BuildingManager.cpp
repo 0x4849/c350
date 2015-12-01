@@ -1589,7 +1589,7 @@ void BuildingManager::checkForCompletedBuildings()
 				}
 			}
 
-			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.finalPosition == createdHatcheriesVector[0] && canBuildTrigger)
+			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.finalPosition == createdHatcheriesVector[0] && canBuildTrigger && BWAPI::Broodwar->enemy()->getRace() != BWAPI::Races::Zerg)
 			{
 				currentExpansions.insert(b.buildingUnit->getTilePosition());
 				currentExpansions.insert(BWAPI::Broodwar->self()->getStartLocation());
@@ -1652,7 +1652,7 @@ void BuildingManager::checkForCompletedBuildings()
 			}
 
 
-			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.buildingUnit->getTilePosition() != BWAPI::Broodwar->self()->getStartLocation() && b.buildingUnit->getTilePosition() != createdHatcheriesVector[0] && isBaseLocation(b.buildingUnit->getTilePosition()))
+			if (b.buildingUnit->getType() == BWAPI::UnitTypes::Zerg_Hatchery && b.buildingUnit->getTilePosition() != BWAPI::Broodwar->self()->getStartLocation() && b.buildingUnit->getTilePosition() != createdHatcheriesVector[0] && isBaseLocation(b.buildingUnit->getTilePosition()) && BWAPI::Broodwar->enemy()->getRace() != BWAPI::Races::Zerg)
 			{
 				baseCount++;
 				BWAPI::Broodwar->printf("Hatch is done --> base count is now %d\n", baseCount);
