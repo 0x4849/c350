@@ -1871,13 +1871,20 @@ BWAPI::TilePosition BuildingManager::getBuildingLocation(const Building & b)
 	//TOMMY
 	if (Config::Strategy::StrategyName != Config::Strategy::AgainstZergStrategyName)
 	{
-		if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()) || b.type.isResourceDepot() && !b.isMacro)
-			//if ((b.type.isResourceDepot()) && (createdHatcheriesVector.size() == 0) && (!b.isMacro))
+		if ((b.type.isResourceDepot()) && (!b.isMacro))
 		{
-			// get the location
-			BWAPI::TilePosition tile = MapTools::Instance().getNextExpansion();
-
-			return tile;
+			if ((b.type.isResourceDepot() && createdHatcheriesVector.size() == 0) || (shouldIExpand && b.type.isResourceDepot()))
+				//if ((b.type.isResourceDepot()) && (createdHatcheriesVector.size() == 0) && (!b.isMacro))
+			{
+				// get the location
+				BWAPI::TilePosition tile = MapTools::Instance().getNextExpansion();
+				return tile;
+			}
+			else
+			{
+				BWAPI::TilePosition tile = MapTools::Instance().getNextExpansion();
+				return tile;
+			}
 		}
 	}
 

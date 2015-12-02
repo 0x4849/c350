@@ -288,7 +288,7 @@ BWAPI::TilePosition MapTools::getNextExpansion(BWAPI::Player player)
 				//prevent expanding at a location that failed before
 				if (!InformationManager::Instance().isSafeExpansionLocation(tile))
 				{
-					BWAPI::Broodwar->printf("Hatchery died here, try somewhere else");
+					//BWAPI::Broodwar->printf("Hatchery died here, try somewhere else");
 					continue;
 				}
 			}

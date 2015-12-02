@@ -52,7 +52,7 @@ const BuildOrder & StrategyManager::getOpeningBookBuildOrder() const
 	} 
 	else
 	{
-		_mineralToBuildMacroHatchery = 600;
+		_mineralToBuildMacroHatchery = 650;
 	}
 
     auto buildOrderIt = _strategies.find(Config::Strategy::StrategyName);
@@ -134,7 +134,7 @@ const bool StrategyManager::shouldExpandNow() const
 	int minute = frame / (24 * 60);
 
 	// if we have a ridiculous stockpile of minerals, expand
-	if (BWAPI::Broodwar->self()->minerals() > 400)
+	if (BWAPI::Broodwar->self()->minerals() > 450)
 	{
 		//BuildingManager::Instance().shouldIExpand = true;
 		return true;
@@ -356,37 +356,12 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
     int numScourge      = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Scourge);
     int numGuardians    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Guardian);
 	int numExtract		= UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Extractor);
+	int numOverlords    = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Overlord);
+	int numDepots		= WorkerManager::Instance().getWorkerData().getDepots().size(); 
 
 	//int mutasWanted = numMutas + 20;
 	//int hydrasWanted = numHydras + 6;
-	/*
-	if (Config::Strategy::StrategyName != "Zerg_9Pool"){
-		int numBases = UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hatchery);
 
-		while (numExtract < numBases)
-		{
-			numExtract++;
-		}
-
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract));
-
-		int mineralPatches = 0;
-		for (auto & depot : WorkerManager::Instance().getWorkerData().getDepots())
-		{
-			mineralPatches += WorkerManager::Instance().getWorkerData().getMineralsNearDepot(depot);
-		}
-		if (numWorkers < mineralPatches)
-		{
-			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, mineralPatches));
-		}
-
-		if (shouldExpandNow())
-		{
-			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
-			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract + 1));
-			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 14));
-		}
-	}*/
     if (Config::Strategy::StrategyName == "Zerg_9Pool")
     {
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 6));
@@ -437,11 +412,71 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Muscular_Augments, 1));
 		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hydralisk, numHydras + 9));
 		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 3));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 8));
 		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 1));
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 1));
-	}
 
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 8));
+		//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 1));
+
+		// build for expanding protoss
+		if (InformationManager::Instance().isEnemyExpand())
+		{
+
+		}
+		// build for 1-base protoss
+		else
+		{
+			if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Lair) < 1) &&
+				(BWAPI::Broodwar->self()->gas() > 100) &&
+				(BWAPI::Broodwar->self()->minerals() > 150))
+			{
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Lair, 1));
+			}
+			if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) < 1) &&
+				(UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Lair) > 0) &&
+				(BWAPI::Broodwar->self()->gas() > 150) &&
+				(BWAPI::Broodwar->self()->minerals() > 200))
+			{
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Spire, 1));
+			}
+			if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) > 0) &&
+				(BWAPI::Broodwar->self()->gas() > 100) &&
+				(BWAPI::Broodwar->self()->minerals() > 375))
+			{
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Overlord, numOverlords + 3));
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 8));
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 1));
+			}
+			if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spawning_Pool) > 0) &&
+				(BWAPI::Broodwar->self()->minerals() > 800))
+			{
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Overlord, numOverlords + 1));
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 1));
+			}
+			if ((BWAPI::Broodwar->self()->minerals() > 725) &&
+				(BWAPI::Broodwar->self()->gas() > 560) &&
+				(UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) > 0))
+			{
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Zerg_Flyer_Carapace, 1));
+			}
+			if ((BWAPI::Broodwar->self()->minerals() > 1200) &&
+				(BWAPI::Broodwar->self()->gas() > 950) &&
+				(UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) > 0))
+			{
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Zerg_Flyer_Attacks, 1));
+			}
+			if ((BWAPI::Broodwar->self()->minerals() > 1500) &&
+				(BWAPI::Broodwar->self()->gas() > 1400) &&
+				(UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) > 0) &&
+				(numCC > 7))
+			{
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Metabolic_Boost, 1));
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Overlord, numOverlords + 1));
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Zergling, zerglings + 3));
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UpgradeTypes::Adrenal_Glands, 1));
+			}
+		}
+	
+	}
 	else if (Config::Strategy::StrategyName == "Zerg_3HatchHydra")
 	{
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Mutalisk, numMutas + 7));
@@ -449,16 +484,18 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numDrones + 3));
 	}
 
-	int mineralPatches = 0;
-	for (auto & depot : WorkerManager::Instance().getWorkerData().getDepots())
+	if (shouldTotallyMakeMacroHatchery())
 	{
-		mineralPatches += WorkerManager::Instance().getWorkerData().getMineralsNearDepot(depot);
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 2));
+		macroHatchCount += 2;
 	}
-	if (numWorkers < mineralPatches)
+	else if (shouldMakeMacroHatchery())
 	{
-		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, mineralPatches));
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
+		macroHatchCount++;
 	}
 
+	/*
 	if (shouldMakeMacroHatchery())
 	{
 		int hatchNeeded = BWAPI::Broodwar->self()->minerals() / _mineralToBuildMacroHatchery;
@@ -470,6 +507,70 @@ const MetaPairVector StrategyManager::getZergBuildOrderGoal() const
 			//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 1));
 			macroHatchCount++;
 			hatchNeeded--;
+		}
+	}*/
+
+	if (Config::Strategy::StrategyName != "Zerg_9Pool")
+	{
+		int extractsWanted = 0;
+		if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) < 1) ||
+			(UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk_Den) < 1))
+		{
+			while (extractsWanted + numExtract < 1)
+			{
+				extractsWanted++;
+			}
+		}
+		else
+		{
+			while ((extractsWanted < numDepots) &&
+				(BWAPI::Broodwar->self()->gas() < BWAPI::Broodwar->self()->minerals()))
+			{
+				extractsWanted++;
+			}
+		}
+		if (extractsWanted > 2)
+		{
+			extractsWanted = 2;
+		}
+		goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract + extractsWanted));
+
+		int mineralPatches = 0;
+		for (auto & depot : WorkerManager::Instance().getWorkerData().getDepots())
+		{
+			mineralPatches += WorkerManager::Instance().getWorkerData().getMineralsNearDepot(depot);
+		}
+		if (numWorkers < mineralPatches)
+		{
+			if ((mineralPatches - numWorkers) > 6)
+			{
+				//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Overlord, numOverlords + 1));
+			}
+			//if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) < 1) && (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk_Den) < 1))
+			if ((mineralPatches - numWorkers) > 4)
+			{
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 4));
+			}
+			else
+			{
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, mineralPatches));
+			}
+		}
+
+		if ((shouldExpandNow()) && 
+			((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) > 0) || (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk_Den) > 0)))
+		{
+			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Hatchery, numCC + 1));
+			if (BWAPI::Broodwar->self()->gas() < BWAPI::Broodwar->self()->minerals())
+			{
+				goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Extractor, numExtract + 1));
+			}
+			//goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 3));
+		}
+
+		if (BWAPI::Broodwar->self()->gas() > BWAPI::Broodwar->self()->minerals())
+		{
+			goal.push_back(std::pair<MetaType, int>(BWAPI::UnitTypes::Zerg_Drone, numWorkers + 2));
 		}
 	}
 
@@ -938,6 +1039,18 @@ std::map<BWAPI::UnitType, int> StrategyManager::shouldBuildSunkens3() const
 const bool StrategyManager::shouldMakeMacroHatchery() const
 {
 	if (BWAPI::Broodwar->self()->minerals() > _mineralToBuildMacroHatchery)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+const bool StrategyManager::shouldTotallyMakeMacroHatchery() const
+{
+	if (BWAPI::Broodwar->self()->minerals() > (2*_mineralToBuildMacroHatchery))
 	{
 		return true;
 	}

@@ -3,6 +3,8 @@
 #include "Common.h"
 
 #include "MetaType.h"
+//TOMMY
+#include "InformationManager.h"
 
 namespace UAlbertaBot
 {

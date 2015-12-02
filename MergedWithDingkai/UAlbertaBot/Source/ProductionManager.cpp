@@ -71,8 +71,7 @@ void ProductionManager::update()
 
 	// if nothing is currently building, get a new goal from the strategy manager
 	//|| (BWAPI::Broodwar->self()->minerals() > 2350))
-	if (((_queue.size() == 0) && (BWAPI::Broodwar->getFrameCount() > 10)) ||
-		((BWAPI::Broodwar->self()->minerals() > 6000) && (BWAPI::Broodwar->getFrameCount() % 960 == 0)))
+	if ((_queue.size() == 0) && (BWAPI::Broodwar->getFrameCount() > 10))
 	{
 		if (Config::Debug::DrawBuildOrderSearchInfo)
 		{
@@ -97,12 +96,12 @@ void ProductionManager::update()
 			BWAPI::Broodwar->printf("Supply deadlock detected, building supply!");
 		}
 		
-		if (BWAPI::Broodwar->self()->supplyUsed() >= 80 && !StrategyManager::Instance().isSpireBuilding())
+		if (BWAPI::Broodwar->self()->supplyUsed() >= 75 && !StrategyManager::Instance().isSpireBuilding())
 		{
 			BWAPI::Broodwar->printf("Queuing one extra overlord");
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
 		}
-		if (BWAPI::Broodwar->self()->supplyUsed() >= 200 && !StrategyManager::Instance().isSpireBuilding())
+		if (BWAPI::Broodwar->self()->supplyUsed() >= 115 && !StrategyManager::Instance().isSpireBuilding())
 		{
 			BWAPI::Broodwar->printf("Queuing two extra overlord");
 			_queue.queueAsHighestPriority(MetaType(BWAPI::Broodwar->self()->getRace().getSupplyProvider()), true);
@@ -251,7 +250,7 @@ void ProductionManager::update()
 		{
 			if (Config::Debug::DrawBuildOrderSearchInfo)
 			{
-				BWAPI::Broodwar->printf("Need defenses");
+				//BWAPI::Broodwar->printf("Need defenses");
 			}
 			for (int i = 0; i < defenses[BWAPI::UnitTypes::Zerg_Sunken_Colony]; i++)
 			{
@@ -723,7 +722,7 @@ bool ProductionManager::detectBuildOrderDeadlock()
 
 	//TOMMY
 	// hacky fix to make sure gas trick always works
-	if ((BWAPI::Broodwar->getFrameCount() < 480) && (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))
+	if ((BWAPI::Broodwar->getFrameCount() < 2000) && (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))
 	{
 		return false;
 	}
@@ -741,11 +740,37 @@ bool ProductionManager::detectBuildOrderDeadlock()
 	int supplyCost = _queue.getHighestPriorityItem().metaType.supplyRequired();
 	int supplyAvailable = std::max(0, BWAPI::Broodwar->self()->supplyTotal() - BWAPI::Broodwar->self()->supplyUsed());
 
+	//TOMMY: try to avoid midgame deadlocks
+	/*
+	int totalSupply = 0;
+	int totalProduced = 0;
+	for (auto &item : _queue.getQueue())
+	{
+		if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg && item.metaType.getUnitType().isBuilding())
+		{
+			totalProduced++;
+		}
+		totalSupply += item.metaType.getUnitType().supplyRequired();
+		totalProduced += item.metaType.getUnitType().supplyProvided();
+	}
+	if ((totalProduced < (totalSupply + 4)) && (BWAPI::Broodwar->self()->minerals() > 950))
+	{
+		BWAPI::Broodwar->printf("Staying way ahead of the supply game");
+		return true;
+	}
+	if ((totalProduced < (totalSupply + 2)) && (BWAPI::Broodwar->self()->minerals() > 580))
+	{
+		BWAPI::Broodwar->printf("Staying a little ahead of the supply game");
+		return true;
+	}*/
+
 	// if we don't have enough supply and none is being built, there's a deadlock
 	if ((supplyAvailable < supplyCost) && !supplyInProgress)
 	{
 		// if we're zerg, check to see if a building is planned to be built
-		if (BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg && BuildingManager::Instance().buildingsQueued().size() > 0)
+		if ((BWAPI::Broodwar->self()->getRace() == BWAPI::Races::Zerg) && 
+			(BuildingManager::Instance().buildingsQueued().size() > 0) &&
+			((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Spire) < 1) && (UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Hydralisk_Den) < 1)))
 		{
 			return false;
 		}
@@ -1029,7 +1054,7 @@ bool ProductionManager::checkDefenses()
 	{
 		return false;
 	}
-	if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Sunken_Colony) >= 7) && (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))
+	if ((UnitUtil::GetAllUnitCount(BWAPI::UnitTypes::Zerg_Sunken_Colony) >= 8) && (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Protoss))
 	{
 		return false;
 	}

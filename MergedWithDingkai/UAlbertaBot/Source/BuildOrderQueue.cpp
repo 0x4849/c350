@@ -47,14 +47,30 @@ void BuildOrderQueue::skipItem()
 	numSkippedItems++;
 }
 
-bool BuildOrderQueue::canSkipItem() 
+bool BuildOrderQueue::canSkipItem()
 {
 	// does the queue have more elements
 	bool bigEnough = queue.size() > (size_t)(1 + numSkippedItems);
 
-	if (!bigEnough) 
+	if (!bigEnough)
 	{
 		return false;
+	}
+
+	// If against Zerg, skip Lair and Hydralisk Den because no gas
+	if (Config::Strategy::StrategyName == Config::Strategy::AgainstZergStrategyName
+		&& (queue[queue.size() - 1 - numSkippedItems].metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Lair
+		|| queue[queue.size() - 1 - numSkippedItems].metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Hydralisk_Den))
+	{
+		return true;
+	}
+
+	if ((Config::Strategy::StrategyName == Config::Strategy::AgainstProtossStrategyName)
+		&& (!InformationManager::Instance().isEnemyExpand())
+		&& (queue[queue.size() - 1 - numSkippedItems].metaType.getUnitType() == BWAPI::UnitTypes::Zerg_Hydralisk_Den))
+	{
+		BWAPI::Broodwar->printf("Skip the troll hydra den");
+		return true;
 	}
 
 	// is the current highest priority item not blocking a skip
