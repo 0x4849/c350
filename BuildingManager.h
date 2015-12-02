@@ -30,10 +30,9 @@ namespace UAlbertaBot
 		void            checkForStartedConstruction();                      // STEP 4
 		void            checkForDeadTerranBuilders();                       // STEP 5
 		void            checkForCompletedBuildings();                       // STEP 6
-
+		std::vector<std::pair<int, int> > myVec;
 		char            getBuildingWorkerCode(const Building & b) const;
-
-
+		std::vector<bool> incrementDecrement;
 	public:
 
 		static BuildingManager &    Instance();
@@ -44,33 +43,39 @@ namespace UAlbertaBot
 		void                update();
 		void                onUnitMorph(BWAPI::Unit unit);
 		void                onUnitDestroy(BWAPI::Unit unit);
-		void                addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal);
+		//TOMMY
+		void                addBuildingTask(BWAPI::UnitType type, BWAPI::TilePosition desiredLocation, bool isGasSteal, bool isMacro);
 		void                drawBuildingInformation(int x, int y);
 		BWAPI::TilePosition getBuildingLocation(const Building & b);
 
 		int                 getReservedMinerals();
 		int                 getReservedGas();
-
+		void				checkSunkenUpgrade();
 		bool                isBeingBuilt(BWAPI::UnitType type);
 		bool				sentFirstDroneForSunken = false;
 		bool				madeFirstSunken = false;
 		bool				isBaseLocation(BWAPI::TilePosition);
-		int					sunkenBuildTimer = 9999999999999;
+		int					sunkenBuildTimer = 9999999;
 		bool				canBuild = false;
 		bool				canSunken = false;
 		bool				canBuildTrigger = true;
 		double				mainToRampDistance;
+		double				expansionToChokeDistance;
 		BWAPI::Position		ourRampPosition;
+		BWAPI::Position		ourChokePointPosition;
+
 		BWAPI::Unit			naturalGas;
 		BWAPI::Position		firstHatcheryPosition;
 		BWAPI::Unit			hatcheryUnit;
 		BWAPI::TilePosition getExtractorPosition(BWAPI::TilePosition);
 		bool				sunkenIntersection(BWAPI::TilePosition) const;
+		int					firstEvoChamber;
+		void				checkForBuildingProblems();
 
 		std::set<BWAPI::Unit> evoCompleted;
 		std::set<int> sentSunkenCommand;
 		int baseCount = 0;
-		BWAPI::TilePosition getSunkenPosition(void);
+		BWAPI::TilePosition getSunkenPosition();
 		std::vector<BWAPI::UnitType> buildingsQueued();
 		std::set<BWAPI::TilePosition> createdHatcheriesSet;
 		std::set<BWAPI::TilePosition> createdSunkenSet;
@@ -80,8 +85,39 @@ namespace UAlbertaBot
 		std::set<BWAPI::TilePosition> createdBuilding;
 		std::set<BWAPI::TilePosition> buildableSunkenTilePositions;
 		std::map<int, std::pair<int, int> > knownBuildableLocations;
-		BWAPI::Position		ourChokePointPosition;
-		double				expansionToChokeDistance;
+
+		std::map<BWAPI::UnitType, int> expectedBuildingNumber;
+		std::map<BWAPI::UnitType, int> expectedBuildingCheck;
+
+
+		std::map<BWAPI::Unit, int> sentBuildingCommandFrame;
+		std::map<BWAPI::Unit, MetaType> sentBuildingCommandBuilding;
+		std::set<BWAPI::UpgradeType> upgradeEvo;
+		std::set<BWAPI::UpgradeType> upgradeHydra;
+		std::set<BWAPI::Unit> hydraCompleted;
+
+		std::map<BWAPI::Unit, int> createdCreeps;
+
+
+
+
+		void removeBuildingExternal(BWAPI::TilePosition);
+
+		BWAPI::TilePosition firstExtractorPosition = BWAPI::TilePositions::None;
+
+		int didGasTrickFrames = 9999999;
+		std::set<BWAPI::TilePosition> completedBuilding;
+
+		bool shouldIExpand = false;
+		std::vector<BWAPI::Unit> createdBaseUnit;
+		BWAPI::TilePosition getNextExpandLocation();
+		std::set<BWAPI::TilePosition> currentExpansions;
+
+		std::set<BWAPI::Unit> hatchSet;
+		std::set<BWAPI::TilePosition> closestBaseSet;
+		void manageLarva();
+		BWAPI::TilePosition getSpirePosition();
+
 
 		void BuildingManager::simcity_init();
 		std::vector<BWAPI::TilePosition> simcity_sunken;
@@ -90,7 +126,7 @@ namespace UAlbertaBot
 		BWAPI::TilePosition BuildingManager::simcitySunken(void);
 		BWAPI::TilePosition BuildingManager::simcityWall(void);
 		BWAPI::TilePosition BuildingManager::simcityRow(void);
-		
+
 	};
 }
 
