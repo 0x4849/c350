@@ -1265,7 +1265,8 @@ void BuildingManager::constructAssignedBuildings()
 
 				else if (b.type == BWAPI::UnitTypes::Zerg_Spire || b.type == BWAPI::UnitTypes::Zerg_Hydralisk_Den)
 				{
-					b.finalPosition = simcityWall();
+					if (BWAPI::Broodwar->enemy()->getRace() != BWAPI::Races::Terran){ b.finalPosition = simcityWall(); }
+					
 					if (b.finalPosition == BWAPI::TilePositions::None){
 						BWAPI::TilePosition spirePos = getSpirePosition();
 						if (spirePos != BWAPI::TilePositions::None)
@@ -1305,7 +1306,10 @@ void BuildingManager::constructAssignedBuildings()
 				{
 
 					//simcity_init();
-					BWAPI::TilePosition sunkPos = simcitySunken();
+					BWAPI::TilePosition sunkPos = BWAPI::TilePositions::None;
+					if (BWAPI::Broodwar->enemy()->getRace() == BWAPI::Races::Terran){sunkPos = simcityRow(); }
+					else{ sunkPos = simcitySunken(); }
+					
 					if (sunkPos == BWAPI::TilePositions::None)
 					{ 
 						sunkPos = getSunkenPosition(); 
