@@ -78,8 +78,6 @@ namespace UAlbertaBot
 		BWAPI::TilePosition getSunkenPosition();
 		std::vector<BWAPI::UnitType> buildingsQueued();
 		std::set<BWAPI::TilePosition> createdHatcheriesSet;
-		std::set<BWAPI::TilePosition> createdSunkenSet;
-		std::vector<BWAPI::TilePosition> createdSunkenVector;
 		std::vector<BWAPI::TilePosition> createdBaseVector;
 		std::vector<BWAPI::TilePosition> createdHatcheriesVector;
 		std::set<BWAPI::TilePosition> createdBuilding;
@@ -89,22 +87,13 @@ namespace UAlbertaBot
 		std::map<BWAPI::UnitType, int> expectedBuildingNumber;
 		std::map<BWAPI::UnitType, int> expectedBuildingCheck;
 
-
-		std::map<BWAPI::Unit, int> sentBuildingCommandFrame;
-		std::map<BWAPI::Unit, MetaType> sentBuildingCommandBuilding;
 		std::set<BWAPI::UpgradeType> upgradeEvo;
 		std::set<BWAPI::UpgradeType> upgradeHydra;
 		std::set<BWAPI::Unit> hydraCompleted;
 
 		std::map<BWAPI::Unit, int> createdCreeps;
-
-
-
-
 		void removeBuildingExternal(BWAPI::TilePosition);
-
 		BWAPI::TilePosition firstExtractorPosition = BWAPI::TilePositions::None;
-
 		int didGasTrickFrames = 9999999;
 		std::set<BWAPI::TilePosition> completedBuilding;
 
@@ -114,7 +103,6 @@ namespace UAlbertaBot
 		std::set<BWAPI::TilePosition> currentExpansions;
 
 		std::set<BWAPI::Unit> hatchSet;
-		std::set<BWAPI::TilePosition> closestBaseSet;
 		void manageLarva();
 		BWAPI::TilePosition getSpirePosition();
 

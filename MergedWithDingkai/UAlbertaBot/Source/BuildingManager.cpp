@@ -416,11 +416,6 @@ void BuildingManager::manageLarva()
 			WorkerData  workerData;
 			//Change X to all possible locations!!
 			BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(x), BWAPI::Filter::IsResourceDepot);
-			/*
-			int assignedWorkers = workerData.getNumAssignedWorkers(x.getTilePosition());
-			int mineralsNearDepot = workerData.getMineralsNearDepot(x->getTilePosition());
-			if (assignedWorkers < mineralsNearDepot || assignedWorkers2 < mineralsNearDepot2)
-			*/
 			if (!WorkerManager::Instance().isDepotSemiFull(pExpansion))
 			{
 				hatchSet.insert(pExpansion);
@@ -449,110 +444,6 @@ void BuildingManager::manageLarva()
 	}
 }
 
-
-BWAPI::TilePosition BuildingManager::getNextExpandLocation()
-{
-	//BWTA::BaseLocation * enemyBaseLocation =;
-	BWAPI::Broodwar->printf("Base count is currently %d\n", baseCount);
-	BWAPI::Broodwar->printf("Entered getNextExpandLocation\n");
-	double distance = 1;
-	double expDist = 999999.0;
-	BWTA::BaseLocation * farthestLocation;
-	BWTA::BaseLocation * hisExpansion;
-	if (InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy()))
-	{
-		return BWAPI::TilePositions::None;
-	}
-	BWTA::BaseLocation * enemyBaseLocation = InformationManager::Instance().getMainBaseLocation(BWAPI::Broodwar->enemy());
-
-
-
-	const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-	BWAPI::Broodwar->printf("Checking for his expansion location\n");
-	for (auto x : locations)
-	{
-
-
-		double myDist = BWTA::getGroundDistance(enemyBaseLocation->getTilePosition(), x->getTilePosition());
-		if (myDist >= 1 && myDist < expDist && !x->isMineralOnly() && x != enemyBaseLocation)
-		{
-			hisExpansion = x;
-			expDist = myDist;
-
-		}
-	}
-	BWAPI::Broodwar->printf("Checking for any location to build it in.\n");
-	for (auto x : locations)
-	{
-		if (currentExpansions.find(x->getTilePosition()) != currentExpansions.end() || createdBuilding.find(x->getTilePosition()) != createdBuilding.end())
-		{
-			continue;
-		}
-		double myDist = BWTA::getGroundDistance(BWTA::getStartLocation(BWAPI::Broodwar->self())->getTilePosition(), x->getTilePosition());
-		if (!x->isMineralOnly() && x != hisExpansion && x != enemyBaseLocation && myDist >= distance)
-		{
-			//distance = myDist;
-			farthestLocation = x;
-			distance = myDist;
-		}
-	}
-
-	BWAPI::Broodwar->printf("Checking if farthestLocation.\n");
-	if (farthestLocation)
-	{
-		currentExpansions.insert(farthestLocation->getTilePosition());
-		BWAPI::Broodwar->printf("Returning farthestLocation\n");
-		return farthestLocation->getTilePosition();
-	}
-	else
-	{
-		BWAPI::Broodwar->printf("Returning None\n");
-		return BWAPI::TilePositions::None;
-	}
-
-
-	//BWAPI::TilePosition getNextExpandLocation();
-
-}
-
-
-BWAPI::TilePosition BuildingManager::getExtractorPosition(BWAPI::TilePosition desiredPosition)
-{
-	if (createdBuilding.find(desiredPosition) != createdBuilding.end() && baseCount == 2)
-	{
-		return naturalGas->getTilePosition();
-	}
-	else if (createdBuilding.find(desiredPosition) != createdBuilding.end() && baseCount >= 3 && createdHatcheriesSet.size() >= 3)
-	{
-		BWAPI::TilePosition hatchPosition = createdBaseVector[createdBaseVector.size() - 1];
-		BWAPI::TilePosition gasPosition;
-		const std::set<BWTA::BaseLocation*, std::less<BWTA::BaseLocation*>> locations = BWTA::getBaseLocations();
-		BWTA::BaseLocation *myLocation;
-
-		for (BWTA::BaseLocation *p : locations) {
-			BWAPI::TilePosition z = p->getTilePosition();
-			if (z == hatchPosition){
-				// This is the BWTA::Location of the first hatchery.
-				myLocation = p;
-
-			}
-		}
-
-		const BWAPI::Unitset gasSet = myLocation->getGeysers();
-		for (BWAPI::Unit p : gasSet)
-		{
-			gasPosition = p->getTilePosition();
-			break;
-		}
-
-		return gasPosition;
-	}
-
-	else
-	{
-		return desiredPosition;
-	}
-}
 // Get a sunken position depending on whether or not we have an expansion.
 BWAPI::TilePosition BuildingManager::getSunkenPosition()
 {
@@ -563,36 +454,6 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 	{
 		BWAPI::TilePosition hatchPosition = createdHatcheriesVector[0];
 		
-		/*
-		if (sentCreepColonyCommand.find(myBuilder->getID()) != sentCreepColonyCommand.end())
-		{
-			int builderID = myBuilder->getID();
-			int builderX = sentCreepColonyCommand[builderID].x;
-			int builderY = sentCreepColonyCommand[builderID].y;
-			
-			if (buildable(builderX, builderY, sentCreepColonyCommand[builderID]))
-			{
-				return sentCreepColonyCommand[builderID];
-			}
-
-		}
-		*/
-		
-		/*
-		BWAPI::Unit pExpansion = BWAPI::Broodwar->getClosestUnit(BWAPI::Position(hatchPosition), BWAPI::Filter::IsResourceDepot);
-		BWAPI::Unitset myUnits = pExpansion->getUnitsInRadius(200);
-		BWAPI::UnitType larva = BWAPI::UnitTypes::Zerg_Larva;
-		BWAPI::UnitType egg = BWAPI::UnitTypes::Zerg_Egg;
-
-		std::set<BWAPI::TilePosition> stuffBlocking;
-		for (BWAPI::Unit p : myUnits)
-		{
-			if (p->getType() == larva || p->getType() == egg)
-			{
-				stuffBlocking.insert(p->getTilePosition());
-			}
-		}
-		*/
 		while (buildableSunkenTilePositions.size() >= 1)
 		{
 			std::set<BWAPI::TilePosition>::iterator it = buildableSunkenTilePositions.begin();
@@ -927,7 +788,7 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 		int beginY = hatchPosition.y;
 
 		int N = 7;
-
+		// Make 7 steps in the 4 directions that are enabled for each expansion.
 		for (int i = 0; i < N; i++)
 			for (int j = 0; j < N; j++)
 				for (int k = 0; k < N; k++)
@@ -970,19 +831,9 @@ BWAPI::TilePosition BuildingManager::getSunkenPosition()
 		}
 	}
 }
-/* We check the following conditions :
-Do we not have creep at the sunken position?
-Can we not build at the sunken position?
-Have we built at this position before?
-If any of these are true and counter <= 7 --> Remain in loop
-Is the counter <= 7 --> Makes sure not to go out of bounds for the incrementDecrement vector
-*/
 
-
-
-// Since counter == 8, it means we tried all 8 directions and couldnt find a sunken position, so return None(sunken will be made in main base)
-
-
+// Often times a creep colony will queue a sunken upgrade but it won't upgrade, so this is an extra test
+// If the creep colony is still a creep colony ~20 or so frames after being completed, queue sunken again.
 void BuildingManager::checkSunkenUpgrade()
 {
 	std::vector<BWAPI::Unit> toRemove;

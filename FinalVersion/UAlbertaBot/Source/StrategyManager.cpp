@@ -104,6 +104,8 @@ const BuildOrder & StrategyManager::getAdaptiveBuildOrder() const
 	return _emptyBuildOrder;
 }
 
+/*Check if our spire is building --> Use this to make strategic decisions like how many minerals we are allowed to accumulate or when to expand etc. shouldExpandNow also calls it.
+ */
 const bool StrategyManager::isSpireBuilding() const
 {
 	for (auto x : BWAPI::Broodwar->self()->getUnits())

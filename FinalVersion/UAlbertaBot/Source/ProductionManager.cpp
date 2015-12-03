@@ -304,25 +304,7 @@ void ProductionManager::manageBuildOrderQueue()
 
 
 			BWAPI::Unit producer;
-
-
-			/*
-			if (currentItem.metaType.whatBuilds().isBuilding() && !canProduce(currentItem.metaType.whatBuilds()))
-			{
-			_queue.queueAsHighestPriority(currentItem.metaType.whatBuilds(), false);
-
-			}
-			*/
 			producer = getProducer(currentItem.metaType);
-			/*
-			if (currentItem.metaType.isUpgrade())
-			{
-				if (currentItem.metaType.getUpgradeType() == BWAPI::UpgradeTypes::Zerg_Carapace)
-				{
-					BWAPI::Broodwar->printf("First evo chamber is %d, chosen Evo chamber is %d\n", BuildingManager::Instance().firstEvoChamber, producer->getID());
-				}
-			}
-			*/
 			
 
 			// check to see if we can make it right now
@@ -413,6 +395,8 @@ void ProductionManager::manageBuildOrderQueue()
 	}
 }
 
+/*Helper function which addressed the problem of trying to upgrade from two evolution chambers at one time. Basically if one of them was upgrading, it would return false. Meaning that you can't upgrade from that one and you should try the other one.
+I think it worked okay some of the time but it was a little buggy maybe.*/
 bool ProductionManager::canProduce(BWAPI::UnitType producerType)
 {
 	for (auto x : BWAPI::Broodwar->self()->getUnits())
